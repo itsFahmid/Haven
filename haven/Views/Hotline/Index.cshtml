@@ -1,0 +1,215 @@
+@model Haven.Models.HotlineViewModel
+@{
+    ViewData["Title"] = "এআই সুরক্ষা সহকারী ও বেনামী হটলাইন | AI Safety Assistant";
+}
+
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Top Anonymous Shield Status Bar -->
+    <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-600 to-teal-800 text-white flex items-center justify-center text-xl font-bold shadow-md shadow-teal-900/10">
+                🤖
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-lg font-extrabold text-slate-900" data-bn="হেভেন বেনামী এআই সুরক্ষা হটলাইন" data-en="HAVEN Anonymous AI Safety Assistant">
+                        হেভেন বেনামী এআই সুরক্ষা হটলাইন
+                    </h1>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        ● 100% Anonymous
+                    </span>
+                </div>
+                <div class="text-xs text-slate-500 flex items-center gap-2 mt-0.5">
+                    <span data-bn="আপনার বর্তমান সেশন আইডি:" data-en="Active Session ID:">আপনার বর্তমান সেশন আইডি:</span>
+                    <span class="font-mono font-bold text-teal-800 bg-teal-50 px-2 py-0.5 rounded border border-teal-100">@Model.AnonymousSessionId</span>
+                    <span class="text-slate-300">|</span>
+                    <span data-bn="নামহীন মোড সক্রিয়" data-en="Zero logs recorded">নামহীন মোড সক্রিয়</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Safety Actions -->
+        <div class="flex items-center gap-2.5">
+            <button type="button" onclick="triggerCrisisEscalation('Manual SOS')" class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs transition flex items-center gap-1.5">
+                <span>🚨</span>
+                <span data-bn="জরুরি সংকট SOS" data-en="Crisis Hotlines">জরুরি সংকট SOS</span>
+            </button>
+            <button type="button" onclick="window.havenQuickExit()" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition flex items-center gap-1.5 pulse-red">
+                <span>🚪</span>
+                <span data-bn="দ্রুত প্রস্থান (ESC)" data-en="Quick Exit">দ্রুত প্রস্থান (ESC)</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Chat Workspace Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Chat Area (Left 8 Cols) -->
+        <div class="lg:col-span-8 flex flex-col bg-white rounded-3xl border border-slate-200 shadow-lg overflow-hidden h-[680px]">
+            
+            <!-- Chat Header & Persona Selector -->
+            <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wider" data-bn="সহকারী মোড:" data-en="Assistant Mode:">সহকারী মোড:</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-teal-100 text-teal-900 text-xs font-semibold" data-bn="🌸 সহমর্মী সঙ্গী" data-en="🌸 Empathetic Ally">🌸 সহমর্মী সঙ্গী</span>
+                </div>
+                
+                <div class="text-[11px] text-slate-400">
+                    <span data-bn="চ্যাট হিস্ট্রি ব্রাউজারে সংরক্ষিত হয় না" data-en="History auto-purges on exit">চ্যাট হিস্ট্রি ব্রাউজারে সংরক্ষিত হয় না</span>
+                </div>
+            </div>
+
+            <!-- Messages Stream -->
+            <div id="chatMessagesStream" class="flex-grow p-4 md:p-6 overflow-y-auto space-y-4 bg-[#faf9f6]/40">
+                
+                <!-- Initial Welcome Message from Haven AI -->
+                <div class="flex flex-col items-start mb-4 animate-fade-in">
+                    <div class="max-w-[85%] md:max-w-[80%] p-4 chat-bubble-bot text-sm leading-relaxed shadow-sm">
+                        <div class="flex items-center gap-2 mb-2 pb-2 border-b border-slate-200/80">
+                            <span class="w-5 h-5 rounded-full bg-teal-700 text-white text-[10px] flex items-center justify-center font-bold">H</span>
+                            <span class="font-bold text-xs text-teal-900" data-bn="হেভেন সেফটি অ্যাসিস্ট্যান্ট" data-en="HAVEN Safety Assistant">হেভেন সেফটি অ্যাসিস্ট্যান্ট</span>
+                        </div>
+                        <p data-bn="আসসালামু আলাইকুম / নমস্কার। হেভেন-এ আপনাকে স্বাগতম। আপনি এখানে সম্পূর্ণ নিরাপদ ও বেনামে আছেন। আপনার নাম, আইপি বা কোনো ব্যক্তিগত তথ্য সংরক্ষণ করা হয় না।<br/><br/>আপনি কি কোনো মানসিক কষ্ট, সাইবার ব্ল্যাকমেইল, বা বিপদের সম্মুখীন? আপনি নির্ভয়ে যে কোনো কথা এখানে শেয়ার করতে পারেন।" data-en="Welcome to HAVEN. You are in a 100% confidential and anonymous sanctuary. Zero information is stored.<br/><br/>Are you dealing with emotional distress, cyber extortion, or personal safety questions? Feel free to speak your mind freely.">
+                            আসসালামু আলাইকুম / নমস্কার। হেভেন-এ আপনাকে স্বাগতম। আপনি এখানে সম্পূর্ণ নিরাপদ ও বেনামে আছেন। আপনার নাম, আইপি বা কোনো ব্যক্তিগত তথ্য সংরক্ষণ করা হয় না।<br/><br/>আপনি কি কোনো মানসিক কষ্ট, সাইবার ব্ল্যাকমেইল, বা বিপদের সম্মুখীন? আপনি নির্ভয়ে যে কোনো কথা এখানে শেয়ার করতে পারেন।
+                        </p>
+                    </div>
+                    <span class="text-[11px] text-slate-400 mt-1 px-1">Just now</span>
+                </div>
+
+            </div>
+
+            <!-- Quick Suggestion Topic Chips -->
+            <div class="p-3 bg-white border-t border-slate-100 flex items-center gap-2 overflow-x-auto">
+                <span class="text-[11px] font-bold text-slate-400 whitespace-nowrap pl-1" data-bn="দ্রুত টপিক:" data-en="Quick Prompts:">দ্রুত টপিক:</span>
+                @foreach (var prompt in Model.QuickPrompts)
+                {
+                    <button type="button" onclick="HavenChat.sendQuickPrompt(this)" data-bn="@prompt.PromptBn" data-en="@prompt.PromptEn" class="px-3 py-1.5 rounded-full bg-slate-100 hover:bg-teal-50 hover:text-teal-800 hover:border-teal-300 border border-slate-200 text-xs text-slate-700 whitespace-nowrap transition flex-shrink-0">
+                        <span data-bn="@prompt.PromptBn" data-en="@prompt.PromptEn">@prompt.PromptBn</span>
+                    </button>
+                }
+            </div>
+
+            <!-- Message Input Form -->
+            <div class="p-4 bg-white border-t border-slate-200">
+                <div class="flex items-center gap-3">
+                    <div class="relative flex-grow">
+                        <input type="text" id="chatMessageInput" placeholder="আপনার অনুভূতি বা প্রশ্ন লিখুন (যেমন: সাইবার ব্ল্যাকমেইল বা মানসিক চাপ)..." class="w-full pl-4 pr-10 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white text-slate-800" data-bn="আপনার অনুভূতি বা প্রশ্ন লিখুন..." data-en="Type your thoughts or safety question here..." autocomplete="off" />
+                        <button type="button" onclick="triggerCrisisEscalation('High Risk')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-600 text-base" title="Trigger Safety Escort">
+                            ❤️‍🩹
+                        </button>
+                    </div>
+                    <button type="button" onclick="HavenChat.sendMessage()" class="px-5 py-3.5 bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm rounded-2xl shadow-md shadow-teal-900/15 transition transform active:scale-95 flex items-center gap-1.5 flex-shrink-0">
+                        <span data-bn="পাঠান" data-en="Send">পাঠান</span>
+                        <span>➔</span>
+                    </button>
+                </div>
+                <div class="flex items-center justify-between text-[11px] text-slate-400 mt-2 px-1">
+                    <span data-bn="⚠️ চরম সংকটে থাকলে তাৎক্ষণিক ১০৯৮ বা ৯৯৯ কল করুন" data-en="⚠️ For immediate life-threatening emergency, dial 1098 or 999">
+                        ⚠️ চরম সংকটে থাকলে তাৎক্ষণিক ১০৯৮ বা ৯৯৯ কল করুন
+                    </span>
+                    <span data-bn="এন্টার প্রেস করে পাঠান" data-en="Press Enter to send">এন্টার প্রেস করে পাঠান</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Side Safety & Grounding Toolkit (4 Cols) -->
+        <div class="lg:col-span-4 space-y-5">
+            
+            <!-- Somatic Breathing Widget -->
+            <div class="bg-gradient-to-br from-teal-50 to-emerald-50 rounded-3xl p-6 border border-teal-200/80 shadow-sm text-center">
+                <div class="inline-block px-2.5 py-1 bg-teal-100 text-teal-800 rounded-full text-[10px] font-extrabold uppercase tracking-wide mb-2" data-bn="মন শান্ত করার টুল" data-en="Somatic Reset">
+                    মন শান্ত করার টুল
+                </div>
+                <h3 class="text-base font-bold text-slate-900" data-bn="৪-৭-৮ শ্বাস-প্রশ্বাস অনুশীলন" data-en="4-7-8 Somatic Breathing">
+                    ৪-৭-৮ শ্বাস-প্রশ্বাস অনুশীলন
+                </h3>
+                <p class="text-xs text-slate-600 mt-1" data-bn="প্যানিক বা অতিরিক্ত অস্থিরতা অনুভব করলে বৃত্তটির সাথে শ্বাস নিন।" data-en="Lower your cortisol and heart rate in 60 seconds.">
+                    প্যানিক বা অতিরিক্ত অস্থিরতা অনুভব করলে বৃত্তটির সাথে শ্বাস নিন।
+                </p>
+
+                <div class="my-6 flex items-center justify-center">
+                    <div class="w-24 h-24 rounded-full bg-teal-600/20 flex items-center justify-center breathing-bubble border-2 border-teal-500/40">
+                        <span class="text-teal-900 font-extrabold text-xs" data-bn="শ্বাস নিন" data-en="Inhale">শ্বাস নিন</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                    <div class="bg-white/80 p-2 rounded-xl border border-teal-100">
+                        <span class="block font-bold text-teal-800 text-sm">৪ সে.</span>
+                        <span class="text-[10px] text-slate-500" data-bn="শ্বাস নিন" data-en="Inhale">শ্বাস নিন</span>
+                    </div>
+                    <div class="bg-white/80 p-2 rounded-xl border border-teal-100">
+                        <span class="block font-bold text-teal-800 text-sm">৭ সে.</span>
+                        <span class="text-[10px] text-slate-500" data-bn="ধরে রাখুন" data-en="Hold">ধরে রাখুন</span>
+                    </div>
+                    <div class="bg-white/80 p-2 rounded-xl border border-teal-100">
+                        <span class="block font-bold text-teal-800 text-sm">৮ সে.</span>
+                        <span class="text-[10px] text-slate-500" data-bn="ছাড়ুন" data-en="Exhale">ছাড়ুন</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Direct Hotline Card -->
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-3">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-bn="জরুরি ক্রাইসিস হেল্পলাইন" data-en="Emergency Crisis Helplines">
+                        জরুরি ক্রাইসিস হেল্পলাইন
+                    </h3>
+                    <span class="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">24/7 Active</span>
+                </div>
+
+                <a href="tel:1098" class="flex items-center justify-between p-3 rounded-2xl bg-rose-50 hover:bg-rose-100 border border-rose-200 transition group">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-rose-600 text-white font-bold text-xs flex items-center justify-center">1098</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900" data-bn="চাইল্ড হেল্পলাইন (টোল-ফ্রি)" data-en="Child Helpline (Toll-Free)">চাইল্ড হেল্পলাইন (টোল-ফ্রি)</div>
+                            <div class="text-[10px] text-rose-700">শিশু ও কিশোর সুরক্ষা</div>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-rose-700">📞 Call</span>
+                </a>
+
+                <a href="tel:999" class="flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 transition group">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-slate-900 text-white font-bold text-xs flex items-center justify-center">999</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900" data-bn="জাতীয় জরুরি পুলিশ/মেডিকেল" data-en="National Emergency Dispatch">জাতীয় জরুরি পুলিশ/মেডিকেল</div>
+                            <div class="text-[10px] text-slate-500">তাৎক্ষণিক রেসকিউ</div>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-slate-800">📞 Call</span>
+                </a>
+
+                <a href="tel:01779554391" class="flex items-center justify-between p-3 rounded-2xl bg-teal-50 hover:bg-teal-100 border border-teal-200 transition group">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-teal-700 text-white font-bold text-xs flex items-center justify-center">💚</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900" data-bn="কান পেতে রই (মানসিক স্বাস্থ্য)" data-en="Kaan Pete Roi Emotional">কান পেতে রই (মানসিক স্বাস্থ্য)</div>
+                            <div class="text-[10px] text-teal-800">01779-554391</div>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-teal-800">📞 Call</span>
+                </a>
+            </div>
+
+            <!-- Verified Therapist Quick Link -->
+            <div class="bg-slate-900 text-white rounded-3xl p-6 text-center space-y-3">
+                <div class="text-xl">🩺</div>
+                <h4 class="font-bold text-sm" data-bn="মানুষের সাথে সরাসরি কথা বলতে চান?" data-en="Prefer talking with a human specialist?">
+                    মানুষের সাথে সরাসরি কথা বলতে চান?
+                </h4>
+                <p class="text-xs text-slate-300" data-bn="আমাদের বিএমডিসি ভেরিফায়েড থেরাপিস্টদের সাথে এনক্রিপ্টেড অডিও/ভিডিও সেশন বুক করুন।" data-en="Book a confidential 1-on-1 session with BMDC verified psychologists.">
+                    আমাদের বিএমডিসি ভেরিফায়েড থেরাপিস্টদের সাথে এনক্রিপ্টেড অডিও/ভিডিও সেশন বুক করুন।
+                </p>
+                <a asp-controller="Therapy" asp-action="Index" class="inline-block w-full py-2.5 bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs rounded-xl transition" data-bn="থেরাপিস্ট ডিরেক্টরি দেখুন" data-en="Browse Verified Therapists">
+                    থেরাপিস্ট ডিরেক্টরি দেখুন ➔
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

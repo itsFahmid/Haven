@@ -1,0 +1,403 @@
+@model Haven.Models.HomeViewModel
+@{
+    ViewData["Title"] = "হোম | Home";
+}
+
+<!-- Hero Section -->
+<section class="relative overflow-hidden pt-8 pb-16 md:pt-16 md:pb-24 bg-gradient-to-b from-teal-50/60 via-[#fdfcf9] to-[#fdfcf9]">
+    <!-- Calming background orb glows -->
+    <div class="absolute top-0 right-1/4 w-96 h-96 bg-teal-200/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+    <div class="absolute top-1/3 left-10 w-80 h-80 bg-emerald-200/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Hero Left Copy -->
+            <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                
+                <!-- Safe badge -->
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-100/80 border border-teal-200 text-teal-800 text-xs font-bold shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-teal-600 animate-pulse"></span>
+                    <span data-bn="বাংলাদেশের প্রথম সম্পূর্ণ এনক্রিপ্টেড যুব সুরক্ষা ও মানসিক স্বাস্থ্য প্ল্যাটফর্ম" data-en="Bangladesh's First 100% Encrypted Youth & Family Safety Sanctuary">
+                        বাংলাদেশের প্রথম সম্পূর্ণ এনক্রিপ্টেড যুব সুরক্ষা ও মানসিক স্বাস্থ্য প্ল্যাটফর্ম
+                    </span>
+                </div>
+
+                <!-- Main Hero Headline -->
+                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.18]">
+                    <span class="block text-teal-800" data-bn="আপনার হাতটি বাড়িয়ে দিন, আমরা আপনার পাশে আছি।" data-en="Extend your hand, we're here for you.">
+                        আপনার হাতটি বাড়িয়ে দিন, আমরা আপনার পাশে আছি।
+                    </span>
+                    <span class="block text-slate-700 text-2xl sm:text-3xl md:text-4xl font-semibold mt-2" data-bn="আপনার জীবনের মূল্য অপরিসীম।" data-en="You matter, just like others.">
+                        আপনার জীবনের মূল্য অপরিসীম।
+                    </span>
+                </h1>
+
+                <!-- Hero Subtitle -->
+                <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed" data-bn="সাইবার ব্ল্যাকমেইল, মানসিক হতাশা, ব্যক্তিগত সীমানা বা সংকটময় মুহূর্তে হেভেন আপনার নির্ভরযোগ্য নিরাপদ আশ্রয়। কোনো নাম বা লগইন ছাড়াই তাৎক্ষণিক কাউন্সেলিং এবং আইনি সুরক্ষা গাইড পান।" data-en="Whether dealing with cyber extortion, acute depression, relationship trauma, or digital privacy threats, HAVEN offers unconditional safety without signups or tracking.">
+                    সাইবার ব্ল্যাকমেইল, মানসিক হতাশা, ব্যক্তিগত সীমানা বা সংকটময় মুহূর্তে হেভেন আপনার নির্ভরযোগ্য নিরাপদ আশ্রয়। কোনো নাম বা লগইন ছাড়াই তাৎক্ষণিক কাউন্সেলিং এবং আইনি সুরক্ষা গাইড পান।
+                </p>
+
+                <!-- Hero Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                    <a asp-controller="Hotline" asp-action="Index" class="w-full sm:w-auto px-7 py-4 bg-teal-700 hover:bg-teal-800 text-white font-bold text-base rounded-2xl shadow-xl shadow-teal-900/15 transition transform hover:-translate-y-0.5 flex items-center justify-center gap-3">
+                        <span class="text-xl">🤖</span>
+                        <span data-bn="বেনামে কথা বলুন (এআই হটলাইন)" data-en="Talk Anonymously (AI Hotline)">বেনামে কথা বলুন (এআই হটলাইন)</span>
+                    </a>
+
+                    <a asp-controller="Courses" asp-action="Index" class="w-full sm:w-auto px-7 py-4 bg-white hover:bg-slate-50 text-slate-800 font-bold text-base rounded-2xl border border-slate-300/80 shadow-sm transition transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                        <span>🎓</span>
+                        <span data-bn="সুরক্ষা কোর্স দেখুন" data-en="Explore Safety Hub">সুরক্ষা কোর্স দেখুন</span>
+                    </a>
+
+                    <button type="button" onclick="triggerCrisisEscalation('Emergency SOS')" class="w-full sm:w-auto px-5 py-4 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-sm rounded-2xl transition flex items-center justify-center gap-2">
+                        <span>🚨</span>
+                        <span data-bn="জরুরি সংকট SOS" data-en="Crisis SOS">জরুরি সংকট SOS</span>
+                    </button>
+                </div>
+
+                <!-- Safe Space Assurances -->
+                <div class="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-slate-500 font-medium">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-teal-600 font-bold">✓</span>
+                        <span data-bn="১০০% পরিচয় গোপন" data-en="Zero Identity Logging">১০০% পরিচয় গোপন</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-teal-600 font-bold">✓</span>
+                        <span data-bn="বিএমডিসি রেজিস্টার্ড থেরাপিস্ট" data-en="BMDC Verified Doctors">বিএমডিসি রেজিস্টার্ড থেরাপিস্ট</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-teal-600 font-bold">✓</span>
+                        <span data-bn="সম্পূর্ণ বিনামূল্যে উন্মুক্ত" data-en="100% Free & Accessible">সম্পূর্ণ বিনামূল্যে উন্মুক্ত</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Hero Right Interactive Card -->
+            <div class="lg:col-span-5">
+                <div class="bg-white/95 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-100 relative overflow-hidden haven-card">
+                    <div class="absolute -top-12 -right-12 w-36 h-36 bg-teal-100 rounded-full blur-xl pointer-events-none"></div>
+
+                    <!-- Card Header -->
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl bg-teal-700 text-white flex items-center justify-center font-bold text-lg">
+                                🛡️
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm" data-bn="তাৎক্ষণিক সুরক্ষা ড্যাশবোর্ড" data-en="Instant Safety Quick-Bar">তাৎক্ষণিক সুরক্ষা ড্যাশবোর্ড</h3>
+                                <span class="text-[11px] text-emerald-600 font-bold">● Active 24/7 Assistance</span>
+                            </div>
+                        </div>
+                        <button onclick="HavenChat.sendMessage()" class="text-xs text-teal-700 hover:text-teal-800 font-bold" data-bn="চ্যাট চালু করুন" data-en="Launch Chat">
+                            চ্যাট চালু ➔
+                        </button>
+                    </div>
+
+                    <!-- Interactive Grounding Exercise Widget -->
+                    <div class="my-5 p-4 rounded-2xl bg-gradient-to-br from-teal-50/80 to-emerald-50/80 border border-teal-100 text-center">
+                        <div class="text-xs font-bold text-teal-900 mb-1" data-bn="🌿 মন শান্ত করার ৪-৭-৮ ব্রিদিং সার্কেল" data-en="🌿 Somatic 4-7-8 Breathing Reset">
+                            🌿 মন শান্ত করার ৪-৭-৮ ব্রিদিং সার্কেল
+                        </div>
+                        <div class="flex items-center justify-center py-4">
+                            <div class="w-20 h-20 rounded-full bg-teal-600/20 flex items-center justify-center breathing-bubble border border-teal-500/30">
+                                <span class="text-teal-900 font-extrabold text-xs" data-bn="শ্বাস নিন" data-en="Breathe">শ্বাস নিন</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-600" data-bn="তীব্র উদ্বেগ বা প্যানিক অনুভব হলে এই ছন্দময় বৃত্তটির সাথে গভীর শ্বাস নিন।" data-en="Follow the rhythm to regulate your nervous system instantly.">
+                            তীব্র উদ্বেগ বা প্যানিক অনুভব হলে এই ছন্দময় বৃত্তটির সাথে গভীর শ্বাস নিন।
+                        </p>
+                    </div>
+
+                    <!-- Quick Direct Dial Rows -->
+                    <div class="space-y-2.5">
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-bn="জরুরি সরাসরি ডায়াল" data-en="Emergency Direct Dial">জরুরি সরাসরি ডায়াল</div>
+                        
+                        <a href="tel:1098" class="flex items-center justify-between p-3 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 transition">
+                            <div class="flex items-center gap-2.5">
+                                <span class="text-base">🧒</span>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-900" data-bn="চাইল্ড হেল্পলাইন (১০৯৮)" data-en="Child Helpline (1098)">চাইল্ড হেল্পলাইন (১০৯৮)</div>
+                                    <div class="text-[10px] text-rose-700 font-medium" data-bn="শিশু ও কিশোরদের বিপদ উদ্ধার" data-en="Child protection & rescue">শিশু ও কিশোরদের বিপদ উদ্ধার</div>
+                                </div>
+                            </div>
+                            <span class="px-2.5 py-1 bg-rose-600 text-white font-bold text-xs rounded-lg">1098</span>
+                        </a>
+
+                        <a href="tel:999" class="flex items-center justify-between p-3 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-300 transition">
+                            <div class="flex items-center gap-2.5">
+                                <span class="text-base">🚨</span>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-900" data-bn="জাতীয় জরুরি সেবা (৯৯৯)" data-en="National Emergency (999)">জাতীয় জরুরি সেবা (৯৯৯)</div>
+                                    <div class="text-[10px] text-slate-600 font-medium" data-bn="পুলিশ, অ্যাম্বুলেন্স ও উদ্ধার" data-en="Police, ambulance & fire">পুলিশ, অ্যাম্বুলেন্স ও উদ্ধার</div>
+                                </div>
+                            </div>
+                            <span class="px-2.5 py-1 bg-slate-900 text-white font-bold text-xs rounded-lg">999</span>
+                        </a>
+                    </div>
+
+                    <!-- Bottom Quick Exit Warning -->
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+                        <span data-bn="গোপনীয় প্রস্থান করতে ESC চাপুন" data-en="Press ESC to quickly leave page">গোপনীয় প্রস্থান করতে ESC চাপুন</span>
+                        <button onclick="window.havenQuickExit()" class="text-rose-600 hover:underline font-bold" data-bn="Exit Now" data-en="Exit Now">Exit Now</button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- Bangladeshi Emergency Hotline Quick Alert Bar -->
+<section id="emergencySection" class="bg-white border-y border-slate-200 py-8 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div>
+                <span class="px-2.5 py-1 bg-rose-100 text-rose-800 rounded-md text-xs font-bold uppercase tracking-wider" data-bn="২৪/৭ জরুরি হটলাইন বার" data-en="24/7 Emergency Alert Bar">
+                    ২৪/৭ জরুরি হটলাইন বার
+                </span>
+                <h2 class="text-xl font-bold text-slate-900 mt-1" data-bn="বাংলাদেশের সরকারি ও জরুরি সংকট নিরসন নম্বর" data-en="Official Bangladesh Emergency Hotlines">
+                    বাংলাদেশের সরকারি ও জরুরি সংকট নিরসন নম্বর
+                </h2>
+            </div>
+            <p class="text-xs text-slate-500 max-w-md" data-bn="যেকোনো শারীরিক বিপদ, সাইবার নির্যাতন বা মানসিক বিপর্যয়ে এই নম্বরগুলো সম্পূর্ণ টোল-ফ্রি ও সার্বক্ষণিক সক্রিয়।" data-en="All hotlines are officially operated, confidential, and 100% toll-free across all BD telecom operators.">
+                যেকোনো শারীরিক বিপদ, সাইবার নির্যাতন বা মানসিক বিপর্যয়ে এই নম্বরগুলো সম্পূর্ণ টোল-ফ্রি ও সার্বক্ষণিক সক্রিয়।
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            @foreach (var hotline in Model.Hotlines)
+            {
+                <div class="p-4 rounded-2xl border border-slate-200 hover:border-teal-500 bg-slate-50/60 hover:bg-white transition haven-card group">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-2xl font-black text-slate-900 group-hover:text-teal-700 transition">@hotline.Number</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold @(hotline.IsTollFree ? "bg-emerald-100 text-emerald-800" : "bg-sky-100 text-sky-800")">
+                            @(hotline.IsTollFree ? "টোল-ফ্রি" : "সহায়তা সেল")
+                        </span>
+                    </div>
+                    <div class="text-xs font-bold text-slate-800 mb-1" data-bn="@hotline.NameBn" data-en="@hotline.NameEn">
+                        @hotline.NameBn
+                    </div>
+                    <div class="text-[11px] text-slate-500 line-clamp-2" data-bn="@hotline.DescriptionBn" data-en="@hotline.DescriptionEn">
+                        @hotline.DescriptionBn
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-slate-200/60 flex items-center justify-between">
+                        <a href="tel:@hotline.Number" class="text-xs font-bold text-teal-700 hover:text-teal-900 inline-flex items-center gap-1">
+                            <span>📞 কল করুন</span>
+                        </a>
+                        <span class="text-[10px] text-slate-400 font-medium" data-bn="@hotline.TagBn" data-en="@hotline.TagEn">
+                            @hotline.TagBn
+                        </span>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+</section>
+
+<!-- Interactive Action Cards Section (Core Pillars of HAVEN) -->
+<section class="py-16 md:py-24 bg-[#fdfcf9]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-3xl mx-auto mb-14">
+            <span class="text-xs font-bold text-teal-700 uppercase tracking-widest bg-teal-50 px-3 py-1 rounded-full border border-teal-200/60" data-bn="আমাদের মূল সেবা ও সুরক্ষা স্তম্ভ" data-en="Haven Pillars of Protection">
+                আমাদের মূল সেবা ও সুরক্ষা স্তম্ভ
+            </span>
+            <h2 class="text-3xl font-extrabold text-slate-900 mt-3" data-bn="নিরাপত্তা, শিক্ষা ও মানসিক সুস্থতার পূর্ণাঙ্গ সমাধান" data-en="Empowering Youth Through Safety, Education & Healing">
+                নিরাপত্তা, শিক্ষা ও মানসিক সুস্থতার পূর্ণাঙ্গ সমাধান
+            </h2>
+            <p class="text-slate-600 text-sm mt-3" data-bn="জেন জি ও আলফা প্রজন্মের বাস্তব জীবনের ডিজিটাল ও মানসিক চ্যালেঞ্জ মোকাবিলার জন্য তৈরি।" data-en="Designed specifically for the evolving real-world digital, emotional, and social pressures faced by Gen Z and Gen Alpha.">
+                জেন জি ও আলফা প্রজন্মের বাস্তব জীবনের ডিজিটাল ও মানসিক চ্যালেঞ্জ মোকাবিলার জন্য তৈরি।
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Action Card 1: Safety & Life-Skill Courses -->
+            <div class="bg-white rounded-3xl p-8 border border-slate-200/90 shadow-sm hover:shadow-xl transition haven-card flex flex-col justify-between group">
+                <div>
+                    <div class="w-14 h-14 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center text-2xl font-bold mb-6 group-hover:scale-110 transition">
+                        🎓
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-teal-50 text-teal-700 border border-teal-200" data-bn="ইন্টারেক্টিভ শিক্ষা হাব" data-en="Interactive Educational Hub">
+                        ইন্টারেক্টিভ শিক্ষা হাব
+                    </span>
+                    <h3 class="text-xl font-bold text-slate-900 mt-3" data-bn="সাইবার ও শারীরিক সুরক্ষা কোর্স" data-en="Cyber & Bodily Safety Courses">
+                        সাইবার ও শারীরিক সুরক্ষা কোর্স
+                    </h3>
+                    <p class="text-xs text-slate-600 mt-2.5 leading-relaxed" data-bn="সাইবার বুলিং প্রতিরোধ, ব্যক্তিগত সম্মতি ও সীমানা রক্ষা, এবং ডিজিটাল ব্ল্যাকমেইল থেকে মুক্তির কার্যকর ব্যবহারিক পাঠ।" data-en="Master evidence forensics, counter online blackmail, understand consent, and protect your digital privacy under BD Cyber Laws.">
+                        সাইবার বুলিং প্রতিরোধ, ব্যক্তিগত সম্মতি ও সীমানা রক্ষা, এবং ডিজিটাল ব্ল্যাকমেইল থেকে মুক্তির কার্যকর ব্যবহারিক পাঠ।
+                    </p>
+                    <ul class="mt-4 space-y-2 text-xs text-slate-500">
+                        <li class="flex items-center gap-2">✓ <span data-bn="বাস্তব কেস স্টাডি ও কুইজ" data-en="Real Case Studies & Interactive Quizzes">বাস্তব কেস স্টাডি ও কুইজ</span></li>
+                        <li class="flex items-center gap-2">✓ <span data-bn="সম্পূর্ণ ফ্রি / ঐচ্ছিক অনুদান (PWYW)" data-en="100% Free / Pay-What-You-Want">সম্পূর্ণ ফ্রি / ঐচ্ছিক অনুদান (PWYW)</span></li>
+                    </ul>
+                </div>
+                <div class="mt-8 pt-4 border-t border-slate-100">
+                    <a asp-controller="Courses" asp-action="Index" class="inline-flex items-center justify-between w-full font-bold text-sm text-teal-700 group-hover:text-teal-900 transition">
+                        <span data-bn="কোর্স মডিউল শুরু করুন" data-en="Explore Courses">কোর্স মডিউল শুরু করুন</span>
+                        <span class="group-hover:translate-x-1 transition">➔</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Action Card 2: AI Safety Assistant & Anonymous Chat -->
+            <div class="bg-gradient-to-b from-teal-800 to-teal-950 text-white rounded-3xl p-8 shadow-xl shadow-teal-950/20 hover:shadow-2xl transition haven-card flex flex-col justify-between relative overflow-hidden group">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-teal-600/30 rounded-full blur-2xl pointer-events-none"></div>
+                <div>
+                    <div class="w-14 h-14 rounded-2xl bg-white/10 text-white flex items-center justify-center text-2xl font-bold mb-6 group-hover:scale-110 transition">
+                        🤖
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" data-bn="১০০% পরিচয়হীন আশ্রয়" data-en="100% Anonymous AI Sanctuary">
+                        ১০০% পরিচয়হীন আশ্রয়
+                    </span>
+                    <h3 class="text-xl font-bold text-white mt-3" data-bn="এআই সুরক্ষা সহকারী ও হটলাইন" data-en="AI Safety Assistant & Hotline">
+                        এআই সুরক্ষা সহকারী ও হটলাইন
+                    </h3>
+                    <p class="text-xs text-teal-100/80 mt-2.5 leading-relaxed" data-bn="কোনো সাইন-আপ ছাড়াই তাৎক্ষণিক সহানুভূতিশীল কাউন্সেলিং চ্যাট। স্বয়ংক্রিয় সংকট শনাক্তকরণ ও জরুরি হটলাইন সংযোগ।" data-en="Instant trauma-informed triage with zero signups. Automated high-risk crisis detection with direct counselor escalation.">
+                        কোনো সাইন-আপ ছাড়াই তাৎক্ষণিক সহানুভূতিশীল কাউন্সেলিং চ্যাট। স্বয়ংক্রিয় সংকট শনাক্তকরণ ও জরুরি হটলাইন সংযোগ।
+                    </p>
+                    <ul class="mt-4 space-y-2 text-xs text-teal-200/70">
+                        <li class="flex items-center gap-2">✓ <span data-bn="জিরো ডাটা ট্র্যাকিং গ্যারান্টি" data-en="Zero Log Retention Guarantee">জিরো ডাটা ট্র্যাকিং গ্যারান্টি</span></li>
+                        <li class="flex items-center gap-2">✓ <span data-bn="তাৎক্ষণিক ক্রাইসিস এসকেলেশন মোডাল" data-en="Instant Crisis Hotline Trigger">তাৎক্ষণিক ক্রাইসিস এসকেলেশন মোডাল</span></li>
+                    </ul>
+                </div>
+                <div class="mt-8 pt-4 border-t border-teal-800/60">
+                    <a asp-controller="Hotline" asp-action="Index" class="inline-flex items-center justify-between w-full font-bold text-sm text-emerald-300 hover:text-white transition">
+                        <span data-bn="বেনামী চ্যাট শুরু করুন" data-en="Start Anonymous Chat">বেনামী চ্যাট শুরু করুন</span>
+                        <span class="group-hover:translate-x-1 transition">➔</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Action Card 3: BMDC Verified Therapy Directory -->
+            <div class="bg-white rounded-3xl p-8 border border-slate-200/90 shadow-sm hover:shadow-xl transition haven-card flex flex-col justify-between group">
+                <div>
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl font-bold mb-6 group-hover:scale-110 transition">
+                        🩺
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200" data-bn="ভেরিফায়েড প্রফেশনালস" data-en="BMDC Verified Directory">
+                        ভেরিফায়েড প্রফেশনালস
+                    </span>
+                    <h3 class="text-xl font-bold text-slate-900 mt-3" data-bn="প্রফেশনাল থেরাপি ডিরেক্টরি" data-en="Verified Therapy Directory">
+                        প্রফেশনাল থেরাপি ডিরেক্টরি
+                    </h3>
+                    <p class="text-xs text-slate-600 mt-2.5 leading-relaxed" data-bn="বাংলাদেশ মেডিকেল অ্যান্ড ডেন্টাল কাউন্সিল (BMDC) ও ক্লিনিক্যাল সাইকোলজিস্টদের সাথে এনক্রিপ্টেড ও স্বল্প খরচে কনফিডেন্সিয়াল সেশন বুক করুন।" data-en="Connect with certified psychiatrists & therapists for confidential online video, audio, or in-person therapy across Bangladesh.">
+                        বাংলাদেশ মেডিকেল অ্যান্ড ডেন্টাল কাউন্সিল (BMDC) ও ক্লিনিক্যাল সাইকোলজিস্টদের সাথে এনক্রিপ্টেড ও স্বল্প খরচে কনফিডেন্সিয়াল সেশন বুক করুন।
+                    </p>
+                    <ul class="mt-4 space-y-2 text-xs text-slate-500">
+                        <li class="flex items-center gap-2">✓ <span data-bn="অনলাইন অডিও/ভিডিও বা সরাসরি চেম্বার" data-en="Encrypted Video, Audio or In-Person">অনলাইন অডিও/ভিডিও বা সরাসরি চেম্বার</span></li>
+                        <li class="flex items-center gap-2">✓ <span data-bn="সাবসিডাইজড / ফ্রি সেশন সুবিধা" data-en="Subsidized & Free Crisis Slots">সাবসিডাইজড / ফ্রি সেশন সুবিধা</span></li>
+                    </ul>
+                </div>
+                <div class="mt-8 pt-4 border-t border-slate-100">
+                    <a asp-controller="Therapy" asp-action="Index" class="inline-flex items-center justify-between w-full font-bold text-sm text-emerald-700 group-hover:text-emerald-900 transition">
+                        <span data-bn="থেরাপিস্ট তালিকা দেখুন" data-en="View Verified Directory">থেরাপিস্ট তালিকা দেখুন</span>
+                        <span class="group-hover:translate-x-1 transition">➔</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- Impact Numbers & Trust Badges -->
+<section class="py-14 bg-teal-900 text-white relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            
+            <div class="space-y-1">
+                <div class="text-3xl sm:text-4xl font-extrabold text-teal-300">28,490+</div>
+                <div class="text-xs text-teal-100 font-medium" data-bn="সুরক্ষিত তরুণ ও শিশু" data-en="Youth & Children Protected">সুরক্ষিত তরুণ ও শিশু</div>
+            </div>
+
+            <div class="space-y-1">
+                <div class="text-3xl sm:text-4xl font-extrabold text-emerald-300">4,120+</div>
+                <div class="text-xs text-teal-100 font-medium" data-bn="সফল ক্রাইসিস ডি-এসকেলেশন" data-en="Crises Safely De-escalated">সফল ক্রাইসিস ডি-এসকেলেশন</div>
+            </div>
+
+            <div class="space-y-1">
+                <div class="text-3xl sm:text-4xl font-extrabold text-amber-300">38+</div>
+                <div class="text-xs text-teal-100 font-medium" data-bn="বিএমডিসি ভেরিফায়েড বিশেষজ্ঞ" data-en="BMDC Verified Specialists">বিএমডিসি ভেরিফায়েড বিশেষজ্ঞ</div>
+            </div>
+
+            <div class="space-y-1">
+                <div class="text-3xl sm:text-4xl font-extrabold text-sky-300">100%</div>
+                <div class="text-xs text-teal-100 font-medium" data-bn="গোপনীয় ও পরিচয়হীন" data-en="Anonymous & Non-Judgmental">গোপনীয় ও পরিচয়হীন</div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- Hall of Fame & Community Micro-Donation Section -->
+<section class="py-16 bg-white border-t border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            <div class="lg:col-span-6 space-y-4">
+                <span class="text-xs font-bold text-amber-800 uppercase tracking-widest bg-amber-50 px-3 py-1 rounded-full border border-amber-200" data-bn="তারুণ্যের হল অফ ফেম" data-en="Haven Hall of Fame">
+                    তারুণ্যের হল অফ ফেম
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900" data-bn="একটি ছোট অনুদান, একটি মূল্যবান জীবন রক্ষা" data-en="A Micro-Donation That Saves Real Lives">
+                    একটি ছোট অনুদান, একটি মূল্যবান জীবন রক্ষা
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed" data-bn="হেভেন একটি অলাভজনক নিরাপদ প্ল্যাটফর্ম। আপনার দেওয়া ৳৫০ বা ৳১০০ অনুদান কোনো এক প্রান্তিক কিশোরীর সাইবার আইনি সহায়তা বা বিষণ্ণতায় ভোগা তরুণের ফ্রি থেরাপি সেশন নিশ্চিত করে।" data-en="HAVEN is a youth-run safe sanctuary. Your ৳50 or ৳100 contribution sponsors immediate psychological first-aid and cyber rescue for vulnerable peers across Bangladesh.">
+                    হেভেন একটি অলাভজনক নিরাপদ প্ল্যাটফর্ম। আপনার দেওয়া ৳৫০ বা ৳১০০ অনুদান কোনো এক প্রান্তিক কিশোরীর সাইবার আইনি সহায়তা বা বিষণ্ণতায় ভোগা তরুণের ফ্রি থেরাপি সেশন নিশ্চিত করে।
+                </p>
+                <div class="pt-2 flex items-center gap-3">
+                    <button onclick="openModal('paymentModal')" class="px-6 py-3 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs sm:text-sm rounded-xl transition flex items-center gap-2">
+                        <span>💝</span>
+                        <span data-bn="বিকাশ / নগদ / কার্ডে অনুদান দিন" data-en="Contribute via bKash / Nagad / Cards">বিকাশ / নগদ / কার্ডে অনুদান দিন</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Donors Marquee / Grid -->
+            <div class="lg:col-span-6">
+                <div class="bg-slate-50 border border-slate-200 rounded-3xl p-6 space-y-3">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
+                        <span data-bn="সাম্প্রতিক সহমর্মী সমর্থকবৃন্দ" data-en="Recent Kind Benefactors">সাম্প্রতিক সহমর্মী সমর্থকবৃন্দ</span>
+                        <span class="text-teal-700">🇧🇩 Bangladesh</span>
+                    </div>
+
+                    <div class="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+                        @foreach (var donor in Model.HallOfFameDonors)
+                        {
+                            <div class="flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs">
+                                        ⭐
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-slate-800">@donor.Name</div>
+                                        <div class="text-[10px] text-slate-400">@donor.City • <span data-bn="@donor.TimeAgoBn" data-en="@donor.TimeAgoEn">@donor.TimeAgoBn</span></div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xs font-bold text-teal-800">৳@donor.AmountBDT</div>
+                                    <span class="inline-block text-[9px] font-bold px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-100" data-bn="@donor.BadgeBn" data-en="@donor.BadgeEn">
+                                        @donor.BadgeBn
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>

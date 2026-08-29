@@ -1,0 +1,103 @@
+<!-- Urgent Crisis Escalation Banner & Modal -->
+<div id="crisisEscalationModal" class="haven-modal urgent-crisis-modal fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md overflow-y-auto" role="dialog" aria-modal="true">
+    <div class="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border-2 border-rose-500 overflow-hidden transform transition-all animate-bounce-short my-8">
+        
+        <!-- Top Emergency Alert Header -->
+        <div class="bg-gradient-to-r from-rose-600 to-rose-700 p-6 text-white text-center relative">
+            <div class="inline-flex items-center justify-center w-14 h-14 bg-white/20 rounded-full mb-3 pulse-red">
+                <span class="text-3xl">❤️‍🩹</span>
+            </div>
+            <h2 class="text-2xl font-bold tracking-tight" data-bn="আপনি একা নন। আমরা আপনার পাশে আছি।" data-en="You Are Not Alone. We Are Here With You.">
+                আপনি একা নন। আমরা আপনার পাশে আছি।
+            </h2>
+            <p class="mt-2 text-rose-100 text-sm max-w-lg mx-auto" data-bn="আপনার জীবনের মূল্য অপরিসীম। এই কঠিন মুহূর্তে অনুগ্রহ করে কোনো চরম সিদ্ধান্ত নেবেন না। এখনই বিনামূল্যে আমাদের সংকটকালীন সহমর্মী বন্ধুদের সাথে সরাসরি কথা বলুন।" data-en="Your life is deeply valuable. Please pause for a moment. Connect instantly with compassionate crisis counselors who are ready to support you unconditionally.">
+                আপনার জীবনের মূল্য অপরিসীম। এই কঠিন মুহূর্তে অনুগ্রহ করে কোনো চরম সিদ্ধান্ত নেবেন না। এখনই বিনামূল্যে আমাদের সংকটকালীন সহমর্মী বন্ধুদের সাথে সরাসরি কথা বলুন।
+            </p>
+            <button onclick="closeModal('crisisEscalationModal')" class="absolute top-4 right-4 text-white/80 hover:text-white bg-black/20 hover:bg-black/30 w-8 h-8 rounded-full flex items-center justify-center transition" aria-label="Close">
+                ✕
+            </button>
+        </div>
+
+        <div class="p-6 md:p-8 space-y-6">
+            
+            <!-- Direct Emergency One-Click Dial Grid -->
+            <div>
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3" data-bn="তাৎক্ষণিক হটলাইন (সরাসরি কল করতে ট্যাপ করুন)" data-en="Instant Hotlines (Tap to Call Immediately)">
+                    তাৎক্ষণিক হটলাইন (সরাসরি কল করতে ট্যাপ করুন)
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    
+                    <!-- 1098 Child Helpline -->
+                    <a href="tel:1098" class="flex items-center p-3.5 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-2xl transition group">
+                        <div class="w-12 h-12 rounded-xl bg-rose-600 text-white flex items-center justify-center text-xl font-bold flex-shrink-0 group-hover:scale-105 transition">
+                            1098
+                        </div>
+                        <div class="ml-3.5">
+                            <div class="font-bold text-slate-800 text-sm" data-bn="চাইল্ড হেল্পলাইন বাংলাদেশ" data-en="Child Helpline Bangladesh">চাইল্ড হেল্পলাইন বাংলাদেশ</div>
+                            <div class="text-xs text-rose-700 font-medium" data-bn="২৪/৭ সম্পূর্ণ টোল-ফ্রি (শিশু ও কিশোর সুরক্ষা)" data-en="24/7 Toll-Free (Child & Youth Protection)">২৪/৭ সম্পূর্ণ টোল-ফ্রি (শিশু ও কিশোর সুরক্ষা)</div>
+                        </div>
+                    </a>
+
+                    <!-- 999 National Emergency -->
+                    <a href="tel:999" class="flex items-center p-3.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-2xl transition group">
+                        <div class="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center text-xl font-bold flex-shrink-0 group-hover:scale-105 transition">
+                            999
+                        </div>
+                        <div class="ml-3.5">
+                            <div class="font-bold text-slate-800 text-sm" data-bn="জাতীয় জরুরি সেবা" data-en="National Emergency Service">জাতীয় জরুরি সেবা</div>
+                            <div class="text-xs text-slate-600 font-medium" data-bn="পুলিশ, অ্যাম্বুলেন্স ও উদ্ধার সহায়তা" data-en="Police, Ambulance & Rescue Dispatch">পুলিশ, অ্যাম্বুলেন্স ও উদ্ধার সহায়তা</div>
+                        </div>
+                    </a>
+
+                    <!-- Kaan Pete Roi -->
+                    <a href="tel:01779554391" class="flex items-center p-3.5 bg-teal-50 hover:bg-teal-100 border border-teal-200 rounded-2xl transition group">
+                        <div class="w-12 h-12 rounded-xl bg-teal-700 text-white flex items-center justify-center text-lg font-bold flex-shrink-0 group-hover:scale-105 transition">
+                            📞
+                        </div>
+                        <div class="ml-3.5">
+                            <div class="font-bold text-slate-800 text-sm" data-bn="কান পেতে রই (মানসিক স্বাস্থ্য)" data-en="Kaan Pete Roi (Emotional Support)">কান পেতে রই (মানসিক স্বাস্থ্য)</div>
+                            <div class="text-xs text-teal-800 font-medium">01779-554391 / 01779-554392</div>
+                        </div>
+                    </a>
+
+                    <!-- 109 Women & Children Violence -->
+                    <a href="tel:109" class="flex items-center p-3.5 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-2xl transition group">
+                        <div class="w-12 h-12 rounded-xl bg-amber-600 text-white flex items-center justify-center text-xl font-bold flex-shrink-0 group-hover:scale-105 transition">
+                            109
+                        </div>
+                        <div class="ml-3.5">
+                            <div class="font-bold text-slate-800 text-sm" data-bn="নারী ও শিশু নির্যাতন প্রতিরোধ সেল" data-en="Women & Children Anti-Violence">নারী ও শিশু নির্যাতন প্রতিরোধ সেল</div>
+                            <div class="text-xs text-amber-800 font-medium" data-bn="২৪ ঘণ্টার জরুরি আইনি ও আশ্রয় সহায়তা" data-en="24/7 Emergency Shelter & Legal Aid">২৪ ঘণ্টার জরুরি আইনি ও আশ্রয় সহায়তা</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Somatic 4-7-8 Breathing Calm Anchor -->
+            <div class="bg-gradient-to-br from-teal-50 to-emerald-50 border border-teal-200/80 rounded-2xl p-5 text-center">
+                <div class="text-xs font-semibold text-teal-800 uppercase tracking-wide mb-2" data-bn="🌿 তাৎক্ষণিক মন শান্ত করার ব্যায়াম (৪-৭-৮ ব্রিদিং)" data-en="🌿 Immediate Grounding: 4-7-8 Breathing Reset">
+                    🌿 তাৎক্ষণিক মন শান্ত করার ব্যায়াম (৪-৭-৮ ব্রিদিং)
+                </div>
+                <div class="relative flex items-center justify-center my-3">
+                    <div class="w-20 h-20 rounded-full bg-teal-500/20 flex items-center justify-center breathing-bubble">
+                        <span class="text-teal-900 font-bold text-xs" data-bn="শ্বাস নিন" data-en="Breathe">শ্বাস নিন</span>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-600 max-w-md mx-auto" data-bn="৪ সেকেন্ড নাক দিয়ে শ্বাস নিন ➔ ৭ সেকেন্ড ধরে রাখুন ➔ ৮ সেকেন্ড মুখ দিয়ে ধীরে ছাড়ুন। আপনি এই মুহূর্তটিতে নিরাপদ আছেন।" data-en="Inhale 4s through nose ➔ Hold 7s gently ➔ Exhale 8s slowly. Ground yourself in this safe space.">
+                    ৪ সেকেন্ড নাক দিয়ে শ্বাস নিন ➔ ৭ সেকেন্ড ধরে রাখুন ➔ ৮ সেকেন্ড মুখ দিয়ে ধীরে ছাড়ুন। আপনি এই মুহূর্তটিতে নিরাপদ আছেন।
+                </p>
+            </div>
+
+            <!-- Bottom Actions -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+                <button onclick="closeModal('crisisEscalationModal')" class="w-full sm:w-auto px-5 py-2.5 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 font-medium text-sm rounded-xl transition" data-bn="আমি কিছুটা শান্ত বোধ করছি / বন্ধ করুন" data-en="I am feeling calmer now / Close">
+                    আমি কিছুটা শান্ত বোধ করছি / বন্ধ করুন
+                </button>
+                <button onclick="window.havenQuickExit()" class="w-full sm:w-auto px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-medium text-sm rounded-xl transition inline-flex items-center justify-center gap-2" data-bn="🚪 জরুরি প্রস্থান (Quick Exit)" data-en="🚪 Quick Exit (Escape)">
+                    🚪 জরুরি প্রস্থান (Quick Exit)
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --haven-teal-50: #f0fdfa;
+    --haven-teal-100: #ccfbf1;
+    --haven-teal-500: #14b8a6;
+    --haven-teal-600: #0d9488;
+    --haven-teal-700: #0f766e;
+    --haven-teal-800: #115e59;
+    --haven-teal-900: #134e4a;
+    --haven-warm-bg: #fdfcf9;
+    --haven-card-bg: #ffffff;
+    --haven-slate-800: #1e293b;
+    --haven-slate-900: #0f172a;
+    --haven-alert-red: #e11d48;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--haven-warm-bg);
+    color: #1e293b;
+    scroll-behavior: smooth;
+}
+
+/* Bengali font enhancement */
+.lang-bn, [data-lang="bn"], body[data-current-lang="bn"] {
+    font-family: 'Hind Siliguri', 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Glassmorphism & Cards */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.glass-panel-dark {
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(51, 65, 85, 0.6);
+}
+
+.haven-card {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+}
+
+.haven-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px -8px rgba(15, 118, 110, 0.08), 0 8px 16px -4px rgba(0, 0, 0, 0.03);
+}
+
+/* Emergency Pulse Animations */
+@keyframes pulse-emergency {
+    0% {
+        box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 12px rgba(225, 29, 72, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(225, 29, 72, 0);
+    }
+}
+
+.pulse-red {
+    animation: pulse-emergency 2s infinite;
+}
+
+@keyframes pulse-teal {
+    0% {
+        box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.6);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(20, 184, 166, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(20, 184, 166, 0);
+    }
+}
+
+.pulse-teal {
+    animation: pulse-teal 2.4s infinite;
+}
+
+/* Breathing Tool Animation */
+@keyframes breatheCycle {
+    0%, 100% {
+        transform: scale(1);
+        background-color: rgba(20, 184, 166, 0.15);
+    }
+    35% {
+        transform: scale(1.35);
+        background-color: rgba(20, 184, 166, 0.35);
+    }
+    60% {
+        transform: scale(1.35);
+        background-color: rgba(20, 184, 166, 0.3);
+    }
+    90% {
+        transform: scale(1);
+        background-color: rgba(20, 184, 166, 0.15);
+    }
+}
+
+.breathing-bubble {
+    animation: breatheCycle 19s infinite ease-in-out;
+}
+
+/* Badge styles */
+.badge-bmdc {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    color: white;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Chat container styling */
+.chat-bubble-user {
+    background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+    color: white;
+    border-radius: 18px 18px 4px 18px;
+}
+
+.chat-bubble-bot {
+    background: #f8fafc;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px 18px 18px 4px;
+}
+
+.chat-bubble-crisis {
+    background: #fff1f2;
+    color: #881337;
+    border: 1px solid #fecdd3;
+    border-radius: 18px 18px 18px 4px;
+}
+
+/* Gateway Selected States */
+.gateway-card.active {
+    border-color: #0f766e;
+    background-color: #f0fdfa;
+    box-shadow: 0 0 0 2px #0f766e;
+}
+
+.gateway-card.active.bkash {
+    border-color: #e2136e;
+    background-color: #fdf2f8;
+    box-shadow: 0 0 0 2px #e2136e;
+}
+
+.gateway-card.active.nagad {
+    border-color: #f7941d;
+    background-color: #fff7ed;
+    box-shadow: 0 0 0 2px #f7941d;
+}
+
+.gateway-card.active.rocket {
+    border-color: #8c3494;
+    background-color: #faf5ff;
+    box-shadow: 0 0 0 2px #8c3494;
+}
+
+/* Tab indicator */
+.tab-btn.active {
+    border-bottom: 2px solid #0f766e;
+    color: #0f766e;
+    font-weight: 600;
+}

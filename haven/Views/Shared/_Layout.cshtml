@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HAVEN | Bangladesh Youth Safety & Mental Health Sanctuary</title>
+    <meta name="description" content="HAVEN is an anonymous, trauma-informed child & adult safety education, mental health, and emergency recovery platform for Bangladesh." />
+    
+    <!-- Google Fonts: Hind Siliguri & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        haven: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                            alert: '#e11d48',
+                            slate: '#1e293b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body class="min-h-screen flex flex-col antialiased bg-[#fdfcf9] text-slate-800" data-current-lang="bn">
+
+    <!-- Top Emergency Safe Notice Ribbon -->
+    <div class="bg-gradient-to-r from-teal-900 via-slate-900 to-teal-900 text-white text-xs py-2 px-4 border-b border-teal-800/40">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    🔒 100% Anonymous Safe Space
+                </span>
+                <span class="hidden sm:inline text-slate-300" data-bn="আপনার পরিচয় সম্পূর্ণ গোপন থাকবে। কোনো লগইন প্রয়োজন নেই।" data-en="Zero registration required. Your privacy & safety are strictly protected.">
+                    আপনার পরিচয় সম্পূর্ণ গোপন থাকবে। কোনো লগইন প্রয়োজন নেই।
+                </span>
+            </div>
+            
+            <div class="flex items-center gap-4 text-[11px]">
+                <div class="flex items-center gap-1.5 text-rose-300 font-semibold">
+                    <span>🚨</span>
+                    <span data-bn="জরুরি হেল্পলাইন:" data-en="National Hotlines:">জরুরি হেল্পলাইন:</span>
+                    <a href="tel:1098" class="underline hover:text-white">1098</a> |
+                    <a href="tel:999" class="underline hover:text-white">999</a> |
+                    <a href="tel:109" class="underline hover:text-white">109</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm transition">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Brand Logo -->
+                <div class="flex items-center">
+                    <a asp-controller="Home" asp-action="Index" class="flex items-center gap-3 group">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-teal-700 to-teal-500 text-white flex items-center justify-center shadow-md shadow-teal-900/10 group-hover:scale-105 transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-2xl font-black tracking-tight text-slate-900 font-sans">HAVEN</span>
+                                <span class="px-2 py-0.5 text-[10px] font-extrabold bg-teal-100 text-teal-800 rounded-md tracking-wider">হেভেন</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 font-medium tracking-tight" data-bn="তারুণ্যের সুরক্ষা ও মানসিক স্বাস্থ্য আশ্রয়" data-en="Youth Safety & Mental Health Sanctuary">
+                                তারুণ্যের সুরক্ষা ও মানসিক স্বাস্থ্য আশ্রয়
+                            </p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <a asp-controller="Home" asp-action="Index" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-700 hover:bg-teal-50/60 transition" data-bn="হোম" data-en="Home">
+                        হোম
+                    </a>
+                    <a asp-controller="Courses" asp-action="Index" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-700 hover:bg-teal-50/60 transition" data-bn="নিরাপত্তা কোর্স" data-en="Safety Courses">
+                        নিরাপত্তা কোর্স
+                    </a>
+                    <a asp-controller="Hotline" asp-action="Index" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-700 hover:bg-teal-50/60 transition flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span data-bn="এআই সুরক্ষা হটলাইন" data-en="AI Safety Assistant">এআই সুরক্ষা হটলাইন</span>
+                    </a>
+                    <a asp-controller="Therapy" asp-action="Index" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-700 hover:bg-teal-50/60 transition" data-bn="ভেরিফায়েড থেরাপিস্ট" data-en="Therapy Directory">
+                        ভেরিফায়েড থেরাপিস্ট
+                    </a>
+                    <button type="button" onclick="openModal('paymentModal')" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 transition flex items-center gap-1.5">
+                        <span>💝</span>
+                        <span data-bn="সহযোগিতা / অনুদান" data-en="Support Haven">সহযোগিতা / অনুদান</span>
+                    </button>
+                </nav>
+
+                <!-- Right Header Actions: Language Switcher & Quick Exit -->
+                <div class="flex items-center gap-2.5 sm:gap-3.5">
+                    
+                    <!-- Bilingual Language Switcher -->
+                    <div class="bg-slate-100 p-1 rounded-xl flex items-center border border-slate-200">
+                        <button type="button" onclick="HavenLang.set('bn')" data-set-lang="bn" class="lang-toggle-btn px-2.5 py-1 rounded-lg text-xs font-bold transition bg-teal-700 text-white shadow-sm">
+                            বাংলা
+                        </button>
+                        <button type="button" onclick="HavenLang.set('en')" data-set-lang="en" class="lang-toggle-btn px-2.5 py-1 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition">
+                            EN
+                        </button>
+                    </div>
+
+                    <!-- Universal Quick Exit Button -->
+                    <button type="button" id="quickExitBtn" onclick="window.havenQuickExit()" title="Press ESC to quickly exit" class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-rose-900/20 transition transform active:scale-95 pulse-red">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        <span data-bn="জরুরি প্রস্থান (ESC)" data-en="Quick Exit (ESC)">জরুরি প্রস্থান (ESC)</span>
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Mobile Secondary Nav Bar -->
+        <div class="md:hidden flex items-center justify-around py-2.5 border-t border-slate-200/80 bg-slate-50/90 text-xs font-semibold text-slate-600">
+            <a asp-controller="Home" asp-action="Index" class="hover:text-teal-700" data-bn="হোম" data-en="Home">হোম</a>
+            <a asp-controller="Courses" asp-action="Index" class="hover:text-teal-700" data-bn="কোর্স" data-en="Courses">কোর্স</a>
+            <a asp-controller="Hotline" asp-action="Index" class="text-teal-700 font-bold flex items-center gap-1" data-bn="🤖 এআই হটলাইন" data-en="🤖 AI Hotline">🤖 এআই হটলাইন</a>
+            <a asp-controller="Therapy" asp-action="Index" class="hover:text-teal-700" data-bn="থেরাপিস্ট" data-en="Therapy">থেরাপিস্ট</a>
+            <button onclick="openModal('paymentModal')" class="text-amber-700 font-bold" data-bn="অনুদান" data-en="Donate">অনুদান</button>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Content Container -->
+    <main role="main" class="flex-grow">
+        @RenderBody()
+    </main>
+
+    <!-- Common National Helpline Emergency Alert Banner -->
+    <section class="bg-gradient-to-r from-slate-900 via-teal-950 to-slate-900 text-white py-12 border-t border-teal-800/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-8">
+                <span class="px-3 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-full text-xs font-bold uppercase tracking-wider">
+                    24/7 Bangladesh Crisis Lines
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold mt-3 text-white" data-bn="জরুরি সহায়তা প্রয়োজন? আমরা সার্বক্ষণিক প্রস্তুত" data-en="Need Urgent Emergency Help? Free National Helplines">
+                    জরুরি সহায়তা প্রয়োজন? আমরা সার্বক্ষণিক প্রস্তুত
+                </h2>
+                <p class="text-slate-300 text-sm mt-2" data-bn="যেকোনো সংকট, নির্যাতন বা মানসিক বিপর্যয়ে নিচের টোল-ফ্রি নম্বরগুলোতে তাৎক্ষণিক কল করুন।" data-en="Call these official toll-free Bangladesh emergency numbers anytime for instant dispatch and rescue.">
+                    যেকোনো সংকট, নির্যাতন বা মানসিক বিপর্যয়ে নিচের টোল-ফ্রি নম্বরগুলোতে তাৎক্ষণিক কল করুন।
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <!-- 999 -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-5 hover:bg-white/15 transition haven-card">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-3xl font-black text-rose-400">999</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300">Toll-Free</span>
+                    </div>
+                    <h3 class="font-bold text-white text-base" data-bn="জাতীয় জরুরি সেবা (৯৯৯)" data-en="National Emergency (999)">জাতীয় জরুরি সেবা (৯৯৯)</h3>
+                    <p class="text-xs text-slate-300 mt-1" data-bn="পুলিশ, অ্যাম্বুলেন্স ও ফায়ার সার্ভিসের দ্রুততম সহায়তা।" data-en="Instant police, ambulance, and rescue dispatch across Bangladesh.">পুলিশ, অ্যাম্বুলেন্স ও ফায়ার সার্ভিস।</p>
+                    <a href="tel:999" class="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-rose-300 hover:text-white">
+                        <span>📞 সরাসরি কল করুন</span> ➔
+                    </a>
+                </div>
+
+                <!-- 1098 -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-5 hover:bg-white/15 transition haven-card">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-3xl font-black text-emerald-400">1098</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300">Toll-Free</span>
+                    </div>
+                    <h3 class="font-bold text-white text-base" data-bn="চাইল্ড হেল্পলাইন বাংলাদেশ" data-en="Child Helpline (1098)">চাইল্ড হেল্পলাইন বাংলাদেশ</h3>
+                    <p class="text-xs text-slate-300 mt-1" data-bn="শিশু ও কিশোর নির্যাতন প্রতিরোধ ও সুরক্ষা শেল্টার।" data-en="Child protection, violence prevention, and safe crisis shelter.">শিশু ও কিশোর নির্যাতন প্রতিরোধ ও সুরক্ষা।</p>
+                    <a href="tel:1098" class="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-emerald-300 hover:text-white">
+                        <span>📞 সরাসরি কল করুন</span> ➔
+                    </a>
+                </div>
+
+                <!-- 109 -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-5 hover:bg-white/15 transition haven-card">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-3xl font-black text-amber-400">109</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300">Toll-Free</span>
+                    </div>
+                    <h3 class="font-bold text-white text-base" data-bn="নারী ও শিশু নির্যাতন প্রতিরোধ" data-en="Violence Against Women (109)">নারী ও শিশু নির্যাতন প্রতিরোধ</h3>
+                    <p class="text-xs text-slate-300 mt-1" data-bn="আইনি সহায়তা ও জরুরি উদ্ধার কার্যক্রম সেল।" data-en="Emergency crisis rescue & legal counseling for women and children.">আইনি সহায়তা ও জরুরি উদ্ধার কার্যক্রম।</p>
+                    <a href="tel:109" class="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-amber-300 hover:text-white">
+                        <span>📞 সরাসরি কল করুন</span> ➔
+                    </a>
+                </div>
+
+                <!-- Kaan Pete Roi -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-5 hover:bg-white/15 transition haven-card">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xl font-black text-sky-400">01779-554391</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-500/20 text-sky-300">Emotional Help</span>
+                    </div>
+                    <h3 class="font-bold text-white text-base" data-bn="কান পেতে রই (মানসিক স্বাস্থ্য)" data-en="Kaan Pete Roi Helpline">কান পেতে রই (মানসিক স্বাস্থ্য)</h3>
+                    <p class="text-xs text-slate-300 mt-1" data-bn="গোপনীয় মানসিক সহানুভূতি ও হতাশা নিরসন।" data-en="Confidential emotional support and suicide prevention listening center.">গোপনীয় মানসিক সহানুভূতি ও হতাশা নিরসন।</p>
+                    <a href="tel:01779554391" class="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-sky-300 hover:text-white">
+                        <span>📞 সরাসরি কল করুন</span> ➔
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Comprehensive Footer -->
+    <footer class="bg-slate-950 text-slate-400 text-xs pt-12 pb-8 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                
+                <!-- Brand Summary -->
+                <div class="space-y-3 md:col-span-2">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center font-bold text-sm">
+                            🛡️
+                        </div>
+                        <span class="text-xl font-bold text-white tracking-tight">HAVEN BANGLADESH</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-relaxed max-w-md" data-bn="হেভেন হলো বাংলাদেশের জেন জি, জেন আলফা এবং জেন বেটা প্রজন্মের জন্য নিবেদিত একটি সম্পূর্ণ নিরাপদ, এনক্রিপ্টেড ও সহমর্মী সুরক্ষা প্ল্যাটফর্ম। এখানে মানসিক স্বাস্থ্য, সাইবার নিরাপত্তা ও জীবন রক্ষার প্রাথমিক পাঠ সম্পূর্ণ বিনামূল্যে উন্মুক্ত।" data-en="HAVEN is an anonymous, trauma-informed child & youth safety education, mental health, and emergency recovery sanctuary designed for Gen Z, Gen Alpha, and Gen Beta in Bangladesh.">
+                        হেভেন হলো বাংলাদেশের জেন জি, জেন আলফা এবং জেন বেটা প্রজন্মের জন্য নিবেদিত একটি সম্পূর্ণ নিরাপদ, এনক্রিপ্টেড ও সহমর্মী সুরক্ষা প্ল্যাটফর্ম।
+                    </p>
+                    <div class="flex items-center gap-3 pt-2">
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-teal-400">
+                            ✓ BMDC Verified Specialists
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-teal-400">
+                            ✓ Zero Log Data Retention
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Navigation Hub -->
+                <div>
+                    <h4 class="font-bold text-white text-sm uppercase tracking-wider mb-3" data-bn="প্রয়োজনীয় লিঙ্ক" data-en="Quick Navigation">
+                        প্রয়োজনীয় লিঙ্ক
+                    </h4>
+                    <ul class="space-y-2">
+                        <li><a asp-controller="Home" asp-action="Index" class="hover:text-teal-400 transition" data-bn="হোম ও জরুরি বার্তা" data-en="Home & Emergency">হোম ও জরুরি বার্তা</a></li>
+                        <li><a asp-controller="Courses" asp-action="Index" class="hover:text-teal-400 transition" data-bn="সুরক্ষা ও সাইবার কোর্স" data-en="Safety Hub & Courses">সুরক্ষা ও সাইবার কোর্স</a></li>
+                        <li><a asp-controller="Hotline" asp-action="Index" class="hover:text-teal-400 transition" data-bn="এআই বেনামী হটলাইন" data-en="Anonymous AI Assistant">এআই বেনামী হটলাইন</a></li>
+                        <li><a asp-controller="Therapy" asp-action="Index" class="hover:text-teal-400 transition" data-bn="ভেরিফায়েড থেরাপি ডিরেক্টরি" data-en="Verified Therapy Directory">ভেরিফায়েড থেরাপি ডিরেক্টরি</a></li>
+                        <li><button onclick="openModal('paymentModal')" class="hover:text-teal-400 transition text-left" data-bn="মাইক্রো-অনুদান প্রদান" data-en="Make Micro-Donation">মাইক্রো-অনুদান প্রদান</button></li>
+                    </ul>
+                </div>
+
+                <!-- Legal & Emergency Pledge -->
+                <div>
+                    <h4 class="font-bold text-white text-sm uppercase tracking-wider mb-3" data-bn="আইনি ও সুরক্ষা নীতি" data-en="Safety & Privacy Pledge">
+                        আইনি ও সুরক্ষা নীতি
+                    </h4>
+                    <p class="text-[11px] text-slate-500 leading-normal" data-bn="হেভেন কোনো মেডিকেল প্রেসক্রিপশন প্রদান করে না। এটি একটি মানসিক প্রাথমিক চিকিৎসা, সাইবার নিরাপত্তা শিক্ষা ও সংকট প্রশমন হাব। তীব্র শারীরিক বিপদে তাৎক্ষণিক ৯৯৯ বা ১০৯৮ নম্বরে কল করুন।" data-en="HAVEN does not substitute clinical psychiatric diagnosis. It provides psychological first-aid, educational frameworks, and confidential triaging. For immediate life danger, call 999 or 1098.">
+                        হেভেন কোনো মেডিকেল প্রেসক্রিপশন প্রদান করে না। এটি একটি মানসিক প্রাথমিক চিকিৎসা, সাইবার নিরাপত্তা শিক্ষা ও সংকট প্রশমন হাব।
+                    </p>
+                    <div class="mt-4 pt-3 border-t border-slate-900 flex items-center gap-2">
+                        <button onclick="window.havenQuickExit()" class="text-rose-400 hover:text-rose-300 text-xs font-semibold flex items-center gap-1">
+                            🚪 Quick Exit (Google Jump)
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
+                <p>&copy; @DateTime.UtcNow.Year HAVEN Foundation Bangladesh. Built for Gen Z, Gen Alpha & Gen Beta Safe Space.</p>
+                <div class="flex items-center gap-4">
+                    <span class="text-slate-400">🇧🇩 Made with empathy for Bangladesh</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shared Universal Modals -->
+    <partial name="_CrisisEscalationModal" />
+    <partial name="_PaymentModal" />
+
+    <!-- Core Scripts -->
+    <script src="~/js/site.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
