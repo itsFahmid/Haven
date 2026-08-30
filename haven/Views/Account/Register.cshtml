@@ -1,0 +1,176 @@
+@model Haven.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "রেজিস্ট্রেশন | Sign Up";
+}
+
+<div class="min-h-[calc(100vh-160px)] py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center bg-gradient-to-b from-teal-50/50 via-[#fdfcf9] to-[#fdfcf9] relative overflow-hidden">
+    
+    <!-- Background ambient lighting -->
+    <div class="absolute top-10 left-1/4 w-96 h-96 bg-teal-200/25 rounded-full blur-3xl pointer-events-none -z-10"></div>
+    <div class="absolute bottom-10 right-1/4 w-80 h-80 bg-emerald-200/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+    <div class="max-w-xl w-full space-y-8">
+        
+        <!-- Header Card -->
+        <div class="text-center space-y-3">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-teal-700 to-teal-500 text-white shadow-lg shadow-teal-900/15">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                </svg>
+            </div>
+
+            <div class="inline-block px-3 py-1 bg-teal-100/80 border border-teal-200 rounded-full text-teal-800 text-xs font-bold shadow-sm">
+                🛡️ <span data-bn="এনক্রিপ্টেড যুব সুরক্ষা অ্যাকাউন্ট" data-en="Encrypted Youth & Family Safety Account">এনক্রিপ্টেড যুব সুরক্ষা অ্যাকাউন্ট</span>
+            </div>
+
+            <h1 class="text-3xl font-black text-slate-900 tracking-tight" data-bn="হেভেনে নতুন অ্যাকাউন্ট তৈরি করুন" data-en="Create Your Haven Sanctuary Account">
+                হেভেনে নতুন অ্যাকাউন্ট তৈরি করুন
+            </h1>
+            
+            <p class="text-sm text-slate-600 max-w-md mx-auto" data-bn="আপনার নিরাপত্তা ও মানসিক শান্তির জন্য একটি সম্পূর্ণ নিরাপদ ও এনক্রিপ্টেড প্রোফাইল তৈরি করুন।" data-en="Create a private, zero-tracking safe profile to bookmark courses, access counseling, and protect yourself.">
+                আপনার নিরাপত্তা ও মানসিক শান্তির জন্য একটি সম্পূর্ণ নিরাপদ ও এনক্রিপ্টেড প্রোফাইল তৈরি করুন।
+            </p>
+        </div>
+
+        <!-- Form Card Container -->
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-slate-100 haven-card">
+            
+            <!-- Server-Side Validation Summary -->
+            <div asp-validation-summary="ModelOnly" class="text-sm font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-xl p-4 mb-6 @(ViewData.ModelState.IsValid ? "hidden" : "")"></div>
+
+            <form asp-controller="Account" asp-action="Register" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]" class="space-y-5" novalidate>
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="ReturnUrl" />
+
+                <!-- Full Name Field -->
+                <div>
+                    <label asp-for="FullName" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        <span data-bn="আপনার পূর্ণ নাম / ছদ্মনাম" data-en="Full Name / Alias">আপনার পূর্ণ নাম / ছদ্মনাম</span> <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative rounded-2xl shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                            👤
+                        </div>
+                        <input asp-for="FullName" class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
+                               placeholder="আপনার নাম লিখুন" data-bn="আপনার নাম লিখুন" data-en="Enter your full name or preferred alias" required />
+                    </div>
+                    <span asp-validation-for="FullName" class="text-xs font-semibold text-rose-600 mt-1.5 block"></span>
+                </div>
+
+                <!-- Email Field -->
+                <div>
+                    <label asp-for="Email" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        <span data-bn="ইমেইল ঠিকানা" data-en="Email Address">ইমেইল ঠিকানা</span> <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative rounded-2xl shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                            ✉️
+                        </div>
+                        <input asp-for="Email" type="email" class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
+                               placeholder="example@haven.org" data-bn="example@haven.org" data-en="example@haven.org" required />
+                    </div>
+                    <span asp-validation-for="Email" class="text-xs font-semibold text-rose-600 mt-1.5 block"></span>
+                    <p class="text-[11px] text-slate-400 mt-1" data-bn="আপনার ইমেইল সম্পূর্ণ গোপন রাখা হবে এবং কোনো বিজ্ঞাপনী কাজে ব্যবহৃত হবে না।" data-en="Your email is strictly encrypted and never shared or spammed.">
+                        আপনার ইমেইল সম্পূর্ণ গোপন রাখা হবে এবং কোনো বিজ্ঞাপনী কাজে ব্যবহৃত হবে না।
+                    </p>
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label asp-for="Password" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        <span data-bn="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" data-en="Password (Min 6 chars)">পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)</span> <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative rounded-2xl shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                            🔒
+                        </div>
+                        <input asp-for="Password" id="registerPasswordInput" type="password" class="w-full pl-11 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
+                               placeholder="••••••••" required />
+                        <button type="button" onclick="togglePasswordVisibility('registerPasswordInput', this)" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none" aria-label="Toggle password visibility">
+                            👁️
+                        </button>
+                    </div>
+                    <span asp-validation-for="Password" class="text-xs font-semibold text-rose-600 mt-1.5 block"></span>
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div>
+                    <label asp-for="ConfirmPassword" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        <span data-bn="পাসওয়ার্ড পুনরায় লিখুন" data-en="Confirm Password">পাসওয়ার্ড পুনরায় লিখুন</span> <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative rounded-2xl shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                            🔐
+                        </div>
+                        <input asp-for="ConfirmPassword" id="registerConfirmPasswordInput" type="password" class="w-full pl-11 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
+                               placeholder="••••••••" required />
+                        <button type="button" onclick="togglePasswordVisibility('registerConfirmPasswordInput', this)" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none" aria-label="Toggle password visibility">
+                            👁️
+                        </button>
+                    </div>
+                    <span asp-validation-for="ConfirmPassword" class="text-xs font-semibold text-rose-600 mt-1.5 block"></span>
+                </div>
+
+                <!-- Terms & Privacy Agreement Checkbox -->
+                <div class="pt-2">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input asp-for="AgreeToTerms" type="checkbox" class="w-5 h-5 mt-0.5 rounded-lg text-teal-700 focus:ring-teal-500 border-slate-300 rounded cursor-pointer" />
+                        <span class="text-xs text-slate-600 leading-relaxed select-none">
+                            <span data-bn="আমি হেভেন-এর সুরক্ষা নীতিমালা ও শর্তাবলীতে সম্মত আছি এবং স্বীকার করছি যে হেভেন একটি নিরাপদ ক্ষেত্র।" data-en="I agree to Haven's Safe Space & Privacy Policy terms.">
+                                আমি হেভেন-এর সুরক্ষা নীতিমালা ও শর্তাবলীতে সম্মত আছি এবং স্বীকার করছি যে হেভেন একটি নিরাপদ ক্ষেত্র।
+                            </span>
+                        </span>
+                    </label>
+                    <span asp-validation-for="AgreeToTerms" class="text-xs font-semibold text-rose-600 mt-1 block"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-4 px-6 bg-gradient-to-r from-teal-700 to-teal-800 hover:from-teal-800 hover:to-teal-900 text-white font-bold text-base rounded-2xl shadow-lg shadow-teal-900/20 transition transform hover:-translate-y-0.5 active:scale-[0.99] flex items-center justify-center gap-2">
+                        <span>✨</span>
+                        <span data-bn="নিরাপদ অ্যাকাউন্ট খুলুন" data-en="Create My Safe Account">নিরাপদ অ্যাকাউন্ট খুলুন</span>
+                    </button>
+                </div>
+
+            </form>
+
+            <!-- Card Footer Switch to Login -->
+            <div class="mt-8 pt-6 border-t border-slate-100 text-center">
+                <p class="text-xs text-slate-500 font-medium">
+                    <span data-bn="ইতিমধ্যে একটি অ্যাকাউন্ট আছে?" data-en="Already have an account?">ইতিমধ্যে একটি অ্যাকাউন্ট আছে?</span>
+                    <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" class="ml-1 text-teal-700 hover:text-teal-800 font-bold underline transition" data-bn="এখানে লগইন করুন" data-en="Log In here">
+                        এখানে লগইন করুন
+                    </a>
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Privacy Assurance Footer Notice -->
+        <div class="p-4 rounded-2xl bg-teal-50/70 border border-teal-100/80 text-center text-xs text-teal-900">
+            <span class="font-bold">🔒 100% Privacy Guarantee:</span>
+            <span data-bn="আপনার ব্যক্তিগত তথ্য সম্পূর্ণ এনক্রিপ্ট করা হয় এবং কখনোই তৃতীয় পক্ষের সাথে আদান-প্রদান করা হয় না।" data-en="Your personal data is strictly encrypted and zero activity is logged.">
+                আপনার ব্যক্তিগত তথ্য সম্পূর্ণ এনক্রিপ্ট করা হয় এবং কখনোই তৃতীয় পক্ষের সাথে আদান-প্রদান করা হয় না।
+            </span>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input) {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    btn.innerText = '🙈';
+                } else {
+                    input.type = 'password';
+                    btn.innerText = '👁️';
+                }
+            }
+        }
+    </script>
+}
