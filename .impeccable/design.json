@@ -136,7 +136,7 @@
       "refersTo": "button-primary",
       "description": "Main call-to-action button for launching anonymous chat or primary flows.",
       "html": "<button class=\"ds-btn-primary\">🤖 BENAMI CHAT START</button>",
-      "css": ".ds-btn-primary { background: #0f766e; color: #ffffff; padding: 16px 28px; font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif; font-weight: 700; font-size: 14px; border: none; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(15, 118, 110, 0.25); cursor: pointer; transition: background 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-primary:hover { background: #0d9488; transform: translateY(-2px); }"
+      "css": ".ds-btn-primary { background: #0f766e; color: #ffffff; padding: 16px 28px; font-family: 'Outfit', 'Hind Siliguri', sans-serif; font-weight: 700; font-size: 14px; border: none; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(15, 118, 110, 0.25); cursor: pointer; transition: background 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-primary:hover { background: #0d9488; transform: translateY(-2px); }"
     },
     {
       "name": "Secondary Ghost Button",

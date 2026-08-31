@@ -6,3 +6,6 @@
 *.userosscache
 *.sln.docstates
 *.userprefs
+# Local tool state
+.impeccable/live/
+.cursor/

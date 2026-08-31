@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 /* ─── Design Tokens ──────────────────────────────────────────── */
 :root {
@@ -35,9 +35,30 @@
     --haven-rocket: #8c3494;
 }
 
+/* ─── Custom Browser Surface Theming ─────────────────────────── */
+::selection {
+    background-color: #0f766e;
+    color: #ffffff;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
 /* ─── Base ───────────────────────────────────────────────────── */
 body {
-    font-family: 'Plus Jakarta Sans', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: 'Outfit', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background-color: var(--haven-warm-bg);
     color: var(--haven-slate-800);
     scroll-behavior: smooth;
@@ -45,7 +66,7 @@ body {
 
 /* Bengali font enhancement */
 .lang-bn, [data-lang="bn"], body[data-current-lang="bn"] {
-    font-family: 'Hind Siliguri', 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Hind Siliguri', 'Outfit', sans-serif;
 }
 
 /* ─── Glassmorphism & Cards ──────────────────────────────────── */

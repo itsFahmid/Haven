@@ -20,29 +20,29 @@ colors:
   rocket: "#8c3494"
 typography:
   display:
-    fontFamily: "Plus Jakarta Sans, Hind Siliguri, sans-serif"
+    fontFamily: "Outfit, Hind Siliguri, sans-serif"
     fontSize: "clamp(2rem, 5vw, 3.75rem)"
     fontWeight: 800
     lineHeight: 1.18
     letterSpacing: "-0.025em"
   headline:
-    fontFamily: "Plus Jakarta Sans, Hind Siliguri, sans-serif"
+    fontFamily: "Outfit, Hind Siliguri, sans-serif"
     fontSize: "clamp(1.5rem, 3vw, 2.25rem)"
     fontWeight: 800
     lineHeight: 1.25
     letterSpacing: "-0.02em"
   title:
-    fontFamily: "Plus Jakarta Sans, Hind Siliguri, sans-serif"
+    fontFamily: "Outfit, Hind Siliguri, sans-serif"
     fontSize: "1.25rem"
     fontWeight: 700
     lineHeight: 1.4
   body:
-    fontFamily: "Plus Jakarta Sans, Hind Siliguri, sans-serif"
+    fontFamily: "Outfit, Hind Siliguri, sans-serif"
     fontSize: "0.875rem"
     fontWeight: 400
     lineHeight: 1.6
   label:
-    fontFamily: "Plus Jakarta Sans, Hind Siliguri, sans-serif"
+    fontFamily: "Outfit, Hind Siliguri, sans-serif"
     fontSize: "0.75rem"
     fontWeight: 700
     letterSpacing: "0.05em"
