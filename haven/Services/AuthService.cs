@@ -39,6 +39,8 @@ public class AuthService : IAuthService
                 FullName = model.FullName.Trim(),
                 Email = normalizedEmail,
                 Role = "User",
+                UserType = string.IsNullOrWhiteSpace(model.UserType) ? "Individual" : model.UserType,
+                Age = model.Age,
                 CreatedAt = DateTime.UtcNow,
                 IsActive = true
             };

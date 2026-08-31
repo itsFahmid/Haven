@@ -4,11 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Haven.Data;
 using Haven.Models;
 using Haven.Services;
+using Haven.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
 
 // Register Microsoft SQL Server Entity Framework Core Database
 builder.Services.AddDbContext<HavenDbContext>(options =>
@@ -79,6 +81,8 @@ app.UseSession();
 // Authentication MUST be before Authorization
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHub<HotlineHub>("/hubs/hotline");
 
 app.MapControllerRoute(
     name: "default",

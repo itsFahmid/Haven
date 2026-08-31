@@ -34,6 +34,41 @@
                 @Html.AntiForgeryToken()
                 <input type="hidden" asp-for="ReturnUrl" />
 
+                <!-- Account Mode Selector (FR-1) -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+                        <span data-bn="অ্যাকাউন্ট মোড নির্বাচন করুন" data-en="Select Account Mode">অ্যাকাউন্ট মোড নির্বাচন করুন</span> <span class="text-amber-700" aria-hidden="true">*</span>
+                    </label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer select-none">
+                            <input type="radio" asp-for="UserType" value="Individual" checked class="text-teal-700 focus:ring-teal-500 h-4 w-4 border-slate-300" />
+                            <div>
+                                <div class="text-xs font-bold text-slate-800" data-bn="ব্যক্তিগত / তরুণ মোড" data-en="Individual / Youth">ব্যক্তিগত / তরুণ মোড</div>
+                                <div class="text-[10px] text-slate-500" data-bn="নিজের জন্য সুরক্ষা শিক্ষা" data-en="Personal safety learning">নিজের জন্য সুরক্ষা শিক্ষা</div>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer select-none">
+                            <input type="radio" asp-for="UserType" value="Parent" class="text-teal-700 focus:ring-teal-500 h-4 w-4 border-slate-300" />
+                            <div>
+                                <div class="text-xs font-bold text-slate-800" data-bn="অভিভাবক / অভিভাবক মোড" data-en="Parent / Guardian">অভিভাবক / অভিভাবক মোড</div>
+                                <div class="text-[10px] text-slate-500" data-bn="সন্তানের প্রোফাইল যুক্ত করুন" data-en="Link child profiles">সন্তানের প্রোফাইল যুক্ত করুন</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Age Field -->
+                <div>
+                    <label asp-for="Age" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+                        <span data-bn="আপনার বয়স" data-en="Your Age">আপনার বয়স</span>
+                    </label>
+                    <div class="relative">
+                        <input asp-for="Age" type="number" min="10" max="120" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
+                               placeholder="e.g. 18" />
+                    </div>
+                    <span asp-validation-for="Age" class="text-xs font-medium text-amber-800 mt-1.5 block"></span>
+                </div>
+
                 <!-- Full Name Field -->
                 <div>
                     <label asp-for="FullName" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">

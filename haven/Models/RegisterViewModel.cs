@@ -15,6 +15,12 @@ public class RegisterViewModel
     [Display(Name = "Email Address / ইমেইল")]
     public string Email { get; set; } = string.Empty;
 
+    [Required(ErrorMessage = "Account Mode selection is required")]
+    public string UserType { get; set; } = "Individual"; // Individual or Parent
+
+    [Range(10, 120, ErrorMessage = "Please enter a valid age")]
+    public int? Age { get; set; }
+
     [Required(ErrorMessage = "Password is required / পাসওয়ার্ড আবশ্যক")]
     [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters / পাসওয়ার্ড ন্যূনতম ৬ অক্ষরের হতে হবে")]
     [DataType(DataType.Password)]
