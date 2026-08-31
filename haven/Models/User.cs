@@ -22,7 +22,17 @@ public class User
     public string PasswordHash { get; set; } = string.Empty;
 
     [MaxLength(50)]
-    public string Role { get; set; } = "User";
+    public string Role { get; set; } = "User"; // Admin, Professional, User
+
+    [MaxLength(50)]
+    public string UserType { get; set; } = "Individual"; // Individual, Parent
+
+    public int? Age { get; set; }
+
+    public bool IsAnonymous { get; set; } = false;
+
+    [MaxLength(500)]
+    public string? ProfilePictureUrl { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
