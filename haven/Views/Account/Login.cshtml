@@ -1,0 +1,139 @@
+@model Haven.Models.LoginViewModel
+@{
+    ViewData["Title"] = "লগইন | Log In";
+}
+
+<div class="min-h-[calc(100vh-160px)] py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center bg-gradient-to-b from-teal-50/50 via-[#fdfcf9] to-[#fdfcf9] relative overflow-hidden">
+    
+    <!-- Background ambient lighting -->
+    <div class="absolute top-12 right-1/4 w-96 h-96 bg-teal-200/25 rounded-full blur-3xl pointer-events-none -z-10"></div>
+    <div class="absolute bottom-12 left-1/4 w-80 h-80 bg-emerald-200/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+    <div class="max-w-md w-full space-y-8">
+        
+        <!-- Header Card -->
+        <div class="text-center space-y-3">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-teal-700 to-teal-500 text-white shadow-lg shadow-teal-900/15">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+            </div>
+
+            <div class="inline-block px-3 py-1 bg-teal-100/80 border border-teal-200 rounded-full text-teal-800 text-xs font-bold shadow-sm">
+                🛡️ <span data-bn="নিরাপদ অ্যাকাউন্টে প্রবেশ" data-en="Safe Sanctuary Login">নিরাপদ অ্যাকাউন্টে প্রবেশ</span>
+            </div>
+
+            <h1 class="text-3xl font-black text-slate-900 tracking-tight" data-bn="হেভেনে স্বাগতম" data-en="Welcome Back to Haven">
+                হেভেনে স্বাগতম
+            </h1>
+            
+            <p class="text-sm text-slate-600 max-w-sm mx-auto" data-bn="আপনার সংরক্ষিত কোর্স ও মানসিক স্বাস্থ্য সহায়তায় অ্যাক্সেস করতে লগইন করুন।" data-en="Log in to access your saved progress, course certificates, and therapy appointments.">
+                আপনার সংরক্ষিত কোর্স ও মানসিক স্বাস্থ্য সহায়তায় অ্যাক্সেস করতে লগইন করুন।
+            </p>
+        </div>
+
+        <!-- Form Card Container -->
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-slate-100 haven-card">
+            
+            <!-- Server-Side Validation Summary -->
+            <div asp-validation-summary="ModelOnly" class="text-sm font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-xl p-4 mb-6 @(ViewData.ModelState.IsValid ? "hidden" : "")"></div>
+
+            <form asp-controller="Account" asp-action="Login" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]" class="space-y-5" novalidate>
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="ReturnUrl" />
+
+                <!-- Email Field -->
+                <div>
+                    <label asp-for="Email" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        <span data-bn="ইমেইল ঠিকানা" data-en="Email Address">ইমেইল ঠিকানা</span> <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative rounded-2xl shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                            ✉️
+                        </div>
+                        <input asp-for="Email" type="email" class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
+                               placeholder="example@haven.org" data-bn="example@haven.org" data-en="example@haven.org" required />
+                    </div>
+                    <span asp-validation-for="Email" class="text-xs font-semibold text-rose-600 mt-1.5 block"></span>
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <label asp-for="Password" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                            <span data-bn="পাসওয়ার্ড" data-en="Password">পাসওয়ার্ড</span> <span class="text-rose-500">*</span>
+                        </label>
+                    </div>
+                    <div class="relative rounded-2xl shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                            🔒
+                        </div>
+                        <input asp-for="Password" id="loginPasswordInput" type="password" class="w-full pl-11 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
+                               placeholder="••••••••" required />
+                        <button type="button" onclick="togglePasswordVisibility('loginPasswordInput', this)" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none" aria-label="Toggle password visibility">
+                            👁️
+                        </button>
+                    </div>
+                    <span asp-validation-for="Password" class="text-xs font-semibold text-rose-600 mt-1.5 block"></span>
+                </div>
+
+                <!-- Remember Me Checkbox -->
+                <div class="flex items-center justify-between pt-1">
+                    <label class="flex items-center gap-2.5 cursor-pointer">
+                        <input asp-for="RememberMe" type="checkbox" class="w-4 h-4 rounded text-teal-700 focus:ring-teal-500 border-slate-300 cursor-pointer" />
+                        <span class="text-xs font-medium text-slate-600 select-none" data-bn="আমাকে মনে রাখুন" data-en="Remember me">
+                            আমাকে মনে রাখুন
+                        </span>
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-3">
+                    <button type="submit" class="w-full py-4 px-6 bg-gradient-to-r from-teal-700 to-teal-800 hover:from-teal-800 hover:to-teal-900 text-white font-bold text-base rounded-2xl shadow-lg shadow-teal-900/20 transition transform hover:-translate-y-0.5 active:scale-[0.99] flex items-center justify-center gap-2">
+                        <span>🔐</span>
+                        <span data-bn="লগইন করুন" data-en="Log In Safely">লগইন করুন</span>
+                    </button>
+                </div>
+
+            </form>
+
+            <!-- Card Footer Switch to Sign Up -->
+            <div class="mt-8 pt-6 border-t border-slate-100 text-center">
+                <p class="text-xs text-slate-500 font-medium">
+                    <span data-bn="এখনও কোনো অ্যাকাউন্ট নেই?" data-en="Don't have an account yet?">এখনও কোনো অ্যাকাউন্ট নেই?</span>
+                    <a asp-controller="Account" asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]" class="ml-1 text-teal-700 hover:text-teal-800 font-bold underline transition" data-bn="নতুন অ্যাকাউন্ট খুলুন" data-en="Create Account">
+                        নতুন অ্যাকাউন্ট খুলুন
+                    </a>
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Emergency anonymous safe notice -->
+        <div class="p-4 rounded-2xl bg-amber-50/80 border border-amber-200/80 text-center text-xs text-amber-900">
+            <span class="font-bold">🚨 <span data-bn="জরুরি সংকট বার্তা:" data-en="Emergency Crisis Notice:">জরুরি সংকট বার্তা:</span></span>
+            <span data-bn="জরুরি মুহূর্তে সাহায্যের জন্য কোনো লগইন প্রয়োজন নেই। সরাসরি ১০৯৮ বা ৯৯৯ এ কল করুন।" data-en="No login required for immediate crisis assistance. Call 1098 or 999 anytime.">
+                জরুরি মুহূর্তে সাহায্যের জন্য কোনো লগইন প্রয়োজন নেই। সরাসরি ১০৯৮ বা ৯৯৯ এ কল করুন।
+            </span>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input) {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    btn.innerText = '🙈';
+                } else {
+                    input.type = 'password';
+                    btn.innerText = '👁️';
+                }
+            }
+        }
+    </script>
+}
