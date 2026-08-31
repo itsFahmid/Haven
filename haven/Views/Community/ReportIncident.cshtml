@@ -1,0 +1,45 @@
+@model Haven.Controllers.IncidentReportRequest
+@{
+    ViewData["Title"] = "গোপনীয় নিরাপত্তা রিপোর্ট দাখিল | Report Incident";
+}
+
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    <div class="space-y-2">
+        <span class="px-3 py-1 bg-amber-100 text-amber-900 rounded-full text-xs font-bold uppercase tracking-wider">
+            Encrypted & Anonymous Safety Reporting (UC-21)
+        </span>
+        <h1 class="text-2xl font-black text-slate-900">গোপনীয় গ্রুমিং ও নির্যাতন রিপোর্ট দাখিল</h1>
+        <p class="text-xs text-slate-500">আপনার পরিচয় সম্পূর্ণ নামহীন ও এনক্রিপ্ট রাখা হবে। কোনো সেশন ট্র্যাকিং করা হয় না।</p>
+    </div>
+
+    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm">
+        <form asp-action="ReportIncident" method="post" class="space-y-5">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-xs text-amber-900 bg-amber-50 p-3 rounded-xl"></div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-2">ঘটনার ধরন / Incident Type</label>
+                <select asp-for="IncidentType" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                    <option value="Online Grooming">অনলাইন গ্রুমিং (Online Grooming)</option>
+                    <option value="Cyber Blackmail">সাইবার ব্ল্যাকমেইল (Cyber Blackmail)</option>
+                    <option value="Child Abuse Concern">শিশু নির্যাতন উদ্বেগ (Child Abuse Concern)</option>
+                    <option value="Fake Profile Harassment">ভুয়া প্রোফাইল হয়রানি (Fake Profile Harassment)</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-2">ঘটনার বিস্তারিত বিবরণ</label>
+                <textarea asp-for="Description" rows="6" required placeholder="ঘটনার স্থান, সময় ও বিবরণ এনক্রিপ্ট করে লিখুন..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm"></textarea>
+            </div>
+
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" asp-for="IsAnonymous" checked class="rounded text-teal-700 h-4 w-4" />
+                <span class="text-xs font-semibold text-slate-700">১০০% বেনামী রিপোর্ট হিসেবে জমা দিন</span>
+            </label>
+
+            <button type="submit" class="w-full py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow-xs transition">
+                এনক্রিপ্ট করা রিপোর্ট দাখিল করুন ➔
+            </button>
+        </form>
+    </div>
+</div>
