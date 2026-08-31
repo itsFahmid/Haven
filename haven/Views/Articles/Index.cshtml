@@ -1,0 +1,72 @@
+@model IEnumerable<Haven.Models.Article>
+@{
+    ViewData["Title"] = "মনোবিজ্ঞান ও সুরক্ষা নিবন্ধ হাব | Safety Articles";
+    var selectedCategory = ViewData["SelectedCategory"] as string ?? "All";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    
+    <!-- Hero Header -->
+    <div class="bg-slate-900 rounded-3xl p-8 sm:p-12 text-white shadow-lg border border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="max-w-2xl space-y-3">
+            <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-full text-xs font-bold uppercase tracking-wider">
+                Psychoeducation & Digital Safety Knowledge
+            </span>
+            <h1 class="text-3xl sm:text-4xl font-black tracking-tight" data-bn="বিশেষজ্ঞ মনোবিজ্ঞান ও সাইবার সুরক্ষা নিবন্ধ" data-en="Clinical Psychoeducation & Digital Defense Articles">
+                বিশেষজ্ঞ মনোবিজ্ঞান ও সাইবার সুরক্ষা নিবন্ধ
+            </h1>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed" data-bn="বিএমডিসি ভেরিফায়েড থেরাপিস্ট ও সাইবার বিশেষজ্ঞদের রচিত ব্যবহারিক আর্টিকেল, যা আপনাকে ও আপনার পরিবারকে অনলাইনে নিরাপদ রাখতে সাহায্য করবে।" data-en="Evidence-based articles authored by verified psychologists and cyber law specialists in Bangladesh.">
+                বিএমডিসি ভেরিফায়েড থেরাপিস্ট ও সাইবার বিশেষজ্ঞদের রচিত ব্যবহারিক আর্টিকেল, যা আপনাকে ও আপনার পরিবারকে অনলাইনে নিরাপদ রাখতে সাহায্য করবে।
+            </p>
+        </div>
+
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <a asp-action="Create" class="px-5 py-3 bg-teal-700 hover:bg-teal-600 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-2 shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                <span data-bn="নতুন নিবন্ধ লিখুন (FR-9)" data-en="Publish Article (FR-9)">নতুন নিবন্ধ লিখুন (FR-9)</span>
+            </a>
+        }
+    </div>
+
+    <!-- Category Filter Bar -->
+    <div class="bg-white rounded-2xl p-2.5 border border-slate-200 shadow-sm flex items-center gap-2 overflow-x-auto">
+        <a asp-action="Index" asp-route-category="All" class="px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap @(selectedCategory == "All" ? "bg-teal-700 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200")">
+            সকল নিবন্ধ
+        </a>
+        <a asp-action="Index" asp-route-category="Grooming Prevention" class="px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap @(selectedCategory == "Grooming Prevention" ? "bg-teal-700 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200")">
+            গ্রুমিং প্রতিরোধ
+        </a>
+        <a asp-action="Index" asp-route-category="Cyber Harassment" class="px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap @(selectedCategory == "Cyber Harassment" ? "bg-teal-700 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200")">
+            সাইবার ব্ল্যাকমেইল ও বুলিং
+        </a>
+    </div>
+
+    <!-- Articles Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        @foreach (var article in Model)
+        {
+            <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
+                <div class="space-y-3">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200">
+                        @article.Category
+                    </span>
+                    <h3 class="text-lg font-bold text-slate-900 leading-snug">
+                        @article.TitleBn
+                    </h3>
+                    <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">
+                        @article.ContentMarkdown
+                    </p>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <span class="text-[11px] text-slate-400 font-medium">@article.CreatedAt.ToString("MMM dd, yyyy")</span>
+                    <a asp-action="Details" asp-route-id="@article.Id" class="text-xs font-bold text-teal-700 hover:text-teal-800 transition">
+                        সম্পূর্ণ পড়ুন ➔
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
