@@ -1,0 +1,124 @@
+@model Haven.Controllers.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "এডমিন ও প্ল্যাটফর্ম সিস্টেম কন্ট্রোল | Admin Operations";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    
+    <!-- Admin Hero Header -->
+    <div class="bg-slate-900 text-white rounded-3xl p-8 border border-slate-800 shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div>
+            <span class="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-full text-xs font-bold uppercase tracking-wider">
+                System Administration & Governance
+            </span>
+            <h1 class="text-2xl sm:text-3xl font-black mt-2 tracking-tight">
+                হেভেন অ্যাডমিন ও সিকিউরিটি কন্ট্রোল
+            </h1>
+            <p class="text-xs text-slate-300 mt-1">
+                লাইসেন্স ভেরিফিকেশন, সংকট অ্যালার্ট অডিট এবং সিস্টেম অডিট ট্রেইল (FR-10, FR-12)
+            </p>
+        </div>
+
+        <div class="flex items-center gap-4 text-center">
+            <div class="bg-slate-800 px-4 py-2.5 rounded-2xl border border-slate-700">
+                <div class="text-lg font-black text-teal-400">@Model.TotalUsersCount</div>
+                <div class="text-[10px] text-slate-400">মোট ইউজার</div>
+            </div>
+            <div class="bg-slate-800 px-4 py-2.5 rounded-2xl border border-slate-700">
+                <div class="text-lg font-black text-amber-400">@Model.PendingTherapists.Count</div>
+                <div class="text-[10px] text-slate-400">পেন্ডিং লাইসেন্স</div>
+            </div>
+            <div class="bg-slate-800 px-4 py-2.5 rounded-2xl border border-slate-700">
+                <div class="text-lg font-black text-sky-400">@Model.TotalAppointmentsCount</div>
+                <div class="text-[10px] text-slate-400">থেরাপি সেশন</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 1: Pending Therapist License Review (FR-10, UC-24) -->
+    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+                <h3 class="text-base font-bold text-slate-900" data-bn="লাইসেন্স ভেরিফিকেশন আবেদন (FR-10)" data-en="Pending License Verification Requests">
+                    লাইসেন্স ভেরিফিকেশন আবেদন (FR-10)
+                </h3>
+                <p class="text-xs text-slate-500">বিএমডিসি লাইসেন্স ও আইডি রিভিউ করে ভেরিফায়েড স্ট্যাটাস প্রদান করুন</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900">
+                @Model.PendingTherapists.Count Pending
+            </span>
+        </div>
+
+        @if (!Model.PendingTherapists.Any())
+        {
+            <div class="text-center py-8 text-xs text-slate-500 bg-slate-50 rounded-2xl border border-slate-100">
+                কোনো পেন্ডিং থেরাপিস্ট লাইসেন্স আবেদন নেই।
+            </div>
+        }
+        else
+        {
+            <div class="space-y-3">
+                @foreach (var prof in Model.PendingTherapists)
+                {
+                    <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">@(prof.User?.FullName ?? "Therapist Profile #" + prof.Id)</div>
+                            <div class="text-[11px] text-slate-600">বিশেষজ্ঞতা: @prof.Specialty | লাইসেন্স নং: <span class="font-mono font-bold">@prof.LicenseNo</span></div>
+                            <div class="text-[10px] text-slate-400">আবেদনের সময়: @prof.SubmittedAt.ToString("g")</div>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <form asp-action="ApproveTherapist" method="post" class="inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@prof.Id" />
+                                <button type="submit" class="px-3 py-1.5 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl shadow-xs transition">
+                                    অনুমোদন দিন (Approve)
+                                </button>
+                            </form>
+                            <form asp-action="RejectTherapist" method="post" class="inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@prof.Id" />
+                                <button type="submit" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs rounded-xl transition">
+                                    বাতিল করুন
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <!-- Section 2: Security & Admin Audit Logs (FR-12, UC-25) -->
+    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
+        <div class="pb-4 border-b border-slate-100">
+            <h3 class="text-base font-bold text-slate-900" data-bn="সিকিউরিটি ও সিস্টেম অ্যাডমিন অডিট লগ (FR-12)" data-en="System Audit & Security Logs (FR-12)">
+                সিকিউরিটি ও সিস্টেম অ্যাডমিন অডিট লগ (FR-12)
+            </h3>
+            <p class="text-xs text-slate-500">সংবেদনশীল ডেটা এক্সেস ও প্রশাসনিক পদক্ষেপের ইতিহাস</p>
+        </div>
+
+        @if (!Model.AuditLogs.Any())
+        {
+            <div class="text-center py-6 text-xs text-slate-400 bg-slate-50 rounded-2xl">
+                এখনো কোনো অডিট লগ নেই।
+            </div>
+        }
+        else
+        {
+            <div class="space-y-2">
+                @foreach (var log in Model.AuditLogs)
+                {
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+                        <div>
+                            <span class="font-bold text-teal-800">@log.ActionType</span>
+                            <span class="text-slate-600 ml-2">@log.ActionDetails</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400 font-mono">@log.ExecutedAt.ToString("g")</span>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+</div>
