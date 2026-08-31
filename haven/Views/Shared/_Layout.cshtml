@@ -45,48 +45,51 @@
 <body class="min-h-screen flex flex-col antialiased bg-[#fdfcf9] text-slate-800" data-current-lang="bn">
 
     <!-- Top Emergency Safe Notice Ribbon -->
-    <div class="bg-gradient-to-r from-teal-900 via-slate-900 to-teal-900 text-white text-xs py-2 px-4 border-b border-teal-800/40">
+    <div class="bg-gradient-to-r from-teal-950 via-slate-900 to-teal-950 text-white text-xs py-2 px-4 border-b border-teal-800/40 shadow-xs">
         <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
             <div class="flex items-center gap-2">
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                    🔒 100% Anonymous Safe Space
+                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 tracking-tight">
+                    <span aria-hidden="true">🔒</span>
+                    <span>100% Anonymous Safe Space</span>
                 </span>
-                <span class="hidden sm:inline text-slate-300" data-bn="আপনার পরিচয় সম্পূর্ণ গোপন থাকবে। কোনো লগইন প্রয়োজন নেই।" data-en="Zero registration required. Your privacy & safety are strictly protected.">
+                <span class="hidden sm:inline text-slate-300 text-[11px]" data-bn="আপনার পরিচয় সম্পূর্ণ গোপন থাকবে। কোনো লগইন প্রয়োজন নেই।" data-en="Zero registration required. Your privacy & safety are strictly protected.">
                     আপনার পরিচয় সম্পূর্ণ গোপন থাকবে। কোনো লগইন প্রয়োজন নেই।
                 </span>
             </div>
             
-            <div class="flex items-center gap-4 text-[11px]">
+            <div class="flex items-center gap-3 text-[11px]">
                 <div class="flex items-center gap-1.5 text-rose-300 font-semibold">
-                    <span>🚨</span>
+                    <span aria-hidden="true">🚨</span>
                     <span data-bn="জরুরি হেল্পলাইন:" data-en="National Hotlines:">জরুরি হেল্পলাইন:</span>
-                    <a href="tel:1098" class="underline hover:text-white">1098</a> |
-                    <a href="tel:999" class="underline hover:text-white">999</a> |
-                    <a href="tel:109" class="underline hover:text-white">109</a>
+                    <a href="tel:1098" class="underline hover:text-white focus-visible:ring-1 focus-visible:ring-rose-300 rounded px-1 transition" aria-label="Call Child Helpline 1098">1098</a>
+                    <span class="text-teal-700" aria-hidden="true">•</span>
+                    <a href="tel:999" class="underline hover:text-white focus-visible:ring-1 focus-visible:ring-rose-300 rounded px-1 transition" aria-label="Call National Emergency 999">999</a>
+                    <span class="text-teal-700" aria-hidden="true">•</span>
+                    <a href="tel:109" class="underline hover:text-white focus-visible:ring-1 focus-visible:ring-rose-300 rounded px-1 transition" aria-label="Call Violence Against Women Helpline 109">109</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Main Navigation Header -->
-    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm transition">
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs transition-all duration-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 
                 <!-- Brand Logo -->
                 <div class="flex items-center">
-                    <a asp-controller="Home" asp-action="Index" class="flex items-center gap-3 group" aria-label="HAVEN - হোম পাতায় যান">
-                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-teal-700 to-teal-500 text-white flex items-center justify-center shadow-md shadow-teal-900/10 group-hover:scale-105 transition" aria-hidden="true">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <a asp-controller="Home" asp-action="Index" class="flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 rounded-2xl p-1 -ml-1 transition" aria-label="HAVEN - হোম পাতায় যান">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-teal-700 via-teal-600 to-teal-500 text-white flex items-center justify-center shadow-md shadow-teal-900/15 group-hover:scale-105 group-hover:shadow-teal-900/25 transition-all duration-250" aria-hidden="true">
+                            <svg class="w-6 h-6 transform group-hover:rotate-3 transition-transform duration-250" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
                         </div>
                         <div>
                             <div class="flex items-center gap-1.5">
-                                <span class="text-2xl font-black tracking-tight text-slate-900 font-sans">HAVEN</span>
-                                <span class="px-2 py-0.5 text-[10px] font-extrabold bg-teal-100 text-teal-800 rounded-md tracking-wider">হেভেন</span>
+                                <span class="text-2xl font-black tracking-tight text-slate-900 font-sans group-hover:text-teal-800 transition-colors">HAVEN</span>
+                                <span class="px-2 py-0.5 text-[10px] font-extrabold bg-teal-100/80 text-teal-800 rounded-md tracking-wider border border-teal-200/60">হেভেন</span>
                             </div>
-                            <p class="text-[11px] text-slate-500 font-medium tracking-tight" data-bn="তারুণ্যের সুরক্ষা ও মানসিক স্বাস্থ্য আশ্রয়" data-en="Youth Safety & Mental Health Sanctuary">
+                            <p class="text-[11px] text-slate-500 font-medium tracking-tight group-hover:text-slate-600 transition-colors" data-bn="তারুণ্যের সুরক্ষা ও মানসিক স্বাস্থ্য আশ্রয়" data-en="Youth Safety & Mental Health Sanctuary">
                                 তারুণ্যের সুরক্ষা ও মানসিক স্বাস্থ্য আশ্রয়
                             </p>
                         </div>
@@ -94,36 +97,36 @@
                 </div>
 
                 <!-- Desktop Navigation Links -->
-                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
-                    <a asp-controller="Home" asp-action="Index" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-700 hover:bg-teal-50/60 transition" data-bn="হোম" data-en="Home">
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-1.5" aria-label="প্রধান নেভিগেশন">
+                    <a asp-controller="Home" asp-action="Index" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-900 hover:bg-teal-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 transition-all duration-150" data-bn="হোম" data-en="Home">
                         হোম
                     </a>
-                    <a asp-controller="Courses" asp-action="Index" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-700 hover:bg-teal-50/60 transition" data-bn="নিরাপত্তা কোর্স" data-en="Safety Courses">
+                    <a asp-controller="Courses" asp-action="Index" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-900 hover:bg-teal-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 transition-all duration-150" data-bn="নিরাপত্তা কোর্স" data-en="Safety Courses">
                         নিরাপত্তা কোর্স
                     </a>
-                    <a asp-controller="Hotline" asp-action="Index" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-700 hover:bg-teal-50/60 transition flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true"></span>
+                    <a asp-controller="Hotline" asp-action="Index" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-900 hover:bg-teal-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 transition-all duration-150 flex items-center gap-1.5 group">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse group-hover:scale-125 transition-transform" aria-hidden="true"></span>
                         <span data-bn="এআই সুরক্ষা হটলাইন" data-en="AI Safety Assistant">এআই সুরক্ষা হটলাইন</span>
                     </a>
-                    <a asp-controller="Therapy" asp-action="Index" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-700 hover:bg-teal-50/60 transition" data-bn="ভেরিফায়েড থেরাপিস্ট" data-en="Therapy Directory">
+                    <a asp-controller="Therapy" asp-action="Index" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-900 hover:bg-teal-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 transition-all duration-150" data-bn="ভেরিফায়েড থেরাপিস্ট" data-en="Therapy Directory">
                         ভেরিফায়েড থেরাপিস্ট
                     </a>
-                    <button type="button" onclick="openModal('paymentModal')" class="px-3 py-2 rounded-xl text-sm font-semibold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 transition flex items-center gap-1.5" aria-label="অনুদান প্রদান করুন">
-                        <span aria-hidden="true">💝</span>
+                    <button type="button" onclick="openModal('paymentModal')" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-amber-900 bg-amber-50/90 hover:bg-amber-100/80 border border-amber-200/90 hover:border-amber-300 shadow-2xs hover:shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 transition-all duration-150 flex items-center gap-1.5 active:scale-97" aria-label="অনুদান প্রদান করুন">
+                        <span aria-hidden="true" class="text-xs">💝</span>
                         <span data-bn="অনুদান" data-en="Donate">অনুদান</span>
                     </button>
 
                     <!-- Auth State Dynamic Navigation -->
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <div class="flex items-center space-x-1 pl-2 border-l border-slate-200">
-                            <a asp-controller="Account" asp-action="Profile" class="px-3 py-1.5 rounded-xl text-xs font-bold text-teal-800 bg-teal-50 hover:bg-teal-100 border border-teal-200/80 transition flex items-center gap-1.5 min-h-[44px]" title="প্রোফাইল" aria-label="প্রোফাইল দেখুন">
+                        <div class="flex items-center space-x-1 pl-2.5 border-l border-slate-200/80">
+                            <a asp-controller="Account" asp-action="Profile" class="px-3 py-1.5 rounded-xl text-xs font-bold text-teal-800 bg-teal-50/80 hover:bg-teal-100 border border-teal-200/80 focus-visible:ring-2 focus-visible:ring-teal-600 transition-all flex items-center gap-1.5 min-h-[44px]" title="প্রোফাইল" aria-label="প্রোফাইল দেখুন">
                                 <span aria-hidden="true">👤</span>
                                 <span class="max-w-[100px] truncate">@(User.Identity.Name ?? "প্রোফাইল")</span>
                             </a>
                             <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
                                 @Html.AntiForgeryToken()
-                                <button type="submit" class="px-2.5 py-1.5 rounded-xl text-xs font-bold text-rose-700 hover:text-rose-800 hover:bg-rose-50 transition flex items-center gap-1 min-h-[44px] min-w-[44px]" title="Log Out" aria-label="লগআউট">
+                                <button type="submit" class="px-2.5 py-1.5 rounded-xl text-xs font-bold text-rose-700 hover:text-rose-800 hover:bg-rose-50/80 focus-visible:ring-2 focus-visible:ring-rose-500 transition-all flex items-center gap-1 min-h-[44px] min-w-[44px]" title="Log Out" aria-label="লগআউট">
                                     <span aria-hidden="true">🚪</span>
                                     <span class="hidden lg:inline" data-bn="লগআউট" data-en="Logout">লগআউট</span>
                                 </button>
@@ -132,11 +135,11 @@
                     }
                     else
                     {
-                        <div class="flex items-center space-x-1.5 pl-2 border-l border-slate-200">
-                            <a asp-controller="Account" asp-action="Login" class="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 hover:text-teal-700 hover:bg-teal-50 transition" data-bn="লগইন" data-en="Log In">
+                        <div class="flex items-center space-x-1.5 pl-2.5 border-l border-slate-200/80">
+                            <a asp-controller="Account" asp-action="Login" class="px-3.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-teal-700 hover:bg-teal-50/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 transition-all" data-bn="লগইন" data-en="Log In">
                                 লগইন
                             </a>
-                            <a asp-controller="Account" asp-action="Register" class="px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 shadow-sm rounded-xl transition" data-bn="রেজিস্ট্রেশন" data-en="Sign Up">
+                            <a asp-controller="Account" asp-action="Register" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 active:scale-97 shadow-sm hover:shadow-teal-900/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 transition-all" data-bn="রেজিস্ট্রেশন" data-en="Sign Up">
                                 রেজিস্ট্রেশন
                             </a>
                         </div>
@@ -147,17 +150,17 @@
                 <div class="flex items-center gap-2.5 sm:gap-3.5">
                     
                     <!-- Bilingual Language Switcher -->
-                    <div class="bg-slate-100 p-1 rounded-xl flex items-center border border-slate-200" role="group" aria-label="ভাষা পছন্দ করুন">
-                        <button type="button" onclick="HavenLang.set('bn')" data-set-lang="bn" class="lang-toggle-btn px-2.5 py-1 rounded-lg text-xs font-bold transition bg-teal-700 text-white shadow-sm min-h-[36px] min-w-[44px]" aria-label="বাংলায় পরিবর্তন করুন" aria-pressed="true">
+                    <div class="bg-slate-100/90 p-1 rounded-xl flex items-center border border-slate-200/80 shadow-2xs" role="group" aria-label="ভাষা পছন্দ করুন">
+                        <button type="button" onclick="HavenLang.set('bn')" data-set-lang="bn" class="lang-toggle-btn px-3 py-1 rounded-lg text-xs font-bold transition-all duration-150 bg-teal-700 text-white shadow-xs min-h-[36px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600" aria-label="বাংলায় পরিবর্তন করুন" aria-pressed="true">
                             বাংলা
                         </button>
-                        <button type="button" onclick="HavenLang.set('en')" data-set-lang="en" class="lang-toggle-btn px-2.5 py-1 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition min-h-[36px] min-w-[44px]" aria-label="Switch to English" aria-pressed="false">
+                        <button type="button" onclick="HavenLang.set('en')" data-set-lang="en" class="lang-toggle-btn px-3 py-1 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition-all duration-150 min-h-[36px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600" aria-label="Switch to English" aria-pressed="false">
                             EN
                         </button>
                     </div>
 
                     <!-- Universal Quick Exit Button -->
-                    <button type="button" id="quickExitBtn" onclick="window.havenQuickExit()" title="Press ESC to quickly exit this page immediately" aria-label="জরুরি প্রস্থান — এই পাতা তাৎক্ষণিকভাবে বন্ধ করুন (ESC)" class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-rose-900/20 transition transform active:scale-95 pulse-red min-h-[44px]">
+                    <button type="button" id="quickExitBtn" onclick="window.havenQuickExit()" title="Press ESC to quickly exit this page immediately" aria-label="জরুরি প্রস্থান — এই পাতা তাৎক্ষণিকভাবে বন্ধ করুন (ESC)" class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-rose-900/20 hover:shadow-lg hover:shadow-rose-900/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 transition-all transform active:scale-95 pulse-red min-h-[44px]">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                         </svg>
@@ -170,22 +173,22 @@
         </div>
 
         <!-- Mobile Secondary Nav Bar -->
-        <nav class="md:hidden flex items-center justify-around py-2.5 border-t border-slate-200/80 bg-slate-50/90 text-xs font-semibold text-slate-600" aria-label="মোবাইল নেভিগেশন">
-            <a asp-controller="Home" asp-action="Index" class="hover:text-teal-700 min-h-[44px] flex items-center px-2" data-bn="হোম" data-en="Home">হোম</a>
-            <a asp-controller="Courses" asp-action="Index" class="hover:text-teal-700 min-h-[44px] flex items-center px-2" data-bn="কোর্স" data-en="Courses">কোর্স</a>
-            <a asp-controller="Hotline" asp-action="Index" class="text-teal-700 font-bold flex items-center gap-1 min-h-[44px] px-2" aria-label="এআই সুরক্ষা হটলাইন">
+        <nav class="md:hidden flex items-center justify-around py-2 border-t border-slate-200/80 bg-slate-50/95 backdrop-blur-md text-xs font-semibold text-slate-600 shadow-2xs" aria-label="মোবাইল নেভিগেশন">
+            <a asp-controller="Home" asp-action="Index" class="hover:text-teal-700 min-h-[44px] flex items-center px-2.5 rounded-lg transition-colors" data-bn="হোম" data-en="Home">হোম</a>
+            <a asp-controller="Courses" asp-action="Index" class="hover:text-teal-700 min-h-[44px] flex items-center px-2.5 rounded-lg transition-colors" data-bn="কোর্স" data-en="Courses">কোর্স</a>
+            <a asp-controller="Hotline" asp-action="Index" class="text-teal-700 font-bold flex items-center gap-1 min-h-[44px] px-2.5 rounded-lg transition-colors" aria-label="এআই সুরক্ষা হটলাইন">
                 <span aria-hidden="true">🤖</span> <span data-bn="এআই" data-en="AI">এআই</span>
             </a>
-            <a asp-controller="Therapy" asp-action="Index" class="hover:text-teal-700 min-h-[44px] flex items-center px-2" data-bn="থেরাপিস্ট" data-en="Therapy">থেরাপিস্ট</a>
+            <a asp-controller="Therapy" asp-action="Index" class="hover:text-teal-700 min-h-[44px] flex items-center px-2.5 rounded-lg transition-colors" data-bn="থেরাপিস্ট" data-en="Therapy">থেরাপিস্ট</a>
             @if (User.Identity?.IsAuthenticated == true)
             {
-                <a asp-controller="Account" asp-action="Profile" class="text-teal-700 font-bold min-h-[44px] flex items-center gap-1 px-2" aria-label="প্রোফাইল দেখুন">
+                <a asp-controller="Account" asp-action="Profile" class="text-teal-700 font-bold min-h-[44px] flex items-center gap-1 px-2.5 rounded-lg transition-colors" aria-label="প্রোফাইল দেখুন">
                     <span aria-hidden="true">👤</span> <span data-bn="প্রোফাইল" data-en="Profile">প্রোফাইল</span>
                 </a>
             }
             else
             {
-                <a asp-controller="Account" asp-action="Login" class="text-teal-700 font-bold min-h-[44px] flex items-center px-2" data-bn="লগইন" data-en="Login">লগইন</a>
+                <a asp-controller="Account" asp-action="Login" class="text-teal-700 font-bold min-h-[44px] flex items-center px-2.5 rounded-lg transition-colors" data-bn="লগইন" data-en="Login">লগইন</a>
             }
         </nav>
     </header>
