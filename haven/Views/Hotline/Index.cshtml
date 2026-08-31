@@ -6,10 +6,12 @@
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
     <!-- Top Anonymous Shield Status Bar -->
-    <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm mb-6 flex flex-wrap items-center justify-between gap-4">
+    <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm mb-6 flex flex-wrap items-center justify-between gap-4">
         <div class="flex items-center gap-3.5">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-600 to-teal-800 text-white flex items-center justify-center text-xl font-bold shadow-md shadow-teal-900/10">
-                🤖
+            <div class="w-12 h-12 rounded-2xl bg-teal-700 text-white flex items-center justify-center font-bold shadow-sm">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
             </div>
             <div>
                 <div class="flex items-center gap-2">
@@ -31,12 +33,16 @@
 
         <!-- Quick Safety Actions -->
         <div class="flex items-center gap-2.5">
-            <button type="button" onclick="triggerCrisisEscalation('Manual SOS')" class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs transition flex items-center gap-1.5">
-                <span>🚨</span>
+            <button type="button" onclick="triggerCrisisEscalation('Manual SOS')" class="px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 font-bold text-xs transition flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
                 <span data-bn="জরুরি সংকট SOS" data-en="Crisis Hotlines">জরুরি সংকট SOS</span>
             </button>
-            <button type="button" onclick="window.havenQuickExit()" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition flex items-center gap-1.5 pulse-red">
-                <span>🚪</span>
+            <button type="button" onclick="window.havenQuickExit()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-black text-white font-bold text-xs transition flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
                 <span data-bn="দ্রুত প্রস্থান (ESC)" data-en="Quick Exit">দ্রুত প্রস্থান (ESC)</span>
             </button>
         </div>
@@ -228,3 +234,37 @@
     </div>
 
 </div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // SignalR Anonymous Hotline WebSocket Connection (FR-8)
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/hubs/hotline")
+                .withAutomaticReconnect()
+                .build();
+
+            connection.start().then(function () {
+                console.log("Connected to HAVEN SignalR Anonymous Hotline Hub");
+                connection.invoke("JoinHotlineSession", "AnonymousHotline").catch(err => console.error(err));
+            }).catch(err => console.warn("SignalR fallback to HTTP polling:", err));
+
+            connection.on("SessionInitialized", function (data) {
+                console.log("Hotline Session Initialized:", data);
+            });
+
+            connection.on("AcuteDangerAlert", function (data) {
+                if (data && data.escalate) {
+                    triggerCrisisEscalation("SignalR Acute Keyword Trigger");
+                }
+            });
+
+            connection.on("ReceiveMessage", function (data) {
+                if (data && data.isAcuteDanger) {
+                    triggerCrisisEscalation("Acute Distress Detected");
+                }
+            });
+        });
+    </script>
+}
