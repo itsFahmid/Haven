@@ -2,22 +2,24 @@
     ViewData["Title"] = "প্রবেশাধিকার নেই | Access Denied";
 }
 
-<div class="min-h-[calc(100vh-200px)] py-16 px-4 flex items-center justify-center bg-gradient-to-b from-amber-50/40 via-[#fdfcf9] to-[#fdfcf9]">
-    <div class="max-w-md w-full text-center space-y-6 bg-white p-8 rounded-3xl shadow-xl border border-slate-100 haven-card">
-        <div class="w-16 h-16 rounded-2xl bg-amber-100/90 text-amber-900 flex items-center justify-center text-3xl mx-auto border border-amber-200/60">
-            🚫
+<div class="min-h-[calc(100vh-200px)] py-16 px-4 flex items-center justify-center bg-[#fdfcf9]">
+    <div class="max-w-md w-full text-center space-y-6 bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+        <div class="w-16 h-16 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center mx-auto border border-amber-200">
+            <svg class="w-8 h-8 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
         </div>
 
-        <h1 class="text-2xl font-black text-slate-900" data-bn="প্রবেশাধিকার সংরক্ষিত" data-en="Access Restricted">
+        <h1 class="text-2xl font-black text-slate-900 tracking-tight" data-bn="প্রবেশাধিকার সংরক্ষিত" data-en="Access Restricted">
             প্রবেশাধিকার সংরক্ষিত
         </h1>
 
-        <p class="text-sm text-slate-600 leading-relaxed" data-bn="এই পৃষ্ঠায় প্রবেশের জন্য প্রয়োজনীয় অনুমতি আপনার নেই অথবা আপনাকে লগইন করতে হবে।" data-en="You do not have permission to view this page. Please log in or return to safety.">
+        <p class="text-sm text-slate-600 leading-relaxed max-w-xs mx-auto" data-bn="এই পৃষ্ঠায় প্রবেশের জন্য প্রয়োজনীয় অনুমতি আপনার নেই অথবা আপনাকে লগইন করতে হবে।" data-en="You do not have permission to view this page. Please log in or return to safety.">
             এই পৃষ্ঠায় প্রবেশের জন্য প্রয়োজনীয় অনুমতি আপনার নেই অথবা আপনাকে লগইন করতে হবে।
         </p>
 
-        <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a asp-controller="Account" asp-action="Login" class="w-full sm:w-auto px-6 py-3 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl shadow-md transition">
+        <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a asp-controller="Account" asp-action="Login" class="w-full sm:w-auto px-6 py-3 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl shadow-sm transition">
                 <span data-bn="লগইন করুন" data-en="Log In">লগইন করুন</span>
             </a>
             <a asp-controller="Home" asp-action="Index" class="w-full sm:w-auto px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition">
