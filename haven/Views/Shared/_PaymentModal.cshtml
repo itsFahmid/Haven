@@ -1,5 +1,5 @@
 <!-- Micro-Donation & Bangladeshi Checkout Modal -->
-<div id="paymentModal" class="haven-modal fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/75 backdrop-blur-sm overflow-y-auto" role="dialog" aria-modal="true">
+<div id="paymentModal" class="haven-modal fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm overflow-y-auto" role="dialog" aria-modal="true">
     <div class="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all my-8">
         
         <!-- Step 1: Payment Formulation View -->
@@ -7,8 +7,10 @@
             
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-lg">
-                        💝
+                    <div class="w-10 h-10 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold text-lg border border-teal-100">
+                        <svg class="w-5 h-5 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
                     </div>
                     <div>
                         <h3 class="text-lg font-bold text-slate-900" data-bn="মাইক্রো-অনুদান ও নিরাপদ পেমেন্ট" data-en="Micro-Donation & Safe Payment">
@@ -58,7 +60,7 @@
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                     
                     <!-- bKash -->
-                    <div onclick="HavenPayment.setGateway('bkash')" data-gateway="bkash" class="gateway-card active bkash p-3 rounded-2xl border-2 cursor-pointer text-center flex flex-col items-center justify-center transition hover:scale-[1.02]">
+                    <div onclick="HavenPayment.setGateway('bkash')" data-gateway="bkash" class="gateway-card active bkash p-3 rounded-2xl border-2 cursor-pointer text-center flex flex-col items-center justify-center transition">
                         <div class="w-8 h-8 rounded-full bg-[#e2136e] text-white flex items-center justify-center font-bold text-xs mb-1">
                             bK
                         </div>
@@ -66,7 +68,7 @@
                     </div>
 
                     <!-- Nagad -->
-                    <div onclick="HavenPayment.setGateway('nagad')" data-gateway="nagad" class="gateway-card p-3 rounded-2xl border-2 border-slate-200 cursor-pointer text-center flex flex-col items-center justify-center transition hover:scale-[1.02]">
+                    <div onclick="HavenPayment.setGateway('nagad')" data-gateway="nagad" class="gateway-card p-3 rounded-2xl border-2 border-slate-200 cursor-pointer text-center flex flex-col items-center justify-center transition">
                         <div class="w-8 h-8 rounded-full bg-[#f7941d] text-white flex items-center justify-center font-bold text-xs mb-1">
                             নগদ
                         </div>
@@ -74,31 +76,32 @@
                     </div>
 
                     <!-- Rocket -->
-                    <div onclick="HavenPayment.setGateway('rocket')" data-gateway="rocket" class="gateway-card p-3 rounded-2xl border-2 border-slate-200 cursor-pointer text-center flex flex-col items-center justify-center transition hover:scale-[1.02]">
+                    <div onclick="HavenPayment.setGateway('rocket')" data-gateway="rocket" class="gateway-card p-3 rounded-2xl border-2 border-slate-200 cursor-pointer text-center flex flex-col items-center justify-center transition">
                         <div class="w-8 h-8 rounded-full bg-[#8c3494] text-white flex items-center justify-center font-bold text-xs mb-1">
-                            🚀
+                            R
                         </div>
                         <span class="text-xs font-bold text-slate-800">Rocket</span>
                     </div>
 
                     <!-- SSLCommerz Cards -->
-                    <div onclick="HavenPayment.setGateway('sslcommerz')" data-gateway="sslcommerz" class="gateway-card p-3 rounded-2xl border-2 border-slate-200 cursor-pointer text-center flex flex-col items-center justify-center transition hover:scale-[1.02]">
-                        <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs mb-1">
-                            💳
+                    <div onclick="HavenPayment.setGateway('sslcommerz')" data-gateway="sslcommerz" class="gateway-card p-3 rounded-2xl border-2 border-slate-200 cursor-pointer text-center flex flex-col items-center justify-center transition">
+                        <div class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-xs mb-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                         </div>
                         <span class="text-xs font-bold text-slate-800">Cards/SSL</span>
                     </div>
                 </div>
 
-                <div id="paymentGatewayHelper" class="mt-2.5 text-xs text-teal-800 bg-teal-50/80 p-2.5 rounded-xl font-medium border border-teal-100 flex items-center gap-2">
-                    <span>💡</span> bKash Merchant / Direct Payment: 01700-000000 (Haven Safe Foundation)
+                <div id="paymentGatewayHelper" class="mt-2.5 text-xs text-teal-800 bg-teal-50 p-2.5 rounded-xl font-medium border border-teal-100 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-teal-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>bKash Merchant / Direct Payment: 01700-000000 (Haven Safe Foundation)</span>
                 </div>
             </div>
 
             <!-- Hall of Fame & Privacy Options -->
             <div class="space-y-3 pt-1">
                 <label class="flex items-start gap-3 cursor-pointer select-none">
-                    <input type="checkbox" id="optHallOfFameCheck" class="mt-1 rounded text-teal-600 focus:ring-teal-500 h-4 w-4 border-slate-300" onchange="document.getElementById('donorNameContainer').classList.toggle('hidden', !this.checked)" />
+                    <input type="checkbox" id="optHallOfFameCheck" class="mt-1 rounded text-teal-700 focus:ring-teal-500 h-4 w-4 border-slate-300" onchange="document.getElementById('donorNameContainer').classList.toggle('hidden', !this.checked)" />
                     <div>
                         <div class="text-xs font-semibold text-slate-800" data-bn="হেভেন 'হল অফ ফেম' (Hall of Fame) দাতা তালিকায় নাম প্রকাশ করুন" data-en="Feature my name on the Haven 'Hall of Fame' donor list">
                             হেভেন 'হল অফ ফেম' (Hall of Fame) দাতা তালিকায় নাম প্রকাশ করুন
@@ -114,7 +117,7 @@
                 </div>
 
                 <label class="flex items-start gap-3 cursor-pointer select-none">
-                    <input type="checkbox" id="payAnonymousCheck" checked class="mt-1 rounded text-teal-600 focus:ring-teal-500 h-4 w-4 border-slate-300" />
+                    <input type="checkbox" id="payAnonymousCheck" checked class="mt-1 rounded text-teal-700 focus:ring-teal-500 h-4 w-4 border-slate-300" />
                     <div>
                         <div class="text-xs font-semibold text-slate-800" data-bn="সম্পূর্ণ গোপনীয় ও বেনামী লেনদেন বজায় রাখুন" data-en="Keep payment 100% confidential & anonymous">
                             সম্পূর্ণ গোপনীয় ও বেনামী লেনদেন বজায় রাখুন
@@ -128,8 +131,9 @@
 
             <!-- Actions -->
             <div class="pt-2">
-                <button type="button" id="confirmPaymentBtn" onclick="HavenPayment.processPayment()" class="w-full py-3.5 px-5 bg-gradient-to-r from-teal-700 to-teal-800 hover:from-teal-800 hover:to-teal-900 text-white font-bold text-sm rounded-2xl shadow-lg shadow-teal-900/10 transition transform active:scale-[0.98] flex items-center justify-center gap-2">
-                    <span data-bn="নিরাপদে অনুদান প্রদান করুন" data-en="Proceed to Secure Payment">নিরাপদে অনুদান প্রদান করুন</span> 🔒
+                <button type="button" id="confirmPaymentBtn" onclick="HavenPayment.processPayment()" class="w-full py-3.5 px-5 bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm rounded-2xl shadow-sm transition flex items-center justify-center gap-2">
+                    <span data-bn="নিরাপদে অনুদান প্রদান করুন" data-en="Proceed to Secure Payment">নিরাপদে অনুদান প্রদান করুন</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                 </button>
                 <div class="text-center mt-2.5 text-[11px] text-slate-400" data-bn="256-Bit SSL এনক্রিপ্টেড ও সম্পূর্ণ নিরাপদ লেনদেন" data-en="256-Bit SSL Encrypted & Bank-Grade Security">
                     256-Bit SSL এনক্রিপ্টেড ও সম্পূর্ণ নিরাপদ লেনদেন
@@ -140,8 +144,8 @@
 
         <!-- Step 2: Instant Success & Receipt View -->
         <div id="paymentStepSuccess" class="p-6 md:p-8 space-y-6 hidden text-center">
-            <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mx-auto pulse-teal">
-                ✓
+            <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-3xl mx-auto border border-emerald-200">
+                <svg class="w-8 h-8 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
             </div>
             
             <div>
