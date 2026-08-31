@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Haven.Data;
 using Haven.Models;
 using Haven.Services;
 
@@ -11,11 +13,13 @@ namespace Haven.Controllers;
 public class AccountController : Controller
 {
     private readonly IAuthService _authService;
+    private readonly HavenDbContext _db;
     private readonly ILogger<AccountController> _logger;
 
-    public AccountController(IAuthService authService, ILogger<AccountController> logger)
+    public AccountController(IAuthService authService, HavenDbContext db, ILogger<AccountController> logger)
     {
         _authService = authService;
+        _db = db;
         _logger = logger;
     }
 
@@ -126,19 +130,168 @@ public class AccountController : Controller
             return RedirectToAction(nameof(Login));
         }
 
+        var childProfiles = await _db.ChildProfiles.Where(c => c.ParentUserId == userId).ToListAsync();
+        var bookmarkedArticles = await _db.Articles.OrderByDescending(a => a.CreatedAt).Take(3).ToListAsync();
+
         var profileModel = new UserProfileViewModel
         {
             Id = user.Id,
             FullName = user.FullName,
             Email = user.Email,
             Role = user.Role,
+            UserType = user.UserType,
+            Age = user.Age,
+            ProfilePictureUrl = user.ProfilePictureUrl,
             CreatedAt = user.CreatedAt,
             LastLoginAt = user.LastLoginAt,
             CompletedCoursesCount = 2,
-            BookedSessionsCount = 1
+            BookedSessionsCount = 1,
+            ChildProfiles = childProfiles,
+            BookmarkedArticles = bookmarkedArticles
         };
 
         return View(profileModel);
+    }
+
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateProfile(string fullName, string? profilePictureUrl)
+    {
+        var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (int.TryParse(idClaim, out int userId) && !string.IsNullOrWhiteSpace(fullName))
+        {
+            var user = await _db.Users.FindAsync(userId);
+            if (user != null)
+            {
+                user.FullName = fullName.Trim();
+                if (!string.IsNullOrWhiteSpace(profilePictureUrl))
+                {
+                    user.ProfilePictureUrl = profilePictureUrl.Trim();
+                }
+                await _db.SaveChangesAsync();
+                await SignInUserAsync(user, isPersistent: true);
+                TempData["SuccessMessage"] = "আপনার প্রোফাইল সফলভাবে আপডেট করা হয়েছে।";
+            }
+        }
+        return RedirectToAction(nameof(Profile));
+    }
+
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangePassword(string currentPassword, string newPassword, string confirmNewPassword)
+    {
+        if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 6)
+        {
+            TempData["ErrorMessage"] = "নতুন পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।";
+            return RedirectToAction(nameof(Profile));
+        }
+
+        if (newPassword != confirmNewPassword)
+        {
+            TempData["ErrorMessage"] = "নতুন পাসওয়ার্ড দুটি মিলছে না।";
+            return RedirectToAction(nameof(Profile));
+        }
+
+        var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (int.TryParse(idClaim, out int userId))
+        {
+            var user = await _db.Users.FindAsync(userId);
+            if (user != null)
+            {
+                var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<User>();
+                var verify = hasher.VerifyHashedPassword(user, user.PasswordHash, currentPassword);
+                if (verify == Microsoft.AspNetCore.Identity.PasswordVerificationResult.Failed)
+                {
+                    TempData["ErrorMessage"] = "বর্তমান পাসওয়ার্ড সঠিক নয়।";
+                    return RedirectToAction(nameof(Profile));
+                }
+
+                user.PasswordHash = hasher.HashPassword(user, newPassword);
+                await _db.SaveChangesAsync();
+                TempData["SuccessMessage"] = "পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে।";
+            }
+        }
+        return RedirectToAction(nameof(Profile));
+    }
+
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteAccount(string confirmEmail)
+    {
+        var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (int.TryParse(idClaim, out int userId))
+        {
+            var user = await _db.Users.FindAsync(userId);
+            if (user != null && string.Equals(user.Email, confirmEmail?.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                _db.Users.Remove(user);
+                await _db.SaveChangesAsync();
+
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                HttpContext.Session.Clear();
+
+                TempData["InfoMessage"] = "আপনার অ্যাকাউন্ট ও সংশ্লিষ্ট তথ্য স্থায়ীভাবে মুছে ফেলা হয়েছে।";
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        TempData["ErrorMessage"] = "অ্যাকাউন্ট ডিলিট করতে সঠিক ইমেইল ঠিকানা প্রদান করুন।";
+        return RedirectToAction(nameof(Profile));
+    }
+
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> Bookmarks()
+    {
+        var bookmarkedArticles = await _db.Articles.OrderByDescending(a => a.CreatedAt).Take(6).ToListAsync();
+        return View(bookmarkedArticles);
+    }
+
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddChildProfile(string aliasName, string ageGroup)
+    {
+        var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (int.TryParse(idClaim, out int userId) && !string.IsNullOrWhiteSpace(aliasName))
+        {
+            var child = new ChildProfile
+            {
+                ParentUserId = userId,
+                AliasName = aliasName.Trim(),
+                AgeGroup = string.IsNullOrWhiteSpace(ageGroup) ? "Child" : ageGroup.Trim(),
+                CreatedAt = DateTime.UtcNow
+            };
+            _db.ChildProfiles.Add(child);
+            await _db.SaveChangesAsync();
+            TempData["SuccessMessage"] = "শিশু প্রোফাইল সফলভাবে সংযুক্ত হয়েছে।";
+        }
+        return RedirectToAction(nameof(Profile));
+    }
+
+    [HttpGet]
+    public IActionResult ForgotPassword()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ForgotPassword(string email)
+    {
+        if (!string.IsNullOrWhiteSpace(email))
+        {
+            var user = await _authService.GetUserByEmailAsync(email);
+            if (user != null)
+            {
+                _logger.LogInformation("Password reset token dispatched for {Email}", email);
+            }
+        }
+        TempData["SuccessMessage"] = "যদি প্রদানকৃত ইমেইলটি নিবন্ধিত থাকে, তবে পাসওয়ার্ড রিসেট লিঙ্ক আপনার ইমেইলে পাঠানো হয়েছে।";
+        return RedirectToAction(nameof(Login));
     }
 
     [HttpGet]

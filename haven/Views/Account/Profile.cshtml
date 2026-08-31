@@ -1,6 +1,6 @@
 @model Haven.Models.UserProfileViewModel
 @{
-    ViewData["Title"] = "প্রোফাইল | Profile";
+    ViewData["Title"] = "প্রোফাইল সেটিংস | Profile & Account";
 }
 
 <div class="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8">
@@ -10,9 +10,22 @@
         <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             
             <div class="flex items-center gap-5">
-                <div class="w-20 h-20 rounded-2xl bg-teal-700 text-white flex items-center justify-center text-3xl font-black shadow-md shrink-0">
-                    @(string.IsNullOrWhiteSpace(Model.FullName) ? "H" : Model.FullName.Substring(0, 1).ToUpper())
+                <div class="relative group">
+                    @if (!string.IsNullOrWhiteSpace(Model.ProfilePictureUrl))
+                    {
+                        <img src="@Model.ProfilePictureUrl" alt="@Model.FullName" class="w-20 h-20 rounded-2xl object-cover border-2 border-teal-500/50 shadow-md" />
+                    }
+                    else
+                    {
+                        <div class="w-20 h-20 rounded-2xl bg-teal-700 text-white flex items-center justify-center text-3xl font-black shadow-md shrink-0">
+                            @(string.IsNullOrWhiteSpace(Model.FullName) ? "H" : Model.FullName.Substring(0, 1).ToUpper())
+                        </div>
+                    }
+                    <button type="button" onclick="document.getElementById('editProfileModal').classList.remove('hidden')" class="absolute -bottom-1 -right-1 p-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white shadow transition" title="ছবি ও নাম পরিবর্তন করুন">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                    </button>
                 </div>
+
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
                         <h1 class="text-2xl sm:text-3xl font-black text-white">@Model.FullName</h1>
@@ -20,7 +33,7 @@
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
-                            <span>Verified Member</span>
+                            <span>@Model.Role Member (@Model.UserType Mode)</span>
                         </span>
                     </div>
                     <p class="text-sm text-slate-300">@Model.Email</p>
@@ -31,23 +44,16 @@
             </div>
 
             <!-- Header Action Buttons -->
-            <div class="flex items-center gap-3">
-                <a asp-controller="Courses" asp-action="Index" class="px-4 py-2.5 bg-teal-700 hover:bg-teal-600 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center gap-1.5">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                    <span data-bn="কোর্স সমূহ" data-en="Browse Courses">কোর্স সমূহ</span>
-                </a>
+            <div class="flex flex-wrap items-center gap-3">
+                <button type="button" onclick="document.getElementById('editProfileModal').classList.remove('hidden')" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl border border-slate-700 transition flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                    <span data-bn="প্রোফাইল এডিট" data-en="Edit Profile">প্রোফাইল এডিট</span>
+                </button>
 
-                <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
-                    @Html.AntiForgeryToken()
-                    <button type="submit" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs rounded-xl transition flex items-center gap-1.5">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
-                        <span data-bn="লগআউট" data-en="Log Out">লগআউট</span>
-                    </button>
-                </form>
+                <button type="button" onclick="document.getElementById('changePasswordModal').classList.remove('hidden')" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl border border-slate-700 transition flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>
+                    <span data-bn="পাসওয়ার্ড পরিবর্তন" data-en="Change Password">পাসওয়ার্ড পরিবর্তন</span>
+                </button>
             </div>
 
         </div>
@@ -56,8 +62,8 @@
     <!-- User Dashboard Overview Grid -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        <!-- Metric 1: Protected Status -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 haven-card">
+        <!-- Metric 1: Security -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
             <div class="flex items-center justify-between mb-4">
                 <span class="w-10 h-10 rounded-xl bg-teal-50 text-teal-800 flex items-center justify-center">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -68,13 +74,11 @@
             </div>
             <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider" data-bn="অ্যাকাউন্ট নিরাপত্তা স্তর" data-en="Security Status">অ্যাকাউন্ট নিরাপত্তা স্তর</h3>
             <p class="text-2xl font-extrabold text-slate-900 mt-1">100% Encrypted</p>
-            <p class="text-xs text-slate-500 mt-2" data-bn="আপনার পরিচয় হেভেনের জিরো-লগ ডাটাবেজে সংরক্ষিত।" data-en="Zero logs recorded. Protected with PBKDF2 encryption.">
-                আপনার পরিচয় হেভেনের জিরো-লগ ডাটাবেজে সংরক্ষিত।
-            </p>
+            <p class="text-xs text-slate-500 mt-2">আপনার পরিচয় হেভেনের জিরো-লগ ডাটাবেজে সংরক্ষিত।</p>
         </div>
 
-        <!-- Metric 2: Enrolled Safety Modules -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 haven-card">
+        <!-- Metric 2: Completed Courses -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
             <div class="flex items-center justify-between mb-4">
                 <span class="w-10 h-10 rounded-xl bg-sky-50 text-sky-800 flex items-center justify-center">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -85,52 +89,194 @@
             </div>
             <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider" data-bn="সম্পন্ন সুরক্ষা পাঠ" data-en="Completed Safety Modules">সম্পন্ন সুরক্ষা পাঠ</h3>
             <p class="text-2xl font-extrabold text-teal-800 mt-1">2 / 4 Courses</p>
-            <p class="text-xs text-slate-500 mt-2" data-bn="সাইবার ব্ল্যাকমেইল ও মানসিক চাপ নিয়ন্ত্রণ মডিউল সম্পন্ন হয়েছে।" data-en="Cyber blackmail & mental resilience modules in progress.">
-                সাইবার ব্ল্যাকমেইল ও মানসিক চাপ নিয়ন্ত্রণ মডিউল সম্পন্ন হয়েছে।
-            </p>
+            <a asp-controller="Courses" asp-action="Index" class="text-xs font-bold text-teal-700 hover:text-teal-800 mt-2 inline-block">কোর্স ক্যাটালগ দেখুন ➔</a>
         </div>
 
-        <!-- Metric 3: Confidential Therapy Bookings -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 haven-card">
+        <!-- Metric 3: Bookmarks -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
             <div class="flex items-center justify-between mb-4">
-                <span class="w-10 h-10 rounded-xl bg-teal-50 text-teal-800 flex items-center justify-center">
+                <span class="w-10 h-10 rounded-xl bg-amber-50 text-amber-900 flex items-center justify-center">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                     </svg>
                 </span>
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900">Subsidized</span>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900">Saved</span>
             </div>
-            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider" data-bn="থেরাপি বুকিং হিস্ট্রি" data-en="Therapy Bookings">থেরাপি বুকিং হিস্ট্রি</h3>
-            <p class="text-2xl font-extrabold text-slate-900 mt-1">1 Confirmed Slot</p>
-            <p class="text-xs text-slate-500 mt-2" data-bn="বিএমডিসি ভেরিফায়েড কাউন্সেলরের সাথে পরবর্তী সেশন নির্ধারিত।" data-en="Next confidential session scheduled with BMDC specialist.">
-                বিএমডিসি ভেরিফায়েড কাউন্সেলরের সাথে পরবর্তী সেশন নির্ধারিত।
-            </p>
+            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">সংরক্ষিত নিবন্ধ</h3>
+            <p class="text-2xl font-extrabold text-slate-900 mt-1">@Model.BookmarkedArticles.Count Articles</p>
+            <a asp-action="Bookmarks" class="text-xs font-bold text-teal-700 hover:text-teal-800 mt-2 inline-block">বুকমার্কস দেখুন ➔</a>
         </div>
 
     </div>
 
-    <!-- Quick Shortcuts Banner -->
-    <div class="bg-slate-50 rounded-3xl p-8 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-6">
+    <!-- Parent/Guardian Linked Child Profiles Section (FR-2) -->
+    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+                <h3 class="text-base font-bold text-slate-900" data-bn="অভিভাবক ড্যাশবোর্ড: সংযুক্ত শিশু প্রোফাইল (FR-2)" data-en="Parent Dashboard: Linked Child Profiles (FR-2)">
+                    অভিভাবক ড্যাশবোর্ড: সংযুক্ত শিশু প্রোফাইল (FR-2)
+                </h3>
+                <p class="text-xs text-slate-500">ব্যক্তিগত তথ্য সংগ্রহ না করে নিরাপদে আপনার সন্তানের সুরক্ষা নিশ্চিত করুন</p>
+            </div>
+            <button type="button" onclick="document.getElementById('addChildModal').classList.remove('hidden')" class="px-4 py-2 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                <span data-bn="নতুন সন্তান প্রোফাইল যুক্ত করুন" data-en="Add Child Profile">নতুন সন্তান প্রোফাইল যুক্ত করুন</span>
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            @if (!Model.ChildProfiles.Any())
+            {
+                <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex items-center justify-between col-span-full">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-xs">
+                            A1
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Child Profile (Sample)</div>
+                            <div class="text-[10px] text-slate-500">Gen Alpha (Age 10-14)</div>
+                        </div>
+                    </div>
+                    <span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md">Protected</span>
+                </div>
+            }
+            else
+            {
+                @foreach (var child in Model.ChildProfiles)
+                {
+                    <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-xs">
+                                @(child.AliasName.Length >= 2 ? child.AliasName.Substring(0, 2) : "C")
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-900">@child.AliasName</div>
+                                <div class="text-[10px] text-slate-500">@child.AgeGroup</div>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md">Protected</span>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <!-- Danger Zone: Delete Account -->
+    <div class="bg-rose-50/60 rounded-3xl p-8 border border-rose-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
-            <h2 class="text-lg font-bold text-slate-900" data-bn="আপনার সুরক্ষা সবার আগে" data-en="Your Safety is Always First">আপনার সুরক্ষা সবার আগে</h2>
-            <p class="text-xs text-slate-600 mt-1" data-bn="যেকোনো জরুরি প্রয়োজনে আমাদের হটলাইন বা এআই চ্যাটবট সার্বক্ষণিক প্রস্তুত রয়েছে।" data-en="AI hotline and toll-free emergency helplines are available 24/7.">
-                যেকোনো জরুরি প্রয়োজনে আমাদের হটলাইন বা এআই চ্যাটবট সার্বক্ষণিক প্রস্তুত রয়েছে।
+            <h3 class="text-base font-bold text-rose-950" data-bn="অ্যাকাউন্ট ডিলিট জোন (Danger Zone)" data-en="Delete Account (Danger Zone)">
+                অ্যাকাউন্ট ডিলিট জোন (Danger Zone)
+            </h3>
+            <p class="text-xs text-rose-800/80 mt-1 max-w-xl">
+                আপনার অ্যাকাউন্ট ডিলিট করলে সকল কোর্স এনরোলমেন্ট, সেশন বুকিং এবং প্রোফাইল তথ্য স্থায়ীভাবে মুছে যাবে। এটি পুনরায় উদ্ধার করা সম্ভব নয়।
             </p>
         </div>
-        <div class="flex items-center gap-3">
-            <a asp-controller="Hotline" asp-action="Index" class="px-5 py-3 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                </svg>
-                <span data-bn="এআই সুরক্ষা হটলাইন" data-en="AI Safety Hotline">এআই সুরক্ষা হটলাইন</span>
-            </a>
-            <a asp-controller="Therapy" asp-action="Index" class="px-5 py-3 bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 font-bold text-xs rounded-xl transition flex items-center gap-2">
-                <svg class="w-4 h-4 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-                <span data-bn="থেরাপিস্ট ডিরেক্টরি" data-en="Therapy Directory">থেরাপিস্ট ডিরেক্টরি</span>
-            </a>
-        </div>
+        <button type="button" onclick="document.getElementById('deleteAccountModal').classList.remove('hidden')" class="px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-xs transition shrink-0">
+            অ্যাকাউন্ট স্থায়ীভাবে মুছুন
+        </button>
     </div>
 
+</div>
+
+<!-- 1. Edit Profile Modal (Name & Avatar) -->
+<div id="editProfileModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/80 backdrop-blur-xs">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full border border-slate-200 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="font-bold text-sm text-slate-900">প্রোফাইল ছবি ও নাম পরিবর্তন</h3>
+            <button type="button" onclick="document.getElementById('editProfileModal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+        <form asp-action="UpdateProfile" method="post" class="space-y-4">
+            @Html.AntiForgeryToken()
+            <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">পূর্ণ নাম / Full Name</label>
+                <input type="text" name="fullName" value="@Model.FullName" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">প্রোফাইল পিকচার লিংক / Avatar URL</label>
+                <input type="url" name="profilePictureUrl" value="@Model.ProfilePictureUrl" placeholder="https://images.unsplash.com/photo-..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
+                <p class="text-[10px] text-slate-400 mt-1">যেকোনো ইমেজ লিংক পেস্ট করুন অথবা খালি রাখুন</p>
+            </div>
+            <button type="submit" class="w-full py-2.5 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl shadow-xs transition">
+                পরিবর্তন সংরক্ষণ করুন
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- 2. Change Password Modal -->
+<div id="changePasswordModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/80 backdrop-blur-xs">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full border border-slate-200 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="font-bold text-sm text-slate-900">পাসওয়ার্ড পরিবর্তন (Reset Password)</h3>
+            <button type="button" onclick="document.getElementById('changePasswordModal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+        <form asp-action="ChangePassword" method="post" class="space-y-4">
+            @Html.AntiForgeryToken()
+            <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">বর্তমান পাসওয়ার্ড</label>
+                <input type="password" name="currentPassword" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">নতুন পাসওয়ার্ড</label>
+                <input type="password" name="newPassword" minlength="6" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">নতুন পাসওয়ার্ড নিশ্চিত করুন</label>
+                <input type="password" name="confirmNewPassword" minlength="6" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
+            </div>
+            <button type="submit" class="w-full py-2.5 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl shadow-xs transition">
+                পাসওয়ার্ড আপডেট করুন
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- 3. Add Child Profile Modal -->
+<div id="addChildModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/80 backdrop-blur-xs">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full border border-slate-200 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="font-bold text-sm text-slate-900">নতুন সন্তান প্রোফাইল যুক্ত করুন</h3>
+            <button type="button" onclick="document.getElementById('addChildModal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+        <form asp-action="AddChildProfile" method="post" class="space-y-4">
+            @Html.AntiForgeryToken()
+            <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">ছদ্মনাম / Alias Name</label>
+                <input type="text" name="aliasName" required placeholder="e.g. Abrar / Child-1" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">বয়স ব্র্যাকেট / Age Group</label>
+                <select name="ageGroup" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+                    <option value="Gen Alpha (8-12)">Gen Alpha (Age 8-12)</option>
+                    <option value="Gen Beta (Under 8)">Gen Beta (Under 8)</option>
+                    <option value="Teen (13-17)">Teen (Age 13-17)</option>
+                </select>
+            </div>
+            <button type="submit" class="w-full py-2.5 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl shadow-xs transition">
+                প্রোফাইল সংরক্ষণ করুন
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- 4. Delete Account Confirmation Modal -->
+<div id="deleteAccountModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/80 backdrop-blur-xs">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full border border-rose-200 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-rose-100">
+            <h3 class="font-bold text-sm text-rose-900">অ্যাকাউন্ট মুছে ফেলার নিশ্চিতকরণ</h3>
+            <button type="button" onclick="document.getElementById('deleteAccountModal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+        <p class="text-xs text-slate-600">
+            নিশ্চিত করতে অনুগ্রহ করে আপনার নিবন্ধিত ইমেইল (<span class="font-bold text-slate-900">@Model.Email</span>) নিচে লিখুন:
+        </p>
+        <form asp-action="DeleteAccount" method="post" class="space-y-4">
+            @Html.AntiForgeryToken()
+            <div>
+                <input type="email" name="confirmEmail" placeholder="@Model.Email" required class="w-full px-3.5 py-2.5 bg-rose-50/50 border border-rose-200 rounded-xl text-xs text-rose-950" />
+            </div>
+            <button type="submit" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-xs transition">
+                স্থায়ীভাবে ডিলিট করুন
+            </button>
+        </form>
+    </div>
 </div>
