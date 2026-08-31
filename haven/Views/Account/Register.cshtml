@@ -3,40 +3,32 @@
     ViewData["Title"] = "রেজিস্ট্রেশন | Sign Up";
 }
 
-<div class="min-h-[calc(100vh-160px)] py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center bg-gradient-to-b from-teal-50/50 via-[#fdfcf9] to-[#fdfcf9] relative overflow-hidden">
-    
-    <!-- Background ambient lighting -->
-    <div class="absolute top-10 left-1/4 w-96 h-96 bg-teal-200/25 rounded-full blur-3xl pointer-events-none -z-10"></div>
-    <div class="absolute bottom-10 right-1/4 w-80 h-80 bg-emerald-200/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<div class="min-h-[calc(100vh-160px)] py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center bg-[#fdfcf9]">
 
     <div class="max-w-xl w-full space-y-8">
         
-        <!-- Header Card -->
+        <!-- Header -->
         <div class="text-center space-y-3">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-teal-700 to-teal-500 text-white shadow-lg shadow-teal-900/15">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-teal-700 text-white shadow-lg shadow-teal-900/20">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                 </svg>
-            </div>
-
-            <div class="inline-block px-3 py-1 bg-teal-100/80 border border-teal-200 rounded-full text-teal-800 text-xs font-bold shadow-sm">
-                🛡️ <span data-bn="এনক্রিপ্টেড যুব সুরক্ষা অ্যাকাউন্ট" data-en="Encrypted Youth & Family Safety Account">এনক্রিপ্টেড যুব সুরক্ষা অ্যাকাউন্ট</span>
             </div>
 
             <h1 class="text-3xl font-black text-slate-900 tracking-tight" data-bn="হেভেনে নতুন অ্যাকাউন্ট তৈরি করুন" data-en="Create Your Haven Sanctuary Account">
                 হেভেনে নতুন অ্যাকাউন্ট তৈরি করুন
             </h1>
             
-            <p class="text-sm text-slate-600 max-w-md mx-auto" data-bn="আপনার নিরাপত্তা ও মানসিক শান্তির জন্য একটি সম্পূর্ণ নিরাপদ ও এনক্রিপ্টেড প্রোফাইল তৈরি করুন।" data-en="Create a private, zero-tracking safe profile to bookmark courses, access counseling, and protect yourself.">
+            <p class="text-sm text-slate-500 max-w-md mx-auto" data-bn="আপনার নিরাপত্তা ও মানসিক শান্তির জন্য একটি সম্পূর্ণ নিরাপদ ও এনক্রিপ্টেড প্রোফাইল তৈরি করুন।" data-en="Create a private, zero-tracking safe profile to bookmark courses, access counseling, and protect yourself.">
                 আপনার নিরাপত্তা ও মানসিক শান্তির জন্য একটি সম্পূর্ণ নিরাপদ ও এনক্রিপ্টেড প্রোফাইল তৈরি করুন।
             </p>
         </div>
 
         <!-- Form Card Container -->
-        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-slate-100 haven-card">
+        <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
             
             <!-- Server-Side Validation Summary -->
-            <div asp-validation-summary="ModelOnly" class="text-sm font-semibold text-amber-900 bg-amber-50 border border-amber-200/90 rounded-xl p-4 mb-6 @(ViewData.ModelState.IsValid ? "hidden" : "")"></div>
+            <div asp-validation-summary="ModelOnly" class="text-sm font-semibold text-amber-900 bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 @(ViewData.ModelState.IsValid ? "hidden" : "")"></div>
 
             <form asp-controller="Account" asp-action="Register" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]" class="space-y-5" novalidate>
                 @Html.AntiForgeryToken()
@@ -44,90 +36,106 @@
 
                 <!-- Full Name Field -->
                 <div>
-                    <label asp-for="FullName" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                        <span data-bn="আপনার পূর্ণ নাম / ছদ্মনাম" data-en="Full Name / Alias">আপনার পূর্ণ নাম / ছদ্মনাম</span> <span class="text-amber-700">*</span>
+                    <label asp-for="FullName" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+                        <span data-bn="আপনার পূর্ণ নাম / ছদ্মনাম" data-en="Full Name / Alias">আপনার পূর্ণ নাম / ছদ্মনাম</span> <span class="text-amber-700" aria-hidden="true">*</span>
                     </label>
-                    <div class="relative rounded-2xl shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                            👤
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
                         </div>
-                        <input asp-for="FullName" class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
+                        <input asp-for="FullName" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
                                placeholder="আপনার নাম লিখুন" data-bn="আপনার নাম লিখুন" data-en="Enter your full name or preferred alias" required />
                     </div>
-                    <span asp-validation-for="FullName" class="text-xs font-semibold text-amber-800 mt-1.5 block"></span>
+                    <span asp-validation-for="FullName" class="text-xs font-medium text-amber-800 mt-1.5 block"></span>
                 </div>
 
                 <!-- Email Field -->
                 <div>
-                    <label asp-for="Email" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                        <span data-bn="ইমেইল ঠিকানা" data-en="Email Address">ইমেইল ঠিকানা</span> <span class="text-amber-700">*</span>
+                    <label asp-for="Email" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+                        <span data-bn="ইমেইল ঠিকানা" data-en="Email Address">ইমেইল ঠিকানা</span> <span class="text-amber-700" aria-hidden="true">*</span>
                     </label>
-                    <div class="relative rounded-2xl shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                            ✉️
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
                         </div>
-                        <input asp-for="Email" type="email" class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
-                               placeholder="example@haven.org" data-bn="example@haven.org" data-en="example@haven.org" required />
+                        <input asp-for="Email" type="email" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
+                               placeholder="example@haven.org" required />
                     </div>
-                    <span asp-validation-for="Email" class="text-xs font-semibold text-amber-800 mt-1.5 block"></span>
-                    <p class="text-[11px] text-slate-400 mt-1" data-bn="আপনার ইমেইল সম্পূর্ণ গোপন রাখা হবে এবং কোনো বিজ্ঞাপনী কাজে ব্যবহৃত হবে না।" data-en="Your email is strictly encrypted and never shared or spammed.">
+                    <span asp-validation-for="Email" class="text-xs font-medium text-amber-800 mt-1.5 block"></span>
+                    <p class="text-xs text-slate-400 mt-1" data-bn="আপনার ইমেইল সম্পূর্ণ গোপন রাখা হবে এবং কোনো বিজ্ঞাপনী কাজে ব্যবহৃত হবে না।" data-en="Your email is strictly encrypted and never shared or spammed.">
                         আপনার ইমেইল সম্পূর্ণ গোপন রাখা হবে এবং কোনো বিজ্ঞাপনী কাজে ব্যবহৃত হবে না।
                     </p>
                 </div>
 
                 <!-- Password Field -->
                 <div>
-                    <label asp-for="Password" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                        <span data-bn="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" data-en="Password (Min 6 chars)">পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)</span> <span class="text-amber-700">*</span>
+                    <label asp-for="Password" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+                        <span data-bn="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" data-en="Password (Min 6 chars)">পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)</span> <span class="text-amber-700" aria-hidden="true">*</span>
                     </label>
-                    <div class="relative rounded-2xl shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                            🔒
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
                         </div>
-                        <input asp-for="Password" id="registerPasswordInput" type="password" class="w-full pl-11 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
+                        <input asp-for="Password" id="registerPasswordInput" type="password" class="w-full pl-10 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
                                placeholder="••••••••" required />
-                        <button type="button" onclick="togglePasswordVisibility('registerPasswordInput', this)" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none" aria-label="Toggle password visibility">
-                            👁️
+                        <button type="button" onclick="togglePasswordVisibility('registerPasswordInput', this)" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 rounded-r-xl" aria-label="Toggle password visibility">
+                            <svg class="pw-eye-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
                         </button>
                     </div>
-                    <span asp-validation-for="Password" class="text-xs font-semibold text-amber-800 mt-1.5 block"></span>
+                    <span asp-validation-for="Password" class="text-xs font-medium text-amber-800 mt-1.5 block"></span>
                 </div>
 
                 <!-- Confirm Password Field -->
                 <div>
-                    <label asp-for="ConfirmPassword" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                        <span data-bn="পাসওয়ার্ড পুনরায় লিখুন" data-en="Confirm Password">পাসওয়ার্ড পুনরায় লিখুন</span> <span class="text-amber-700">*</span>
+                    <label asp-for="ConfirmPassword" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+                        <span data-bn="পাসওয়ার্ড পুনরায় লিখুন" data-en="Confirm Password">পাসওয়ার্ড পুনরায় লিখুন</span> <span class="text-amber-700" aria-hidden="true">*</span>
                     </label>
-                    <div class="relative rounded-2xl shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                            🔐
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
                         </div>
-                        <input asp-for="ConfirmPassword" id="registerConfirmPasswordInput" type="password" class="w-full pl-11 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
+                        <input asp-for="ConfirmPassword" id="registerConfirmPasswordInput" type="password" class="w-full pl-10 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
                                placeholder="••••••••" required />
-                        <button type="button" onclick="togglePasswordVisibility('registerConfirmPasswordInput', this)" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none" aria-label="Toggle password visibility">
-                            👁️
+                        <button type="button" onclick="togglePasswordVisibility('registerConfirmPasswordInput', this)" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 rounded-r-xl" aria-label="Toggle confirm password visibility">
+                            <svg class="pw-eye-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
                         </button>
                     </div>
-                    <span asp-validation-for="ConfirmPassword" class="text-xs font-semibold text-amber-800 mt-1.5 block"></span>
+                    <span asp-validation-for="ConfirmPassword" class="text-xs font-medium text-amber-800 mt-1.5 block"></span>
                 </div>
 
                 <!-- Terms & Privacy Agreement Checkbox -->
-                <div class="pt-2">
+                <div class="pt-1">
                     <label class="flex items-start gap-3 cursor-pointer">
-                        <input asp-for="AgreeToTerms" type="checkbox" class="w-5 h-5 mt-0.5 rounded-lg text-teal-700 focus:ring-teal-500 border-slate-300 rounded cursor-pointer" />
-                        <span class="text-xs text-slate-600 leading-relaxed select-none">
+                        <input asp-for="AgreeToTerms" type="checkbox" class="w-4 h-4 mt-0.5 rounded text-teal-700 focus:ring-teal-500 border-slate-300 cursor-pointer" />
+                        <span class="text-sm text-slate-600 leading-relaxed select-none">
                             <span data-bn="আমি হেভেন-এর সুরক্ষা নীতিমালা ও শর্তাবলীতে সম্মত আছি এবং স্বীকার করছি যে হেভেন একটি নিরাপদ ক্ষেত্র।" data-en="I agree to Haven's Safe Space & Privacy Policy terms.">
                                 আমি হেভেন-এর সুরক্ষা নীতিমালা ও শর্তাবলীতে সম্মত আছি এবং স্বীকার করছি যে হেভেন একটি নিরাপদ ক্ষেত্র।
                             </span>
                         </span>
                     </label>
-                    <span asp-validation-for="AgreeToTerms" class="text-xs font-semibold text-amber-800 mt-1 block"></span>
+                    <span asp-validation-for="AgreeToTerms" class="text-xs font-medium text-amber-800 mt-1 block"></span>
                 </div>
 
                 <!-- Submit Button -->
-                <div class="pt-4">
-                    <button type="submit" class="w-full py-4 px-6 bg-gradient-to-r from-teal-700 to-teal-800 hover:from-teal-800 hover:to-teal-900 text-white font-bold text-base rounded-2xl shadow-lg shadow-teal-900/20 transition transform hover:-translate-y-0.5 active:scale-[0.99] flex items-center justify-center gap-2">
-                        <span>✨</span>
+                <div class="pt-3">
+                    <button type="submit" class="w-full py-3.5 px-6 bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                         <span data-bn="নিরাপদ অ্যাকাউন্ট খুলুন" data-en="Create My Safe Account">নিরাপদ অ্যাকাউন্ট খুলুন</span>
                     </button>
                 </div>
@@ -135,11 +143,11 @@
             </form>
 
             <!-- Card Footer Switch to Login -->
-            <div class="mt-8 pt-6 border-t border-slate-100 text-center">
-                <p class="text-xs text-slate-500 font-medium">
+            <div class="mt-6 pt-5 border-t border-slate-100 text-center">
+                <p class="text-sm text-slate-500">
                     <span data-bn="ইতিমধ্যে একটি অ্যাকাউন্ট আছে?" data-en="Already have an account?">ইতিমধ্যে একটি অ্যাকাউন্ট আছে?</span>
-                    <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" class="ml-1 text-teal-700 hover:text-teal-800 font-bold underline transition" data-bn="এখানে লগইন করুন" data-en="Log In here">
-                        এখানে লগইন করুন
+                    <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" class="ml-1.5 text-teal-700 hover:text-teal-800 font-bold transition" data-bn="এখানে লগইন করুন" data-en="Log In here">
+                        এখানে লগইন করুন →
                     </a>
                 </p>
             </div>
@@ -147,10 +155,15 @@
         </div>
 
         <!-- Privacy Assurance Footer Notice -->
-        <div class="p-4 rounded-2xl bg-teal-50/70 border border-teal-100/80 text-center text-xs text-teal-900">
-            <span class="font-bold">🔒 100% Privacy Guarantee:</span>
-            <span data-bn="আপনার ব্যক্তিগত তথ্য সম্পূর্ণ এনক্রিপ্ট করা হয় এবং কখনোই তৃতীয় পক্ষের সাথে আদান-প্রদান করা হয় না।" data-en="Your personal data is strictly encrypted and zero activity is logged.">
-                আপনার ব্যক্তিগত তথ্য সম্পূর্ণ এনক্রিপ্ট করা হয় এবং কখনোই তৃতীয় পক্ষের সাথে আদান-প্রদান করা হয় না।
+        <div class="p-4 rounded-2xl bg-teal-50 border border-teal-200 flex items-start gap-3 text-sm text-teal-900">
+            <svg class="w-4 h-4 text-teal-700 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            <span>
+                <span class="font-bold">100% Privacy Guarantee:</span>
+                <span class="ml-1" data-bn="আপনার ব্যক্তিগত তথ্য সম্পূর্ণ এনক্রিপ্ট করা হয় এবং কখনোই তৃতীয় পক্ষের সাথে আদান-প্রদান করা হয় না।" data-en="Your personal data is strictly encrypted and zero activity is logged.">
+                    আপনার ব্যক্তিগত তথ্য সম্পূর্ণ এনক্রিপ্ট করা হয় এবং কখনোই তৃতীয় পক্ষের সাথে আদান-প্রদান করা হয় না।
+                </span>
             </span>
         </div>
 
@@ -162,13 +175,14 @@
     <script>
         function togglePasswordVisibility(inputId, btn) {
             const input = document.getElementById(inputId);
-            if (input) {
+            const icon = btn.querySelector('.pw-eye-icon');
+            if (input && icon) {
                 if (input.type === 'password') {
                     input.type = 'text';
-                    btn.innerText = '🙈';
+                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />';
                 } else {
                     input.type = 'password';
-                    btn.innerText = '👁️';
+                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />';
                 }
             }
         }
