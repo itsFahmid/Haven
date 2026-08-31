@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-31T23:47:00Z",
+  "title": "Design System: HAVEN",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Sanctuary Teal",
+        "canonical": "#0f766e",
+        "tonalRamp": ["#042f2e", "#0d4744", "#0f766e", "#14b8a6", "#2dd4bf", "#5eead4", "#99f6e4", "#ccfbf1"]
+      },
+      "primary-hover": {
+        "role": "primary",
+        "displayName": "Teal Hover Accent",
+        "canonical": "#0d9488",
+        "tonalRamp": ["#042f2e", "#0b3b37", "#0d9488", "#14b8a6", "#2dd4bf", "#5eead4", "#99f6e4", "#ccfbf1"]
+      },
+      "primary-light": {
+        "role": "accent",
+        "displayName": "Vibrant Mint Light",
+        "canonical": "#14b8a6",
+        "tonalRamp": ["#042f2e", "#0d4744", "#0f766e", "#14b8a6", "#2dd4bf", "#5eead4", "#99f6e4", "#e6fffa"]
+      },
+      "mint-tint": {
+        "role": "neutral",
+        "displayName": "Mint Foam Tint",
+        "canonical": "#f0fdfa",
+        "tonalRamp": ["#115e59", "#14b8a6", "#5eead4", "#99f6e4", "#ccfbf1", "#e6fffa", "#f0fdfa", "#ffffff"]
+      },
+      "neutral-bg": {
+        "role": "neutral",
+        "displayName": "Warm Cream Surface",
+        "canonical": "#fdfcf9",
+        "tonalRamp": ["#1e293b", "#475569", "#94a3b8", "#cbd5e1", "#e2e8f0", "#f1f5f9", "#f8fafc", "#fdfcf9"]
+      },
+      "neutral-card": {
+        "role": "neutral",
+        "displayName": "Pure Card White",
+        "canonical": "#ffffff",
+        "tonalRamp": ["#0f172a", "#334155", "#64748b", "#94a3b8", "#cbd5e1", "#e2e8f0", "#f8fafc", "#ffffff"]
+      },
+      "alert-crisis": {
+        "role": "alert",
+        "displayName": "Emergency Rose",
+        "canonical": "#e11d48",
+        "tonalRamp": ["#4c0519", "#881337", "#be123c", "#e11d48", "#f43f5e", "#fb7185", "#fda4af", "#fff1f2"]
+      },
+      "crisis-bubble-border": {
+        "role": "alert",
+        "displayName": "Crisis Bubble Border",
+        "canonical": "#fecdd3",
+        "tonalRamp": ["#4c0519", "#881337", "#be123c", "#e11d48", "#f43f5e", "#fb7185", "#fda4af", "#fecdd3"]
+      },
+      "verified-green": {
+        "role": "tertiary",
+        "displayName": "BMDC Verified Green",
+        "canonical": "#059669",
+        "tonalRamp": ["#022c22", "#064e3b", "#065f46", "#059669", "#10b981", "#34d399", "#6ee7b7", "#d1fae5"]
+      },
+      "bkash": {
+        "role": "tertiary",
+        "displayName": "bKash Magenta",
+        "canonical": "#e2136e",
+        "tonalRamp": ["#500726", "#831843", "#9d174d", "#e2136e", "#f43f8a", "#f97fb3", "#fbcfe8", "#fdf2f8"]
+      },
+      "nagad": {
+        "role": "tertiary",
+        "displayName": "Nagad Orange",
+        "canonical": "#f7941d",
+        "tonalRamp": ["#431407", "#7c2d12", "#c2410c", "#f7941d", "#fb923c", "#fdba74", "#fed7aa", "#fff7ed"]
+      },
+      "rocket": {
+        "role": "tertiary",
+        "displayName": "Rocket Purple",
+        "canonical": "#8c3494",
+        "tonalRamp": ["#2e1065", "#4c1d95", "#6b21a8", "#8c3494", "#a855f7", "#c084fc", "#e9d5ff", "#faf5ff"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display Hero",
+        "purpose": "Hero main headlines in English and Bengali."
+      },
+      "headline": {
+        "displayName": "Section Headline",
+        "purpose": "Major section title headings."
+      },
+      "title": {
+        "displayName": "Card Title",
+        "purpose": "Card titles, modal titles, and component subheaders."
+      },
+      "body": {
+        "displayName": "Body Copy",
+        "purpose": "Primary readable paragraphs and description text."
+      },
+      "label": {
+        "displayName": "Badge Label",
+        "purpose": "Upper-case category pills, hotline badges, and status labels."
+      }
+    },
+    "shadows": [
+      {
+        "name": "card-hover",
+        "value": "0 16px 32px -8px rgba(15, 118, 110, 0.08), 0 8px 16px -4px rgba(0, 0, 0, 0.03)",
+        "purpose": "Soft ambient teal shadow on card hover elevation."
+      },
+      {
+        "name": "emergency-pulse",
+        "value": "0 0 0 12px rgba(225, 29, 72, 0)",
+        "purpose": "Keyframe ring shadow for critical SOS button."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Smooth spring-like easing for hover lifts and transitions."
+      },
+      {
+        "name": "breatheCycle",
+        "value": "19s infinite ease-in-out",
+        "purpose": "4-7-8 somatic breathing reset circle animation."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Action Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main call-to-action button for launching anonymous chat or primary flows.",
+      "html": "<button class=\"ds-btn-primary\">🤖 BENAMI CHAT START</button>",
+      "css": ".ds-btn-primary { background: #0f766e; color: #ffffff; padding: 16px 28px; font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif; font-weight: 700; font-size: 14px; border: none; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(15, 118, 110, 0.25); cursor: pointer; transition: background 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-primary:hover { background: #0d9488; transform: translateY(-2px); }"
+    },
+    {
+      "name": "Secondary Ghost Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Secondary action button for exploring hub or viewing courses.",
+      "html": "<button class=\"ds-btn-secondary\">🎓 EXPLORE COURSES</button>",
+      "css": ".ds-btn-secondary { background: #ffffff; color: #1e293b; padding: 16px 28px; font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif; font-weight: 700; font-size: 14px; border: 1px solid rgba(203, 213, 225, 0.8); border-radius: 16px; cursor: pointer; transition: background 0.2s, transform 0.2s; } .ds-btn-secondary:hover { background: #f8fafc; transform: translateY(-2px); }"
+    },
+    {
+      "name": "Crisis SOS Button",
+      "kind": "button",
+      "refersTo": "button-crisis",
+      "description": "High-priority life safety button with red emergency pulse ring.",
+      "html": "<button class=\"ds-btn-crisis\">🚨 EMERGENCY SOS</button>",
+      "css": ".ds-btn-crisis { background: linear-gradient(135deg, #e11d48 0%, #be123c 100%); color: #ffffff; padding: 14px 20px; font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif; font-weight: 700; font-size: 13px; border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3); transition: transform 0.2s; } .ds-btn-crisis:hover { transform: scale(1.03); }"
+    },
+    {
+      "name": "Haven Feature Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Interactive content module card with hover lift and ambient teal shadow.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-icon\">🎓</div><span class=\"ds-card-tag\">EDUCATION</span><h3 class=\"ds-card-title\">Bodily & Cyber Safety</h3><p class=\"ds-card-text\">Practical modules on cyber blackmail prevention, consent, and digital rights.</p></div>",
+      "css": ".ds-card { background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 24px; padding: 32px; font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1); } .ds-card:hover { transform: translateY(-4px); box-shadow: 0 16px 32px -8px rgba(15, 118, 110, 0.08), 0 8px 16px -4px rgba(0, 0, 0, 0.03); } .ds-card-icon { width: 48px; height: 48px; border-radius: 16px; background: #ccfbf1; color: #0f766e; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 16px; } .ds-card-tag { font-size: 10px; font-weight: 700; color: #0f766e; background: #f0fdfa; border: 1px solid #ccfbf1; padding: 4px 8px; border-radius: 9999px; } .ds-card-title { font-size: 20px; font-weight: 700; color: #0f766e; margin: 12px 0 8px 0; } .ds-card-text { font-size: 13px; color: #64748b; margin: 0; line-height: 1.5; }"
+    },
+    {
+      "name": "User Chat Bubble",
+      "kind": "custom",
+      "refersTo": "chat-bubble-user",
+      "description": "Encrypted user message bubble in hotline chat.",
+      "html": "<div class=\"ds-chat-user\">Ami safe human help chai.</div>",
+      "css": ".ds-chat-user { background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); color: #ffffff; padding: 12px 18px; font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif; font-size: 14px; border-radius: 18px 18px 4px 18px; max-width: 280px; display: inline-block; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Digital Healing Sanctuary",
+    "overview": "HAVEN is an anonymous, trauma-informed child & adult safety education, mental health, and emergency recovery platform for Bangladesh. The visual interface is designed to evoke absolute safety, emotional calm, and immediate clarity. Built around soft warm paper backgrounds, deep organic sanctuary teal accents, and protective glassmorphic layers, HAVEN balances immediate crisis response with reassuring mental health sanctuary aesthetics.",
+    "keyCharacteristics": [
+      "Trauma-Informed Warmth: Soft warm-cream background (#fdfcf9) eliminating stark white glare.",
+      "Sanctuary Teal Hierarchy: Deep teal (#0f766e) anchors primary actions and trust badges.",
+      "Glassmorphic Security: Translucent frosted glass headers (backdrop-filter: blur(12px)) and floating quick-exit emergency controls.",
+      "Dual-Script Typographic Excellence: Seamless side-by-side rendering of English (Plus Jakarta Sans) and Bengali (Hind Siliguri).",
+      "Fluid Somatic Motion: Interactive 19s breathing reset rings and pulsing red emergency SOS indicators."
+    ],
+    "rules": [
+      {
+        "name": "The One Voice Rule",
+        "body": "Primary Sanctuary Teal (#0f766e) is used on ≤15% of any given viewport surface to preserve its authority as a trust anchor. Emergency Rose (#e11d48) is reserved strictly for immediate life safety triggers and Quick Exit affordances.",
+        "section": "colors"
+      },
+      {
+        "name": "The Dual-Script Harmony Rule",
+        "body": "Every UI element containing text must support both English (Plus Jakarta Sans) and Bengali (Hind Siliguri) fonts with matching line-heights (line-height: 1.5–1.6) to prevent text jump or overflow during language toggling.",
+        "section": "typography"
+      },
+      {
+        "name": "The Sanctuary Layering Rule",
+        "body": "Surfaces rest flat on the warm cream background (#fdfcf9). Elevation appears dynamically on hover via teal-tinted ambient glow (rgba(15, 118, 110, 0.08)), reserving frosted glass blur (backdrop-filter: blur(12px)) for fixed navigation headers and floating crisis overlays.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Protective Curve Rule",
+        "body": "Corners are kept soft and rounded (minimum 12px, default 16px–24px) to reinforce a safe, approachable aesthetic. Sharp square corners (border-radius: 0px) are prohibited on interactive surfaces.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do use warm cream background (#fdfcf9) for primary content pages to maintain trauma-informed visual comfort.",
+      "Do keep card border-radius generous at 24px (rounded-3xl) and button border-radius at 16px (rounded-2xl).",
+      "Do ensure every interactive card features smooth hover elevation (translateY(-4px) with soft teal shadow rgba(15, 118, 110, 0.08)).",
+      "Do test all copy layout changes in both English and Bengali (data-bn and data-en bilingual attributes).",
+      "Do maintain the Quick Exit (ESC) button in a high-visibility, fixed/sticky location across all pages."
+    ],
+    "donts": [
+      "Don't use stark pure black (#000000) for text or backgrounds; use Slate Navy (#1e293b) or Midnight Slate (#0f172a).",
+      "Don't use sharp rectangular corners (border-radius: 0px) on cards, buttons, or dialog containers.",
+      "Don't use Emergency Rose (#e11d48) for non-critical interface elements; reserve it strictly for SOS and hotline emergency triggers.",
+      "Don't remove frosted glass backdrop filters (backdrop-filter: blur(12px)) from sticky navigation headers.",
+      "Don't use cold, clinical grey-blue colors that mimic clinical hospital management software."
+    ]
+  }
+}
