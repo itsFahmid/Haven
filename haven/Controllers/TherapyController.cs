@@ -1,11 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Haven.Data;
 using Haven.Models;
 using Haven.Services;
+using System.Security.Claims;
 
 namespace Haven.Controllers;
 
 public class TherapyController : Controller
 {
+    private readonly HavenDbContext _db;
+
+    public TherapyController(HavenDbContext db)
+    {
+        _db = db;
+    }
+
     public IActionResult Index(string specialty = "All", string mode = "All")
     {
         var therapists = HavenDataStore.GetTherapists();
@@ -32,12 +42,39 @@ public class TherapyController : Controller
         return View(model);
     }
 
+    // FR-5 / UC-16: Book Confidential Therapy Appointment
     [HttpPost]
-    public IActionResult BookSession([FromBody] BookingRequest request)
+    public async Task<IActionResult> BookSession([FromBody] BookingRequest request)
     {
         if (request == null || request.TherapistId <= 0)
         {
             return BadRequest(new { success = false, message = "Invalid booking details." });
+        }
+
+        int userId = 0;
+        var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (int.TryParse(idClaim, out int claimId))
+        {
+            userId = claimId;
+        }
+
+        // Database record insertion for appointment (FR-5, UC-16)
+        if (userId > 0)
+        {
+            var appointment = new Appointment
+            {
+                UserId = userId,
+                ProfessionalId = request.TherapistId,
+                ScheduledDate = DateTime.TryParse(request.Date, out DateTime dt) ? dt : DateTime.UtcNow.AddDays(1),
+                TimeSlot = string.IsNullOrWhiteSpace(request.Time) ? "04:30 PM" : request.Time,
+                Status = "Scheduled",
+                CommunicationChannel = request.ContactMethod ?? "Encrypted Session",
+                Notes = $"Anonymous: {request.IsAnonymous}, Fee Subsidy: {request.RequestFeeSubsidy}",
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _db.Appointments.Add(appointment);
+            await _db.SaveChangesAsync();
         }
 
         var bookingCode = "HVN-SLOT-" + Random.Shared.Next(10000, 99999);
@@ -52,6 +89,20 @@ public class TherapyController : Controller
             messageEn = $"Your confidential session is booked! Reference code: {bookingCode}. Encrypted session link sent.",
             messageBn = $"আপনার গোপনীয় সেশনটি নিশ্চিত হয়েছে! রেফারেন্স কোড: {bookingCode}। এনক্রিপ্ট করা সেশন লিংক পাঠানো হয়েছে।"
         });
+    }
+
+    // FR-5 / Reschedule or Cancel Appointment
+    [HttpPost]
+    public async Task<IActionResult> CancelAppointment(int appointmentId)
+    {
+        var appt = await _db.Appointments.FindAsync(appointmentId);
+        if (appt != null)
+        {
+            appt.Status = "Cancelled";
+            await _db.SaveChangesAsync();
+            return Json(new { success = true, message = "Appointment cancelled / বুকিং বাতিল করা হয়েছে।" });
+        }
+        return Json(new { success = false, message = "Appointment not found." });
     }
 }
 
