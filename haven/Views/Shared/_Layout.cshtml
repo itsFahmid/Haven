@@ -11,7 +11,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS CDN
+         NOTE (Performance P1): The JIT CDN script compiles CSS at runtime.
+         For production, run `npx tailwindcss -o wwwroot/css/tailwind.css --minify`
+         and replace this with: <link rel="stylesheet" href="~/css/tailwind.css" />
+    -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -71,9 +75,9 @@
                 
                 <!-- Brand Logo -->
                 <div class="flex items-center">
-                    <a asp-controller="Home" asp-action="Index" class="flex items-center gap-3 group">
-                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-teal-700 to-teal-500 text-white flex items-center justify-center shadow-md shadow-teal-900/10 group-hover:scale-105 transition">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <a asp-controller="Home" asp-action="Index" class="flex items-center gap-3 group" aria-label="HAVEN - হোম পাতায় যান">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-teal-700 to-teal-500 text-white flex items-center justify-center shadow-md shadow-teal-900/10 group-hover:scale-105 transition" aria-hidden="true">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
                         </div>
@@ -98,14 +102,14 @@
                         নিরাপত্তা কোর্স
                     </a>
                     <a asp-controller="Hotline" asp-action="Index" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-700 hover:bg-teal-50/60 transition flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true"></span>
                         <span data-bn="এআই সুরক্ষা হটলাইন" data-en="AI Safety Assistant">এআই সুরক্ষা হটলাইন</span>
                     </a>
                     <a asp-controller="Therapy" asp-action="Index" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-700 hover:bg-teal-50/60 transition" data-bn="ভেরিফায়েড থেরাপিস্ট" data-en="Therapy Directory">
                         ভেরিফায়েড থেরাপিস্ট
                     </a>
-                    <button type="button" onclick="openModal('paymentModal')" class="px-3 py-2 rounded-xl text-sm font-semibold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 transition flex items-center gap-1.5">
-                        <span>💝</span>
+                    <button type="button" onclick="openModal('paymentModal')" class="px-3 py-2 rounded-xl text-sm font-semibold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 transition flex items-center gap-1.5" aria-label="অনুদান প্রদান করুন">
+                        <span aria-hidden="true">💝</span>
                         <span data-bn="অনুদান" data-en="Donate">অনুদান</span>
                     </button>
 
@@ -113,14 +117,14 @@
                     @if (User.Identity?.IsAuthenticated == true)
                     {
                         <div class="flex items-center space-x-1 pl-2 border-l border-slate-200">
-                            <a asp-controller="Account" asp-action="Profile" class="px-3 py-1.5 rounded-xl text-xs font-bold text-teal-800 bg-teal-50 hover:bg-teal-100 border border-teal-200/80 transition flex items-center gap-1.5" title="প্রোফাইল">
-                                <span>👤</span>
+                            <a asp-controller="Account" asp-action="Profile" class="px-3 py-1.5 rounded-xl text-xs font-bold text-teal-800 bg-teal-50 hover:bg-teal-100 border border-teal-200/80 transition flex items-center gap-1.5 min-h-[44px]" title="প্রোফাইল" aria-label="প্রোফাইল দেখুন">
+                                <span aria-hidden="true">👤</span>
                                 <span class="max-w-[100px] truncate">@(User.Identity.Name ?? "প্রোফাইল")</span>
                             </a>
                             <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
                                 @Html.AntiForgeryToken()
-                                <button type="submit" class="px-2.5 py-1.5 rounded-xl text-xs font-bold text-rose-700 hover:text-rose-800 hover:bg-rose-50 transition flex items-center gap-1" title="Log Out">
-                                    <span>🚪</span>
+                                <button type="submit" class="px-2.5 py-1.5 rounded-xl text-xs font-bold text-rose-700 hover:text-rose-800 hover:bg-rose-50 transition flex items-center gap-1 min-h-[44px] min-w-[44px]" title="Log Out" aria-label="লগআউট">
+                                    <span aria-hidden="true">🚪</span>
                                     <span class="hidden lg:inline" data-bn="লগআউট" data-en="Logout">লগআউট</span>
                                 </button>
                             </form>
@@ -143,18 +147,18 @@
                 <div class="flex items-center gap-2.5 sm:gap-3.5">
                     
                     <!-- Bilingual Language Switcher -->
-                    <div class="bg-slate-100 p-1 rounded-xl flex items-center border border-slate-200">
-                        <button type="button" onclick="HavenLang.set('bn')" data-set-lang="bn" class="lang-toggle-btn px-2.5 py-1 rounded-lg text-xs font-bold transition bg-teal-700 text-white shadow-sm">
+                    <div class="bg-slate-100 p-1 rounded-xl flex items-center border border-slate-200" role="group" aria-label="ভাষা পছন্দ করুন">
+                        <button type="button" onclick="HavenLang.set('bn')" data-set-lang="bn" class="lang-toggle-btn px-2.5 py-1 rounded-lg text-xs font-bold transition bg-teal-700 text-white shadow-sm min-h-[36px] min-w-[44px]" aria-label="বাংলায় পরিবর্তন করুন" aria-pressed="true">
                             বাংলা
                         </button>
-                        <button type="button" onclick="HavenLang.set('en')" data-set-lang="en" class="lang-toggle-btn px-2.5 py-1 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition">
+                        <button type="button" onclick="HavenLang.set('en')" data-set-lang="en" class="lang-toggle-btn px-2.5 py-1 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition min-h-[36px] min-w-[44px]" aria-label="Switch to English" aria-pressed="false">
                             EN
                         </button>
                     </div>
 
                     <!-- Universal Quick Exit Button -->
-                    <button type="button" id="quickExitBtn" onclick="window.havenQuickExit()" title="Press ESC to quickly exit" class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-rose-900/20 transition transform active:scale-95 pulse-red">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button type="button" id="quickExitBtn" onclick="window.havenQuickExit()" title="Press ESC to quickly exit this page immediately" aria-label="জরুরি প্রস্থান — এই পাতা তাৎক্ষণিকভাবে বন্ধ করুন (ESC)" class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-rose-900/20 transition transform active:scale-95 pulse-red min-h-[44px]">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                         </svg>
                         <span data-bn="জরুরি প্রস্থান (ESC)" data-en="Quick Exit (ESC)">জরুরি প্রস্থান (ESC)</span>
@@ -166,20 +170,24 @@
         </div>
 
         <!-- Mobile Secondary Nav Bar -->
-        <div class="md:hidden flex items-center justify-around py-2.5 border-t border-slate-200/80 bg-slate-50/90 text-xs font-semibold text-slate-600">
-            <a asp-controller="Home" asp-action="Index" class="hover:text-teal-700" data-bn="হোম" data-en="Home">হোম</a>
-            <a asp-controller="Courses" asp-action="Index" class="hover:text-teal-700" data-bn="কোর্স" data-en="Courses">কোর্স</a>
-            <a asp-controller="Hotline" asp-action="Index" class="text-teal-700 font-bold flex items-center gap-1" data-bn="🤖 এআই" data-en="🤖 AI">🤖 এআই</a>
-            <a asp-controller="Therapy" asp-action="Index" class="hover:text-teal-700" data-bn="থেরাপিস্ট" data-en="Therapy">থেরাপিস্ট</a>
+        <nav class="md:hidden flex items-center justify-around py-2.5 border-t border-slate-200/80 bg-slate-50/90 text-xs font-semibold text-slate-600" aria-label="মোবাইল নেভিগেশন">
+            <a asp-controller="Home" asp-action="Index" class="hover:text-teal-700 min-h-[44px] flex items-center px-2" data-bn="হোম" data-en="Home">হোম</a>
+            <a asp-controller="Courses" asp-action="Index" class="hover:text-teal-700 min-h-[44px] flex items-center px-2" data-bn="কোর্স" data-en="Courses">কোর্স</a>
+            <a asp-controller="Hotline" asp-action="Index" class="text-teal-700 font-bold flex items-center gap-1 min-h-[44px] px-2" aria-label="এআই সুরক্ষা হটলাইন">
+                <span aria-hidden="true">🤖</span> <span data-bn="এআই" data-en="AI">এআই</span>
+            </a>
+            <a asp-controller="Therapy" asp-action="Index" class="hover:text-teal-700 min-h-[44px] flex items-center px-2" data-bn="থেরাপিস্ট" data-en="Therapy">থেরাপিস্ট</a>
             @if (User.Identity?.IsAuthenticated == true)
             {
-                <a asp-controller="Account" asp-action="Profile" class="text-teal-700 font-bold" data-bn="👤 প্রোফাইল" data-en="👤 Profile">👤 প্রোফাইল</a>
+                <a asp-controller="Account" asp-action="Profile" class="text-teal-700 font-bold min-h-[44px] flex items-center gap-1 px-2" aria-label="প্রোফাইল দেখুন">
+                    <span aria-hidden="true">👤</span> <span data-bn="প্রোফাইল" data-en="Profile">প্রোফাইল</span>
+                </a>
             }
             else
             {
-                <a asp-controller="Account" asp-action="Login" class="text-teal-700 font-bold" data-bn="লগইন" data-en="Login">লগইন</a>
+                <a asp-controller="Account" asp-action="Login" class="text-teal-700 font-bold min-h-[44px] flex items-center px-2" data-bn="লগইন" data-en="Login">লগইন</a>
             }
-        </div>
+        </nav>
     </header>
 
     <!-- Main Dynamic Content Container -->
@@ -187,24 +195,24 @@
         @if (TempData["SuccessMessage"] != null)
         {
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-                <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm font-semibold flex items-center justify-between shadow-sm animate-fade-in">
+                <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm font-semibold flex items-center justify-between shadow-sm animate-fade-in" role="status" aria-live="polite">
                     <div class="flex items-center gap-2.5">
-                        <span class="text-lg">✅</span>
+                        <span class="text-lg" aria-hidden="true">✅</span>
                         <span>@TempData["SuccessMessage"]</span>
                     </div>
-                    <button type="button" onclick="this.parentElement.remove()" class="text-emerald-700 hover:text-emerald-900 p-1 text-xs">✕</button>
+                    <button type="button" onclick="this.parentElement.remove()" class="text-emerald-700 hover:text-emerald-900 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-sm" aria-label="বার্তা বন্ধ করুন">✕</button>
                 </div>
             </div>
         }
         @if (TempData["InfoMessage"] != null)
         {
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-                <div class="p-4 rounded-2xl bg-sky-50 border border-sky-200 text-sky-900 text-sm font-semibold flex items-center justify-between shadow-sm animate-fade-in">
+                <div class="p-4 rounded-2xl bg-sky-50 border border-sky-200 text-sky-900 text-sm font-semibold flex items-center justify-between shadow-sm animate-fade-in" role="status" aria-live="polite">
                     <div class="flex items-center gap-2.5">
-                        <span class="text-lg">ℹ️</span>
+                        <span class="text-lg" aria-hidden="true">ℹ️</span>
                         <span>@TempData["InfoMessage"]</span>
                     </div>
-                    <button type="button" onclick="this.parentElement.remove()" class="text-sky-700 hover:text-sky-900 p-1 text-xs">✕</button>
+                    <button type="button" onclick="this.parentElement.remove()" class="text-sky-700 hover:text-sky-900 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-sm" aria-label="বার্তা বন্ধ করুন">✕</button>
                 </div>
             </div>
         }
