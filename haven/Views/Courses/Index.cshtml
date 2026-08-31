@@ -1,10 +1,29 @@
 @model Haven.Models.CoursesHubViewModel
 @{
-    ViewData["Title"] = "সুরক্ষা ও জীবন-দক্ষতা কোর্স হাব | Courses Hub";
+    var isEnrolledOnly = ViewData["IsEnrolledOnly"] as bool? ?? false;
+    ViewData["Title"] = isEnrolledOnly ? "আমার এনরোলকৃত কোর্স সমূহ | My Enrolled Courses" : "সুরক্ষা ও জীবন-দক্ষতা কোর্স হাব | Courses Hub";
 }
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
     
+    @if (isEnrolledOnly)
+    {
+        <div class="p-4 rounded-2xl bg-teal-50 border border-teal-200 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <span class="w-9 h-9 rounded-xl bg-teal-700 text-white flex items-center justify-center font-bold">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                </span>
+                <div>
+                    <h2 class="text-sm font-bold text-teal-950">আমার এনরোলকৃত কোর্স সমূহ (My Enrolled Courses)</h2>
+                    <p class="text-xs text-teal-800">শুধুমাত্র আপনার চলমান ও সংরক্ষিত কোর্স মডিউলগুলো প্রদর্শিত হচ্ছে।</p>
+                </div>
+            </div>
+            <a asp-action="Index" asp-route-category="All" asp-route-enrolledOnly="false" class="px-3.5 py-1.5 bg-white text-teal-900 border border-teal-200 rounded-xl text-xs font-bold hover:bg-teal-100 transition shadow-2xs">
+                সকল কোর্স দেখুন ➔
+            </a>
+        </div>
+    }
+
     <!-- Hero Header -->
     <div class="bg-slate-900 rounded-3xl p-8 sm:p-12 text-white shadow-lg border border-slate-800">
         <div class="max-w-3xl space-y-4">
@@ -12,7 +31,7 @@
                 Youth Safety & Resilience Academy
             </span>
             <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight" data-bn="সুরক্ষা ও জীবন-দক্ষতা কোর্স হাব" data-en="Safety & Life-Skills Educational Hub">
-                সুরক্ষা ও জীবন-দক্ষতা কোর্স হাব
+                @(isEnrolledOnly ? "আমার এনরোলকৃত কোর্স সমূহ" : "সুরক্ষা ও জীবন-দক্ষতা কোর্স হাব")
             </h1>
             <p class="text-slate-300 text-sm sm:text-base leading-relaxed" data-bn="জেন জি, জেন আলফা এবং তরুণ অভিভাবকদের জন্য তৈরি ব্যবহারিক শিক্ষা। সাইবার বুলিং প্রতিরোধ, ডিজিটাল প্রমাণ সংগ্রহ, ব্যক্তিগত সম্মতি ও মানসিক প্রাথমিক চিকিৎসার আধুনিক পাঠ।" data-en="Practical trauma-informed frameworks for digital natives. Learn evidence preservation, cyber harassment defense, consent boundary setting, and panic stabilization.">
                 জেন জি, জেন আলফা এবং তরুণ অভিভাবকদের জন্য তৈরি ব্যবহারিক শিক্ষা। সাইবার বুলিং প্রতিরোধ, ডিজিটাল প্রমাণ সংগ্রহ, ব্যক্তিগত সম্মতি ও মানসিক প্রাথমিক চিকিৎসার আধুনিক পাঠ।
@@ -34,6 +53,26 @@
             </div>
         </div>
     </div>
+
+    @if (User.Identity?.IsAuthenticated != true)
+    {
+        <div class="p-4 rounded-2xl bg-teal-50 border border-teal-200 flex items-center justify-between gap-4 text-xs text-teal-900">
+            <div class="flex items-center gap-2.5">
+                <svg class="w-4 h-4 text-teal-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>
+                    <span class="font-bold" data-bn="বিজ্ঞপ্তি:" data-en="Notice:">বিজ্ঞপ্তি:</span>
+                    <span data-bn="কোর্স তালিকা উন্মুক্তভাবে দেখা যাবে। তবে লেসনে প্রবেশ ও অগ্রগতি সংরক্ষণ করতে বিনামূল্যে অ্যাকাউন্টে লগইন করতে হবে।" data-en="Courses are freely browsable. Log in to access interactive lessons and save progress.">
+                        কোর্স তালিকা উন্মুক্তভাবে দেখা যাবে। তবে লেসনে প্রবেশ ও অগ্রগতি সংরক্ষণ করতে বিনামূল্যে অ্যাকাউন্টে লগইন করতে হবে।
+                    </span>
+                </span>
+            </div>
+            <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Url.Action("Index", "Courses")" class="px-3.5 py-1.5 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-lg transition whitespace-nowrap" data-bn="লগইন করুন" data-en="Log In">
+                লগইন করুন
+            </a>
+        </div>
+    }
 
     <!-- Category Filter Bar -->
     <div class="bg-white rounded-2xl p-2.5 border border-slate-200 shadow-sm flex items-center gap-2 overflow-x-auto">
@@ -159,7 +198,14 @@
                 <!-- Bottom Actions -->
                 <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
                     <a asp-action="Details" asp-route-id="@course.Id" class="flex-grow py-3 px-4 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl transition text-center shadow-xs">
-                        <span data-bn="লেসন শুরু করুন ➔" data-en="Start Lesson ➔">লেসন শুরু করুন ➔</span>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <span data-bn="লেসন শুরু করুন ➔" data-en="Start Lesson ➔">লেসন শুরু করুন ➔</span>
+                        }
+                        else
+                        {
+                            <span data-bn="লগইন করে লেসনে প্রবেশ করুন ➔" data-en="Log in to Access Lesson ➔">লগইন করে লেসনে প্রবেশ করুন ➔</span>
+                        }
                     </a>
                     
                     @if (course.IsPayWhatYouWant)

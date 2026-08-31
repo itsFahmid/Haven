@@ -115,6 +115,12 @@
                     <a asp-controller="Therapy" asp-action="Index" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-900 hover:bg-teal-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 transition-all duration-150" data-bn="ভেরিফায়েড থেরাপিস্ট" data-en="Therapy Directory">
                         ভেরিফায়েড থেরাপিস্ট
                     </a>
+                    <a asp-controller="Articles" asp-action="Index" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-900 hover:bg-teal-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 transition-all duration-150" data-bn="নিবন্ধ" data-en="Articles">
+                        নিবন্ধ
+                    </a>
+                    <a asp-controller="Community" asp-action="Index" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-900 hover:bg-teal-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 transition-all duration-150" data-bn="কমিউনিটি" data-en="Community">
+                        কমিউনিটি
+                    </a>
                     <button type="button" onclick="openModal('paymentModal')" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-amber-900 bg-amber-50/90 hover:bg-amber-100/80 border border-amber-200/90 hover:border-amber-300 shadow-2xs hover:shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 transition-all duration-150 flex items-center gap-1.5 active:scale-97" aria-label="অনুদান প্রদান করুন">
                         <svg class="w-4 h-4 text-amber-700" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                             <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
@@ -122,25 +128,72 @@
                         <span data-bn="অনুদান" data-en="Donate">অনুদান</span>
                     </button>
 
-                    <!-- Auth State Dynamic Navigation -->
+                    <!-- Auth State Dynamic Navigation with Profile Dropdown -->
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <div class="flex items-center space-x-1 pl-2.5 border-l border-slate-200/80">
-                            <a asp-controller="Account" asp-action="Profile" class="px-3 py-1.5 rounded-xl text-xs font-bold text-teal-800 bg-teal-50/80 hover:bg-teal-100 border border-teal-200/80 focus-visible:ring-2 focus-visible:ring-teal-600 transition-all flex items-center gap-1.5 min-h-[44px]" title="প্রোফাইল" aria-label="প্রোফাইল দেখুন">
-                                <svg class="w-4 h-4 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
+                        <div class="relative inline-block text-left pl-2.5 border-l border-slate-200/80" id="userMenuContainer">
+                            <button type="button" onclick="document.getElementById('profileDropdownMenu').classList.toggle('hidden')" class="px-3 py-1.5 rounded-xl text-xs font-bold text-teal-800 bg-teal-50 hover:bg-teal-100 border border-teal-200 focus-visible:ring-2 focus-visible:ring-teal-600 transition-all flex items-center gap-1.5 min-h-[44px]" id="userMenuButton" aria-expanded="false" aria-haspopup="true">
+                                <span class="w-6 h-6 rounded-full bg-teal-700 text-white flex items-center justify-center text-[10px] font-black">
+                                    @(User.Identity.Name?.Substring(0, 1).ToUpper() ?? "U")
+                                </span>
                                 <span class="max-w-[100px] truncate">@(User.Identity.Name ?? "প্রোফাইল")</span>
-                            </a>
-                            <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
-                                @Html.AntiForgeryToken()
-                                <button type="submit" class="px-2.5 py-1.5 rounded-xl text-xs font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-100/80 focus-visible:ring-2 focus-visible:ring-slate-500 transition-all flex items-center gap-1 min-h-[44px] min-w-[44px]" title="Log Out" aria-label="লগআউট">
-                                    <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    <span class="hidden lg:inline" data-bn="লগআউট" data-en="Logout">লগআউট</span>
-                                </button>
-                            </form>
+                                <svg class="w-3.5 h-3.5 text-teal-700 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+
+                            <!-- Profile Dropdown Panel -->
+                            <div id="profileDropdownMenu" class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white shadow-xl border border-slate-200 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                                <div class="px-4 py-2 border-b border-slate-100">
+                                    <div class="text-xs font-bold text-slate-900 truncate">@User.Identity.Name</div>
+                                    <div class="text-[10px] text-teal-700 font-semibold">ভেরিফায়েড সদস্য / Member</div>
+                                </div>
+
+                                <div class="py-1">
+                                    <a asp-controller="Account" asp-action="Profile" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-teal-800 transition">
+                                        <svg class="w-4 h-4 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                        <span data-bn="প্রোফাইল ও সেটিংস" data-en="Profile & Settings">প্রোফাইল ও সেটিংস</span>
+                                    </a>
+
+                                    <a asp-controller="Courses" asp-action="MyCourses" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-teal-800 transition">
+                                        <svg class="w-4 h-4 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                        </svg>
+                                        <span data-bn="আমার কোর্স সমূহ" data-en="My Courses">আমার কোর্স সমূহ</span>
+                                    </a>
+
+                                    <a asp-controller="Account" asp-action="Bookmarks" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-teal-800 transition">
+                                        <svg class="w-4 h-4 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                        </svg>
+                                        <span data-bn="বুকমার্ক করা নিবন্ধ" data-en="Bookmarks (Articles)">বুকমার্ক করা নিবন্ধ</span>
+                                    </a>
+
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a asp-controller="Admin" asp-action="Index" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-amber-900 hover:bg-amber-50 transition">
+                                            <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                            </svg>
+                                            <span data-bn="অ্যাডমিন কন্ট্রোল" data-en="Admin Portal">অ্যাডমিন কন্ট্রোল</span>
+                                        </a>
+                                    }
+                                </div>
+
+                                <div class="pt-1 border-t border-slate-100">
+                                    <form asp-controller="Account" asp-action="Logout" method="post" class="w-full">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition">
+                                            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                            </svg>
+                                            <span data-bn="লগআউট" data-en="Log Out">লগআউট</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     }
                     else
