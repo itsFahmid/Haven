@@ -42,9 +42,14 @@
             </div>
             @if (existing.ApprovalStatus == "Approved")
             {
-                <a asp-controller="Courses" asp-action="Create" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-xs transition">
-                    + নতুন কোর্স প্রকাশ করুন
-                </a>
+                <div class="flex items-center gap-2">
+                    <a asp-controller="Therapy" asp-action="Dashboard" class="px-4 py-2 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5">
+                        <span>📊 থেরাপিস্ট ড্যাশবোর্ড</span>
+                    </a>
+                    <a asp-controller="Courses" asp-action="Create" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-xs transition">
+                        + নতুন কোর্স প্রকাশ করুন
+                    </a>
+                </div>
             }
         </div>
     }
@@ -55,7 +60,7 @@
             <h2 class="text-lg font-bold text-slate-900" data-bn="প্রফেশনাল ভেরিফিকেশন তথ্য প্রদান করুন" data-en="Submit Professional Verification Details">
                 প্রফেশনাল ভেরিফিকেশন তথ্য প্রদান করুন
             </h2>
-            <p class="text-xs text-slate-500">আপনার পেশাগত লাইসেন্স তথ্য প্রদান করুন। আমাদের অ্যাডমিন প্যানেল সরাসরি যাচাইকরণ সম্পন্ন করবে।</p>
+            <p class="text-xs text-slate-500">আপনার পেশাগত লাইসেন্স ও অভিজ্ঞতার তথ্য প্রদান করুন। আমাদের অ্যাডমিন প্যানেল আপনার লাইসেন্স যাচাই করে অ্যাকাউন্টটি Professional হিসেবে অ্যাপ্রুভ করবে।</p>
         </div>
 
         <form asp-action="Apply" method="post" class="space-y-5">
@@ -83,12 +88,12 @@
                         Primary Specialty *
                     </label>
                     <select name="specialty" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white">
-                        <option value="Adolescent Trauma">Adolescent Trauma / কিশোর ট্রমা</option>
-                        <option value="Clinical Depression">Clinical Depression / ক্লিনিক্যাল ডিপ্রেশন</option>
-                        <option value="Cyber Harassment Recovery">Cyber Harassment Recovery / সাইবার হয়রানি নিরাময়</option>
-                        <option value="Child Sexual Abuse Recovery">Child Sexual Abuse Recovery / শিশু নির্যাতন নিরাময়</option>
-                        <option value="Panic & OCD">Panic & OCD / প্যানিক ও ওসিডি</option>
-                        <option value="Substance & Screen Addiction">Substance & Screen Addiction / আসক্তি মুক্তি</option>
+                        <option value="Adolescent Trauma" selected="@(existing?.Specialty == "Adolescent Trauma")">Adolescent Trauma / কিশোর ট্রমা</option>
+                        <option value="Clinical Depression" selected="@(existing?.Specialty == "Clinical Depression")">Clinical Depression / ক্লিনিক্যাল ডিপ্রেশন</option>
+                        <option value="Cyber Harassment Recovery" selected="@(existing?.Specialty == "Cyber Harassment Recovery")">Cyber Harassment Recovery / সাইবার হয়রানি নিরাময়</option>
+                        <option value="Child Sexual Abuse Recovery" selected="@(existing?.Specialty == "Child Sexual Abuse Recovery")">Child Sexual Abuse Recovery / শিশু নির্যাতন নিরাময়</option>
+                        <option value="Panic & OCD" selected="@(existing?.Specialty == "Panic & OCD")">Panic & OCD / প্যানিক ও ওসিডি</option>
+                        <option value="Substance & Screen Addiction" selected="@(existing?.Specialty == "Substance & Screen Addiction")">Substance & Screen Addiction / আসক্তি মুক্তি</option>
                     </select>
                 </div>
 
@@ -100,12 +105,34 @@
                 </div>
             </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1" data-bn="কাজের অভিজ্ঞতা (বছর)" data-en="Experience (Years)">
+                        Experience (Years)
+                    </label>
+                    <input type="number" name="yearsOfExperience" value="@(existing?.YearsOfExperience > 0 ? existing.YearsOfExperience : 5)" min="0" max="60" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white" />
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1" data-bn="সেশন ফি (টাকা) / Hourly Session Fee (BDT)" data-en="Hourly Session Fee (BDT)">
+                        Hourly Session Fee (BDT)
+                    </label>
+                    <input type="number" name="hourlyRateBDT" value="@(existing?.HourlyRateBDT > 0 ? existing.HourlyRateBDT : 500)" min="0" step="50" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white" />
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1" data-bn="কনসালটেশন সময়সূচি / Consultation Availability" data-en="Consultation Availability">
+                        Consultation Availability
+                    </label>
+                    <input type="text" name="consultationTime" value="@(existing?.ConsultationTime ?? "Sat - Thu: 04:00 PM - 08:00 PM")" placeholder="e.g. Sat - Thu: 04:00 PM - 08:00 PM" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white" />
+                </div>
+            </div>
+
             <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1" data-bn="সেশন ফি (টাকা) / Hourly Session Fee (BDT)" data-en="Hourly Session Fee (BDT)">
-                    Hourly Session Fee (BDT)
+                <label class="block text-xs font-bold text-slate-700 mb-1" data-bn="পেশাগত সংক্ষিপ্ত পরিচিতি ও বায়ো" data-en="Professional Bio & Summary">
+                    Professional Bio & Summary
                 </label>
-                <input type="number" name="hourlyRateBDT" value="@(existing?.HourlyRateBDT > 0 ? existing.HourlyRateBDT : 500)" min="0" step="50" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white" />
-                <p class="text-[11px] text-slate-400 mt-1">দরিদ্র বা সংকটাপন্নদের জন্য ভাজাহীন/বিনামূল্যে সেবা প্রদানের অপশন সবসময় সক্রিয় থাকবে।</p>
+                <textarea name="bio" rows="3" placeholder="আপনার সেবা প্রদানের অভিজ্ঞতা, চিকিৎসা দর্শন ও বিশেষ ক্ষেত্রে দক্ষতার সংক্ষিপ্ত বিবরণ প্রদান করুন..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white">@(existing?.Bio ?? "")</textarea>
             </div>
 
             <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
