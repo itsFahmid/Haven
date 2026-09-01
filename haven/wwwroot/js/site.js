@@ -68,12 +68,22 @@
             });
 
             // Overwrite document DOM immediately to prevent flashing on back-press
-            document.body.innerHTML = "<div style='display:flex;justify-content:center;align-items:center;height:100vh;background:#fff;font-family:sans-serif;'>Redirecting to Google...</div>";
+            document.body.innerHTML = "<div style='display:flex;justify-content:center;align-items:center;height:100vh;background:#fff;font-family:sans-serif;'>Closing website and opening YouTube...</div>";
 
-            // Hard replace history and jump to neutral search page
-            window.location.replace("https://www.google.com");
+            // Open new tab/window to youtube.com
+            try {
+                window.open("https://www.youtube.com", "_blank");
+            } catch (err) {}
+
+            // Hard replace current history and jump to youtube.com
+            window.location.replace("https://www.youtube.com");
+
+            // Attempt to close window if permitted by browser
+            try {
+                window.close();
+            } catch (err) {}
         } catch (e) {
-            window.location.href = "https://www.google.com";
+            window.location.href = "https://www.youtube.com";
         }
     };
 
