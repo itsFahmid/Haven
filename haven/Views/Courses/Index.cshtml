@@ -1,224 +1,267 @@
 @model Haven.Models.CoursesHubViewModel
 @{
-    var isEnrolledOnly = ViewData["IsEnrolledOnly"] as bool? ?? false;
-    ViewData["Title"] = isEnrolledOnly ? "আমার এনরোলকৃত কোর্স সমূহ | My Enrolled Courses" : "সুরক্ষা ও জীবন-দক্ষতা কোর্স হাব | Courses Hub";
+    ViewData["Title"] = "সুরক্ষা ও জীবন-দক্ষতা কোর্স হাব | Courses Hub";
 }
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
-    
-    @if (isEnrolledOnly)
-    {
-        <div class="p-4 rounded-2xl bg-teal-50 border border-teal-200 flex items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-                <span class="w-9 h-9 rounded-xl bg-teal-700 text-white flex items-center justify-center font-bold">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-                </span>
-                <div>
-                    <h2 class="text-sm font-bold text-teal-950">আমার এনরোলকৃত কোর্স সমূহ (My Enrolled Courses)</h2>
-                    <p class="text-xs text-teal-800">শুধুমাত্র আপনার চলমান ও সংরক্ষিত কোর্স মডিউলগুলো প্রদর্শিত হচ্ছে।</p>
-                </div>
-            </div>
-            <a asp-action="Index" asp-route-category="All" asp-route-enrolledOnly="false" class="px-3.5 py-1.5 bg-white text-teal-900 border border-teal-200 rounded-xl text-xs font-bold hover:bg-teal-100 transition shadow-2xs">
-                সকল কোর্স দেখুন ➔
-            </a>
-        </div>
-    }
 
     <!-- Hero Header -->
-    <div class="bg-slate-900 rounded-3xl p-8 sm:p-12 text-white shadow-lg border border-slate-800">
-        <div class="max-w-3xl space-y-4">
-            <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full text-xs font-bold uppercase tracking-wider">
-                Youth Safety & Resilience Academy
-            </span>
-            <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight" data-bn="সুরক্ষা ও জীবন-দক্ষতা কোর্স হাব" data-en="Safety & Life-Skills Educational Hub">
-                @(isEnrolledOnly ? "আমার এনরোলকৃত কোর্স সমূহ" : "সুরক্ষা ও জীবন-দক্ষতা কোর্স হাব")
-            </h1>
-            <p class="text-slate-300 text-sm sm:text-base leading-relaxed" data-bn="জেন জি, জেন আলফা এবং তরুণ অভিভাবকদের জন্য তৈরি ব্যবহারিক শিক্ষা। সাইবার বুলিং প্রতিরোধ, ডিজিটাল প্রমাণ সংগ্রহ, ব্যক্তিগত সম্মতি ও মানসিক প্রাথমিক চিকিৎসার আধুনিক পাঠ।" data-en="Practical trauma-informed frameworks for digital natives. Learn evidence preservation, cyber harassment defense, consent boundary setting, and panic stabilization.">
-                জেন জি, জেন আলফা এবং তরুণ অভিভাবকদের জন্য তৈরি ব্যবহারিক শিক্ষা। সাইবার বুলিং প্রতিরোধ, ডিজিটাল প্রমাণ সংগ্রহ, ব্যক্তিগত সম্মতি ও মানসিক প্রাথমিক চিকিৎসার আধুনিক পাঠ।
-            </p>
+    <div class="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-8 sm:p-12 shadow-xl border border-slate-800">
+        <div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+            <div class="max-w-3xl space-y-4">
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full text-xs font-extrabold uppercase tracking-wider">
+                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                    <span>Youth Safety & Resilience Academy</span>
+                </span>
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight" data-bn="সুরক্ষা ও জীবন-দক্ষতা কোর্স হাব" data-en="Safety & Life-Skills Educational Hub">
+                    সুরক্ষা ও জীবন-দক্ষতা কোর্স হাব
+                </h1>
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed" data-bn="জেন জি, জেন আলফা এবং তরুণ অভিভাবকদের জন্য তৈরি প্র্যাকটিক্যাল কোর্স। সাইবার বুলিং প্রতিরক্ষা, প্রমাণ সংগ্রহ, ব্যক্তিগত সম্মতি ও মানসিক স্থিতিস্থাপকতার আধুনিক পাঠ।" data-en="Practical trauma-informed safety courses for youth. Learn evidence preservation, cyber harassment defense, consent boundary setting, and panic stabilization.">
+                    জেন জি, জেন আলফা এবং তরুণ অভিভাবকদের জন্য তৈরি প্র্যাকটিক্যাল কোর্স। সাইবার বুলিং প্রতিরক্ষা, প্রমাণ সংগ্রহ, ব্যক্তিগত সম্মতি ও মানসিক স্থিতিস্থাপকতার আধুনিক পাঠ।
+                </p>
 
-            <div class="flex flex-wrap items-center gap-6 pt-4 text-xs font-semibold text-slate-300">
-                <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
-                    <span data-bn="১৮,৪৫০+ নিবন্ধিত শিক্ষার্থী" data-en="18,450+ Active Youth Learners">১৮,৪৫০+ নিবন্ধিত শিক্ষার্থী</span>
+                <div class="flex flex-wrap items-center gap-6 pt-2 text-xs font-semibold text-slate-300">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                        <span data-bn="১৮,৪৫০+ নিবন্ধিত শিক্ষার্থী" data-en="18,450+ Active Youth Learners">১৮,৪৫০+ নিবন্ধিত শিক্ষার্থী</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                        <span data-bn="ফ্রি ও ঐচ্ছিক Pay-What-You-Want" data-en="100% Free & Pay-What-You-Want">ফ্রি ও ঐচ্ছিক Pay-What-You-Want</span>
+                    </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
-                    <span data-bn="সম্পূর্ণ ফ্রি ও ঐচ্ছিক অনুদান (PWYW)" data-en="100% Free & Pay-What-You-Want">সম্পূর্ণ ফ্রি ও ঐচ্ছিক অনুদান (PWYW)</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
-                    <span data-bn="ইন্টারেক্টিভ চেকলিস্ট ও কুইজ" data-en="Interactive Module Checklists">ইন্টারেক্টিভ চেকলিস্ট ও কুইজ</span>
-                </div>
+            </div>
+
+            <!-- Header Action & Publishing Portal for Therapists -->
+            <div class="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-action="MyCourses" class="px-6 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-2xl shadow-lg transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+                        <span data-bn="আমার এনরোলকৃত কোর্স সমূহ" data-en="My Enrolled Courses">আমার এনরোলকৃত কোর্স সমূহ</span>
+                    </a>
+                }
+
+                @if (User.IsInRole("Professional") || User.IsInRole("Admin"))
+                {
+                    <a asp-action="Create" class="px-6 py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-2xl shadow-lg transition flex items-center justify-center gap-2 border border-amber-300">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" /></svg>
+                        <span data-bn="নতুন কোর্স প্রকাশ করুন (থেরাপিস্ট)" data-en="Publish New Course (Therapist)">নতুন কোর্স প্রকাশ করুন (থেরাপিস্ট)</span>
+                    </a>
+                }
             </div>
         </div>
     </div>
 
+    <!-- Login Guest Warning Banner -->
     @if (User.Identity?.IsAuthenticated != true)
     {
-        <div class="p-4 rounded-2xl bg-teal-50 border border-teal-200 flex items-center justify-between gap-4 text-xs text-teal-900">
-            <div class="flex items-center gap-2.5">
-                <svg class="w-4 h-4 text-teal-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>
-                    <span class="font-bold" data-bn="বিজ্ঞপ্তি:" data-en="Notice:">বিজ্ঞপ্তি:</span>
-                    <span data-bn="কোর্স তালিকা উন্মুক্তভাবে দেখা যাবে। তবে লেসনে প্রবেশ ও অগ্রগতি সংরক্ষণ করতে বিনামূল্যে অ্যাকাউন্টে লগইন করতে হবে।" data-en="Courses are freely browsable. Log in to access interactive lessons and save progress.">
-                        কোর্স তালিকা উন্মুক্তভাবে দেখা যাবে। তবে লেসনে প্রবেশ ও অগ্রগতি সংরক্ষণ করতে বিনামূল্যে অ্যাকাউন্টে লগইন করতে হবে।
-                    </span>
+        <div class="p-4 rounded-2xl bg-teal-50 border border-teal-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-teal-950">
+            <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl bg-teal-700 text-white flex items-center justify-center shrink-0 font-bold">
+                    🔐
                 </span>
+                <div>
+                    <h3 class="font-bold text-teal-950" data-bn="কোর্সের পাঠে সরাসরি প্রবেশাধিকার সুরক্ষিত" data-en="Course Lesson Access is Protected">কোর্সের পাঠে সরাসরি প্রবেশাধিকার সুরক্ষিত</h3>
+                    <p class="text-teal-800 text-[11px]" data-bn="যেকোনো কোর্সে ফ্রিতে এনরোল করতে ও আপনার শিখন অগ্রগতি সংরক্ষণ করতে অনুগ্রহ করে প্রথমে একটি অ্যাকাউন্টে লগইন করুন।" data-en="Courses are free to browse. Please log in or register to enroll and unlock interactive module lessons.">
+                        যেকোনো কোর্সে ফ্রিতে এনরোল করতে ও আপনার শিখন অগ্রগতি সংরক্ষণ করতে অনুগ্রহ করে প্রথমে একটি অ্যাকাউন্টে লগইন করুন।
+                    </p>
+                </div>
             </div>
-            <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Url.Action("Index", "Courses")" class="px-3.5 py-1.5 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-lg transition whitespace-nowrap" data-bn="লগইন করুন" data-en="Log In">
-                লগইন করুন
+            <a asp-controller="Account" asp-action="Login" class="px-4 py-2 bg-teal-800 text-white font-bold text-xs rounded-xl hover:bg-teal-900 transition shrink-0">
+                লগইন / Sign In ➔
             </a>
         </div>
     }
 
-    <!-- Category Filter Bar -->
-    <div class="bg-white rounded-2xl p-2.5 border border-slate-200 shadow-sm flex items-center gap-2 overflow-x-auto">
-        <a asp-action="Index" asp-route-category="All" class="px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap @(Model.SelectedCategory == "All" ? "bg-teal-700 text-white shadow-xs" : "text-slate-700 hover:bg-slate-100")" data-bn="সকল কোর্স" data-en="All Courses">
-            সকল কোর্স
-        </a>
-        <a asp-action="Index" asp-route-category="Cyber Safety" class="px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap @(Model.SelectedCategory == "Cyber Safety" ? "bg-teal-700 text-white shadow-xs" : "text-slate-700 hover:bg-slate-100")" data-bn="সাইবার নিরাপত্তা" data-en="Cyber Safety">
-            সাইবার নিরাপত্তা
-        </a>
-        <a asp-action="Index" asp-route-category="Personal Safety" class="px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap @(Model.SelectedCategory == "Personal Safety" ? "bg-teal-700 text-white shadow-xs" : "text-slate-700 hover:bg-slate-100")" data-bn="ব্যক্তিগত সুরক্ষা ও সম্মতি" data-en="Personal Safety & Consent">
-            ব্যক্তিগত সুরক্ষা ও সম্মতি
-        </a>
-        <a asp-action="Index" asp-route-category="Mental Health" class="px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap @(Model.SelectedCategory == "Mental Health" ? "bg-teal-700 text-white shadow-xs" : "text-slate-700 hover:bg-slate-100")" data-bn="মানসিক স্বাস্থ্য ও প্যানিক" data-en="Mental Health & Panic">
-            মানসিক স্বাস্থ্য ও প্যানিক
-        </a>
-        <a asp-action="Index" asp-route-category="Parenting & Guardians" class="px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap @(Model.SelectedCategory == "Parenting & Guardians" ? "bg-teal-700 text-white shadow-xs" : "text-slate-700 hover:bg-slate-100")" data-bn="অভিভাবকত্ব ও গাইডেন্স" data-en="Parenting in Digital Era">
-            অভিভাবকত্ব ও গাইডেন্স
-        </a>
+    <!-- Search & Filter Bar (Minimal - Category pills removed as requested) -->
+    <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+        <form method="get" asp-action="Index" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+            
+            <!-- Search Keyword -->
+            <div class="md:col-span-5 relative">
+                <input type="text" name="search" value="@Model.SearchQuery" placeholder="কোর্সের শিরোনাম বা কিউয়ার্ড খুঁজুন / Search courses..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none" />
+                <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            </div>
+
+            <!-- Mandatory Age Group Filter Tag -->
+            <div class="md:col-span-3">
+                <select name="ageGroup" onchange="this.form.submit()" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-semibold text-slate-700 focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                    <option value="All" selected="@(Model.SelectedAgeGroup == "All")">সকল বয়স শ্রেণী (All Age Ranges)</option>
+                    <option value="Gen Z & Alpha (10-24y)" selected="@(Model.SelectedAgeGroup == "Gen Z & Alpha (10-24y)")">🏷️ Gen Z & Alpha (10-24y)</option>
+                    <option value="Young Adults (18-25y)" selected="@(Model.SelectedAgeGroup == "Young Adults (18-25y)")">🏷️ Young Adults (18-25y)</option>
+                    <option value="Parents & Guardians" selected="@(Model.SelectedAgeGroup == "Parents & Guardians")">🏷️ Parents & Guardians</option>
+                </select>
+            </div>
+
+            <!-- Category Filter Dropdown -->
+            <div class="md:col-span-3">
+                <select name="category" onchange="this.form.submit()" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-semibold text-slate-700 focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                    <option value="All" selected="@(Model.SelectedCategory == "All")">সকল বিষয়শ্রেণী (All Categories)</option>
+                    <option value="Cyber Safety" selected="@(Model.SelectedCategory == "Cyber Safety")">সাইবার নিরাপত্তা (Cyber Safety)</option>
+                    <option value="Personal Safety" selected="@(Model.SelectedCategory == "Personal Safety")">ব্যক্তিগত সুরক্ষা (Personal Safety)</option>
+                    <option value="Mental Health" selected="@(Model.SelectedCategory == "Mental Health")">মানসিক স্বাস্থ্য (Mental Health)</option>
+                    <option value="Parenting & Guidance" selected="@(Model.SelectedCategory == "Parenting & Guidance")">অভিভাবকত্ব (Parenting & Guidance)</option>
+                </select>
+            </div>
+
+            <div class="md:col-span-1">
+                <button type="submit" class="w-full py-2.5 bg-slate-900 text-white rounded-2xl text-xs font-bold hover:bg-slate-800 transition">
+                    Filter
+                </button>
+            </div>
+        </form>
     </div>
 
-    <!-- Dynamic Courses Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        @foreach (var course in Model.Courses)
-        {
-            <div class="course-card bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition haven-card p-6 sm:p-8 flex flex-col justify-between" data-course-id="@course.Id">
-                
-                <div class="space-y-4">
+    <!-- Courses Grid (Minimalist Cards) -->
+    @if (!Model.Courses.Any())
+    {
+        <div class="bg-white rounded-3xl p-12 text-center border border-slate-200 space-y-4">
+            <div class="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto text-2xl font-bold">
+                🔍
+            </div>
+            <h3 class="text-lg font-bold text-slate-800" data-bn="কোনো অনুমোদিত কোর্স পাওয়া যায়নি" data-en="No Approved Courses Found">কোনো অনুমোদিত কোর্স পাওয়া যায়নি</h3>
+            <p class="text-xs text-slate-500 max-w-md mx-auto">আপনার ফিল্টারের সাথে মিলে এমন কোনো কোর্স পাওয়া যায়নি। অনুগ্রহ করে অন্য ফিল্টার চেষ্টা করুন।</p>
+            <a asp-action="Index" class="inline-block px-4 py-2 bg-teal-800 text-white text-xs font-bold rounded-xl hover:bg-teal-900 transition">
+                সকল কোর্স দেখুন
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @foreach (var course in Model.Courses)
+            {
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden group">
                     
-                    <!-- Top Badges Row -->
-                    <div class="flex flex-wrap items-center justify-between gap-2">
-                        <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200" data-bn="@course.CategoryBn" data-en="@course.CategoryEn">
-                                @course.CategoryBn
+                    <a asp-action="Details" asp-route-id="@course.Id" class="p-6 space-y-4 block">
+                        <!-- Top Badges & Ratings -->
+                        <div class="flex items-center justify-between gap-2">
+                            <!-- Mandatory Age Range Tag -->
+                            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-extrabold bg-teal-50 text-teal-800 border border-teal-200">
+                                🏷️ @course.TargetGen
                             </span>
-                            <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-700" data-bn="@course.TargetGenBn" data-en="@course.TargetGen">
-                                @course.TargetGenBn
-                            </span>
+
+                            <!-- Rating -->
+                            <div class="flex items-center gap-1 text-xs font-bold text-amber-500 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200 shrink-0">
+                                <span>★</span>
+                                <span>@course.Rating.ToString("0.0")</span>
+                                <span class="text-[10px] text-slate-400 font-normal">(5.0)</span>
+                            </div>
                         </div>
 
-                        <!-- Pricing / Tag -->
+                        <!-- Course Title -->
+                        <div class="space-y-1.5">
+                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-teal-700">@course.CategoryBn • @course.CategoryEn</span>
+                            <h3 class="text-base sm:text-lg font-black text-slate-900 group-hover:text-teal-700 transition line-clamp-2" title="@course.TitleBn">
+                                @course.TitleBn
+                            </h3>
+                            <p class="text-xs text-slate-500 font-semibold line-clamp-1">@course.TitleEn</p>
+                        </div>
+
+                        <!-- Minimal Course Description -->
+                        <p class="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                            @course.DescriptionBn
+                        </p>
+
+                        <!-- Minimal Duration & Module Metadata Row -->
+                        <div class="flex items-center justify-between text-[11px] font-bold text-slate-500 pt-2 border-t border-slate-100">
+                            <span>⏱️ @course.Duration</span>
+                            <span class="text-teal-800 font-black">📚 @course.ModuleCount মডিউল</span>
+                        </div>
+                    </a>
+
+                    <!-- Footer Pricing & Enrollment Action -->
+                    <div class="p-6 pt-0 border-t border-slate-100 mt-2 flex items-center justify-between gap-3">
                         <div>
                             @if (course.IsFree)
                             {
-                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200" data-bn="১০০% বিনামূল্যে" data-en="100% FREE">
-                                    ১০০% বিনামূল্যে
+                                <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-black uppercase">
+                                    FREE / ফ্রি
                                 </span>
                             }
                             else if (course.IsPayWhatYouWant)
                             {
-                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200" data-bn="ঐচ্ছিক ফি (PWYW)" data-en="Pay-What-You-Want">
-                                    ঐচ্ছিক ফি (PWYW)
+                                <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-black uppercase" title="Pay What You Want">
+                                    PWYW / সাধ্যমতো
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-sm font-black text-slate-900">
+                                    ৳@course.SuggestedFeeBDT BDT
                                 </span>
                             }
                         </div>
-                    </div>
 
-                    <!-- Course Title & Description -->
-                    <div>
-                        <h3 class="text-xl font-bold text-slate-900 tracking-tight leading-snug" data-bn="@course.TitleBn" data-en="@course.TitleEn">
-                            @course.TitleBn
-                        </h3>
-                        <p class="text-xs text-slate-600 mt-2 leading-relaxed" data-bn="@course.DescriptionBn" data-en="@course.DescriptionEn">
-                            @course.DescriptionBn
-                        </p>
-                    </div>
-
-                    <!-- Course Metadata Row -->
-                    <div class="flex items-center gap-4 text-xs text-slate-500 py-1">
-                        <div class="flex items-center gap-1">
-                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            <span data-bn="@course.DurationBn" data-en="@course.Duration">@course.DurationBn</span>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <svg class="w-3.5 h-3.5 text-amber-500 fill-amber-500" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
-                            <span class="font-bold text-slate-800">@course.Rating</span>
-                            <span>(@course.EnrolledCount+)</span>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-                            <span data-bn="@course.ModuleCount টি মডিউল" data-en="@course.ModuleCount Modules">@course.ModuleCount টি মডিউল</span>
-                        </div>
-                    </div>
-
-                    <!-- Interactive Module Progress Indicator -->
-                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2">
-                        <div class="flex items-center justify-between text-xs font-bold text-slate-700">
-                            <span data-bn="আপনার অগ্রগতি" data-en="Your Progress">আপনার অগ্রগতি</span>
-                            <span class="course-progress-text text-teal-700" data-bn="@course.CompletedModules/@course.ModuleCount সম্পন্ন (@course.ProgressPercentage%)" data-en="@course.CompletedModules/@course.ModuleCount Completed (@course.ProgressPercentage%)">
-                                @course.CompletedModules/@course.ModuleCount সম্পন্ন (@course.ProgressPercentage%)
-                            </span>
-                        </div>
-                        <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                            <div class="course-progress-fill bg-teal-700 h-2 rounded-full transition-all duration-300" style="width: @course.ProgressPercentage%;"></div>
-                        </div>
-                    </div>
-
-                    <!-- Interactive Module Checklist -->
-                    <div class="space-y-2 pt-1">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-bn="মডিউল চেকলিস্ট (ট্যাপ করে সম্পন্ন করুন)" data-en="Module Checklist (Tap to Complete)">
-                            মডিউল চেকলিস্ট (ট্যাপ করে সম্পন্ন করুন)
-                        </span>
-
-                        <div class="space-y-2">
-                            @foreach (var mod in course.Modules)
+                        <div>
+                            @if (course.IsUserEnrolled)
                             {
-                                <label class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200 hover:border-teal-600 transition cursor-pointer select-none">
-                                    <div class="flex items-center gap-2.5 text-xs">
-                                        <input type="checkbox" @(mod.IsCompleted ? "checked" : "") class="module-step-check rounded text-teal-700 focus:ring-teal-500 h-4 w-4 border-slate-300" onchange="toggleModuleStep(this, @course.Id, @mod.StepNumber)" />
-                                        <span class="font-medium text-slate-800" data-bn="@mod.TitleBn" data-en="@mod.TitleEn">
-                                            @mod.TitleBn
-                                        </span>
-                                    </div>
-                                    <span class="text-[10px] font-semibold text-slate-500 px-2 py-0.5 bg-slate-100 rounded-md whitespace-nowrap" data-bn="@mod.DurationBn" data-en="@mod.Duration">
-                                        @mod.DurationBn
-                                    </span>
-                                </label>
+                                <a asp-action="MyCourses" class="px-4 py-2 bg-emerald-700 text-white text-xs font-bold rounded-xl hover:bg-emerald-800 transition shadow-2xs">
+                                    আমার কোর্সে দেখুন ✓
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-action="Details" asp-route-id="@course.Id" class="px-4 py-2 bg-teal-800 text-white text-xs font-bold rounded-xl hover:bg-teal-900 transition shadow-2xs">
+                                    বিবরণ ও মডিউল ➔
+                                </a>
                             }
                         </div>
                     </div>
 
                 </div>
+            }
+        </div>
 
-                <!-- Bottom Actions -->
-                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
-                    <a asp-action="Details" asp-route-id="@course.Id" class="flex-grow py-3 px-4 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl transition text-center shadow-xs">
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            <span data-bn="লেসন শুরু করুন ➔" data-en="Start Lesson ➔">লেসন শুরু করুন ➔</span>
-                        }
-                        else
-                        {
-                            <span data-bn="লগইন করে লেসনে প্রবেশ করুন ➔" data-en="Log in to Access Lesson ➔">লগইন করে লেসনে প্রবেশ করুন ➔</span>
-                        }
-                    </a>
-                    
-                    @if (course.IsPayWhatYouWant)
+        <!-- Pagination System -->
+        @if (Model.TotalPages > 1)
+        {
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                <p class="text-xs text-slate-500">
+                    মোট <strong class="text-slate-800">@Model.TotalCoursesCount</strong> টি কোর্সের মধ্যে পৃষ্ঠা <strong class="text-slate-800">@Model.CurrentPage</strong> / <strong class="text-slate-800">@Model.TotalPages</strong> প্রদর্শিত হচ্ছে।
+                </p>
+
+                <div class="flex items-center gap-2">
+                    <!-- Previous Button -->
+                    @if (Model.HasPreviousPage)
                     {
-                        <button type="button" onclick="openModal('paymentModal')" class="py-3 px-4 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 font-bold text-xs rounded-xl transition flex items-center gap-1.5" data-bn="অনুদান দিন" data-en="PWYW Support">
-                            <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-                            <span data-bn="অনুদান দিন" data-en="PWYW Support">অনুদান দিন</span>
-                        </button>
+                        <a asp-action="Index" asp-route-page="@(Model.CurrentPage - 1)" asp-route-category="@Model.SelectedCategory" asp-route-ageGroup="@Model.SelectedAgeGroup" asp-route-search="@Model.SearchQuery" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
+                            ◄ পূর্ববর্তী (Prev)
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="px-3.5 py-2 bg-slate-50 text-slate-300 font-bold text-xs rounded-xl cursor-not-allowed">
+                            ◄ পূর্ববর্তী
+                        </span>
+                    }
+
+                    <!-- Page Numbers -->
+                    @for (int p = 1; p <= Model.TotalPages; p++)
+                    {
+                        var isCurrent = p == Model.CurrentPage;
+                        <a asp-action="Index" asp-route-page="@p" asp-route-category="@Model.SelectedCategory" asp-route-ageGroup="@Model.SelectedAgeGroup" asp-route-search="@Model.SearchQuery" class="w-8 h-8 flex items-center justify-center font-bold text-xs rounded-xl transition @(isCurrent ? "bg-teal-800 text-white shadow-xs" : "bg-slate-100 text-slate-700 hover:bg-slate-200")">
+                            @p
+                        </a>
+                    }
+
+                    <!-- Next Button -->
+                    @if (Model.HasNextPage)
+                    {
+                        <a asp-action="Index" asp-route-page="@(Model.CurrentPage + 1)" asp-route-category="@Model.SelectedCategory" asp-route-ageGroup="@Model.SelectedAgeGroup" asp-route-search="@Model.SearchQuery" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
+                            পরবর্তী (Next) ►
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="px-3.5 py-2 bg-slate-50 text-slate-300 font-bold text-xs rounded-xl cursor-not-allowed">
+                            পরবর্তী ►
+                        </span>
                     }
                 </div>
-
             </div>
         }
-    </div>
+    }
 
 </div>

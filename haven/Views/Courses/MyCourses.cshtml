@@ -1,0 +1,299 @@
+@using System.Text.Encodings.Web
+@model List<Haven.Models.CourseViewModel>
+@{
+    ViewData["Title"] = "আমার অ্যানরোলকৃত কোর্স সমূহ | My Enrolled Courses";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+
+    <!-- Header Section -->
+    <div class="bg-slate-900 text-white rounded-3xl p-8 sm:p-10 shadow-xl border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div class="space-y-2">
+            <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full text-xs font-black uppercase tracking-wider">
+                Youth Student Learning Portal
+            </span>
+            <h1 class="text-2xl sm:text-3xl font-black" data-bn="আমার অ্যানরোলকৃত কোর্স সমূহ" data-en="My Enrolled Courses">
+                আমার অ্যানরোলকৃত কোর্স সমূহ
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-300">
+                আপনার সক্রিয় এনরোলকৃত কোর্সের পাঠ্যসূচী, মডিউল লেসন ফাইল ও শিখন অগ্রগতি দেখুন।
+            </p>
+        </div>
+
+        <a asp-action="Index" class="px-5 py-3 bg-teal-700 hover:bg-teal-600 text-white font-bold text-xs rounded-2xl transition shadow-md shrink-0">
+            + নতুন কোর্সে এনরোল করুন
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="bg-white rounded-3xl p-12 text-center border border-slate-200 space-y-4">
+            <div class="w-16 h-16 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center mx-auto text-2xl font-bold">
+                📚
+            </div>
+            <h3 class="text-lg font-bold text-slate-800" data-bn="আপনি এখনো কোনো কোর্সে এনরোল করেননি" data-en="No Courses Enrolled Yet">আপনি এখনো কোনো কোর্সে এনরোল করেননি</h3>
+            <p class="text-xs text-slate-500 max-w-md mx-auto">আমাদের ফ্রি ও সাধ্যমতো মূল্যের কোর্স ব্রাউজ করুন এবং আপনার সুরক্ষা ও মানসিক স্বাস্থ্যের দক্ষতা বৃদ্ধি করুন।</p>
+            <a asp-action="Index" class="inline-block px-5 py-2.5 bg-teal-800 text-white text-xs font-bold rounded-xl hover:bg-teal-900 transition shadow-sm">
+                কোর্স ক্যাটালগ দেখুন ➔
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="space-y-8">
+            @foreach (var course in Model)
+            {
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+                    
+                    <!-- Course Header Summary -->
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-slate-100">
+                        <div class="space-y-2 max-w-2xl">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="px-3 py-1 bg-teal-50 text-teal-800 border border-teal-200 rounded-full text-xs font-black">
+                                    🏷️ @course.TargetGen
+                                </span>
+                                <span class="px-3 py-1 bg-sky-50 text-sky-900 border border-sky-200 rounded-full text-xs font-bold">
+                                    🌐 @course.LanguageBn
+                                </span>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs font-bold">
+                                    @course.CategoryBn
+                                </span>
+                                <span class="flex items-center gap-1 text-amber-500 font-bold text-xs bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+                                    ★ @course.Rating.ToString("0.0")
+                                </span>
+                            </div>
+
+                            <h2 class="text-xl sm:text-2xl font-black text-slate-900">
+                                @course.TitleBn
+                            </h2>
+                            <p class="text-xs text-slate-500 font-semibold">@course.TitleEn • ⏱️ @course.Duration</p>
+                        </div>
+
+                        <!-- Action Controls: Open Review Modal Button -->
+                        <div class="flex flex-col sm:flex-row items-center gap-3 shrink-0 w-full md:w-auto">
+                            <button type="button" onclick="openReviewModal(@course.Id, '@JavaScriptEncoder.Default.Encode(course.TitleBn)', @(course.UserRating ?? 5), '@JavaScriptEncoder.Default.Encode(course.UserReviewComment ?? "")')" class="w-full sm:w-auto px-4 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-900 font-extrabold text-xs rounded-2xl border border-amber-300 transition flex items-center justify-center gap-1.5 shadow-2xs">
+                                <span>★</span>
+                                <span>@(course.UserRating.HasValue ? "আমার রিভিউ সংশোধন করুন" : "রিভিউ ও রেটিং দিন ★")</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Course Completion Progress Meter Bar -->
+                    <div class="space-y-2 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div class="flex items-center justify-between text-xs font-extrabold text-slate-700">
+                            <span>কোর্স অগ্রগতি (Course Completion Progress):</span>
+                            <span id="progress-text-@course.Id" class="text-teal-800 font-black">@course.ProgressPercentage% (@course.CompletedModules / @course.ModuleCount মডিউল সম্পন্ন)</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                            <div id="progress-bar-@course.Id" class="bg-teal-700 h-3 rounded-full transition-all duration-500" style="width: @course.ProgressPercentage%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Module Lessons Accordion -->
+                    <div class="space-y-4 pt-2">
+                        <h3 class="text-sm font-black text-slate-900">
+                            ইন্টারেক্টিভ মডিউল সমূহের পাঠ ও সহায়িকা (Interactive Modules & Materials)
+                        </h3>
+
+                        <div class="space-y-3">
+                            @foreach (var mod in course.Modules)
+                            {
+                                <!-- Individual Grouped Module Element -->
+                                <div id="module-card-@course.Id-@mod.StepNumber" class="module-group bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden transition-all">
+                                    
+                                    <!-- Grouped Header: Clear separation between toggle trigger and checkbox input -->
+                                    <div class="p-4 flex items-center justify-between gap-4">
+                                        
+                                        <!-- Clickable Lesson Title Area -->
+                                        <div class="flex items-center gap-3 cursor-pointer grow select-none" onclick="toggleModuleBody('mod-body-@course.Id-@mod.StepNumber', 'icon-@course.Id-@mod.StepNumber')">
+                                            <span class="w-8 h-8 rounded-xl bg-teal-800 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs">
+                                                @mod.StepNumber
+                                            </span>
+                                            <div>
+                                                <h4 class="text-xs sm:text-sm font-bold text-slate-900 hover:text-teal-800 transition">@mod.TitleBn</h4>
+                                                <p class="text-[11px] text-slate-500">@mod.TitleEn • @mod.Duration</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Grouped Module Done Checkbox Element -->
+                                        <div class="flex items-center gap-3 shrink-0 pl-3 border-l border-slate-200">
+                                            <label for="check-@course.Id-@mod.StepNumber" class="inline-flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-700 bg-white px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-teal-50 transition select-none">
+                                                <input type="checkbox" id="check-@course.Id-@mod.StepNumber" onchange="toggleModuleCheck(@course.Id, @mod.StepNumber, this.checked, @course.ModuleCount)" @(mod.IsCompleted ? "checked" : "") class="w-4 h-4 text-teal-700 rounded focus:ring-teal-500 cursor-pointer" />
+                                                <span class="text-slate-800">সম্পন্ন (Done)</span>
+                                            </label>
+                                            
+                                            <button type="button" onclick="toggleModuleBody('mod-body-@course.Id-@mod.StepNumber', 'icon-@course.Id-@mod.StepNumber')" class="text-slate-400 hover:text-slate-700 font-bold text-xs p-1">
+                                                <span id="icon-@course.Id-@mod.StepNumber">▼</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Expanded Module Content, Short Description, Full Detailed Lesson Text & Optional Materials Links -->
+                                    <div id="mod-body-@course.Id-@mod.StepNumber" class="hidden p-6 border-t border-slate-200 bg-white space-y-4 text-xs leading-relaxed text-slate-700">
+                                        
+                                        <!-- Short Description -->
+                                        @if (!string.IsNullOrWhiteSpace(mod.ShortDescriptionBn))
+                                        {
+                                            <div class="p-3 bg-teal-50/70 rounded-xl border border-teal-100 text-teal-950 font-medium">
+                                                <strong class="font-bold">💡 সংক্ষিপ্ত ধারণা:</strong> @mod.ShortDescriptionBn
+                                            </div>
+                                        }
+
+                                        <!-- Full Detailed Lesson Text (Markdown) -->
+                                        <div class="prose prose-sm max-w-none text-slate-800 space-y-2">
+                                            <h5 class="text-xs font-black uppercase tracking-wider text-slate-600">বিস্তারিত লেসন টেক্সট (Detailed Lesson Content):</h5>
+                                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 leading-relaxed font-sans text-slate-800 whitespace-pre-wrap">@mod.ContentMarkdown</div>
+                                        </div>
+
+                                        <!-- Optional Materials Section -->
+                                        @if (!string.IsNullOrWhiteSpace(mod.OptionalMaterials))
+                                        {
+                                            <div class="p-4 bg-amber-50 rounded-xl border border-amber-200 space-y-2">
+                                                <div class="flex items-center justify-between gap-4">
+                                                    <div>
+                                                        <h5 class="font-bold text-amber-950 text-xs">📎 সহায়ক রিসোর্স ফাইল ও লিঙ্ক (Optional Materials):</h5>
+                                                        <p class="text-[11px] text-amber-800 font-mono pt-0.5">@mod.OptionalMaterials</p>
+                                                    </div>
+                                                    <a href="@mod.OptionalMaterials" target="_blank" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-xs rounded-xl shadow-xs transition shrink-0">
+                                                        📥 এক্সেস / ডাউনলোড ↗
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            }
+        </div>
+    }
+
+</div>
+
+<!-- Review & 5-Star Rating Modal -->
+<div id="reviewModal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-6 shadow-2xl border border-slate-200 relative animate-in fade-in zoom-in duration-200">
+        
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <h3 class="text-base font-black text-slate-900" data-bn="কোর্সের রিভিউ ও রেটিং দিন" data-en="Course Review & Star Rating">কোর্সের রিভিউ ও রেটিং দিন</h3>
+            <button type="button" onclick="closeReviewModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
+        </div>
+
+        <form asp-action="SubmitReview" method="post" class="space-y-4">
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="modalCourseId" name="courseId" value="0" />
+
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-slate-700">কোর্সের নাম:</label>
+                <p id="modalCourseTitle" class="text-xs font-black text-teal-800 truncate"></p>
+            </div>
+
+            <!-- Star Rating Selector (1 to 5 Stars Capped) -->
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-slate-700">আপনার স্টার রেটিং নির্বাচন করুন (১-৫ স্টার):</label>
+                <div class="flex items-center gap-2 text-2xl cursor-pointer select-none" id="starContainer">
+                    <span onclick="setRating(1)" class="star-btn text-slate-300 hover:text-amber-400 transition" data-star="1">★</span>
+                    <span onclick="setRating(2)" class="star-btn text-slate-300 hover:text-amber-400 transition" data-star="2">★</span>
+                    <span onclick="setRating(3)" class="star-btn text-slate-300 hover:text-amber-400 transition" data-star="3">★</span>
+                    <span onclick="setRating(4)" class="star-btn text-slate-300 hover:text-amber-400 transition" data-star="4">★</span>
+                    <span onclick="setRating(5)" class="star-btn text-amber-400" data-star="5">★</span>
+                </div>
+                <input type="hidden" id="modalRatingInput" name="rating" value="5" />
+            </div>
+
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-slate-700">আপনার মতামত/অভিজ্ঞতা লিখুন (Review Comment):</label>
+                <textarea id="modalCommentInput" name="comment" rows="3" required placeholder="এই কোর্সটি আপনার জন্য কতখানি সহায়ক ছিল তা লিখুন..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none"></textarea>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 pt-2">
+                <button type="button" onclick="closeReviewModal()" class="px-4 py-2 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-200 transition">
+                    বাতিল
+                </button>
+                <button type="submit" class="px-5 py-2 bg-teal-800 hover:bg-teal-900 text-white font-extrabold text-xs rounded-xl shadow-md transition">
+                    রিভিউ জমা দিন
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleModuleBody(id, iconId) {
+            const el = document.getElementById(id);
+            const icon = document.getElementById(iconId);
+            if (el) {
+                const isHidden = el.classList.contains('hidden');
+                if (isHidden) {
+                    el.classList.remove('hidden');
+                    if (icon) icon.innerText = '▲';
+                } else {
+                    el.classList.add('hidden');
+                    if (icon) icon.innerText = '▼';
+                }
+            }
+        }
+
+        async function toggleModuleCheck(courseId, stepNumber, isCompleted, totalModules) {
+            try {
+                const form = new FormData();
+                form.append('courseId', courseId);
+                form.append('stepNumber', stepNumber);
+                form.append('isCompleted', isCompleted);
+
+                const res = await fetch('@Url.Action("ToggleModuleProgress", "Courses")', {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    },
+                    body: form
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.success) {
+                        // Dynamically update progress bar and text without page flicker
+                        const bar = document.getElementById(`progress-bar-${courseId}`);
+                        const text = document.getElementById(`progress-text-${courseId}`);
+                        if (bar) bar.style.width = `${data.progressPercentage}%`;
+                        if (text) text.innerText = `${data.progressPercentage}% (${data.completedModulesCount} / ${totalModules} মডিউল সম্পন্ন)`;
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to update progress', err);
+            }
+        }
+
+        function openReviewModal(courseId, courseTitle, currentRating, currentComment) {
+            document.getElementById('modalCourseId').value = courseId;
+            document.getElementById('modalCourseTitle').innerText = courseTitle;
+            document.getElementById('modalCommentInput').value = currentComment || '';
+            setRating(currentRating || 5);
+            document.getElementById('reviewModal').classList.remove('hidden');
+        }
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal').classList.add('hidden');
+        }
+
+        function setRating(rating) {
+            document.getElementById('modalRatingInput').value = rating;
+            const stars = document.querySelectorAll('.star-btn');
+            stars.forEach((star, idx) => {
+                if (idx < rating) {
+                    star.classList.remove('text-slate-300');
+                    star.classList.add('text-amber-400');
+                } else {
+                    star.classList.remove('text-amber-400');
+                    star.classList.add('text-slate-300');
+                }
+            });
+        }
+    </script>
+}

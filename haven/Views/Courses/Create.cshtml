@@ -1,0 +1,254 @@
+@model Haven.Models.CreateCourseViewModel
+@{
+    ViewData["Title"] = "নতুন কোর্স তৈরি করুন | Publish Course";
+}
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    
+    <div class="p-8 rounded-3xl bg-slate-900 text-white shadow-xl border border-slate-800 space-y-2">
+        <span class="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-full text-xs font-black uppercase tracking-wider">
+            Therapist & Clinician Publishing Portal
+        </span>
+        <h1 class="text-2xl sm:text-3xl font-black" data-bn="নতুন সুরক্ষা কোর্স প্রকাশ করুন" data-en="Publish New Safety Course">
+            নতুন সুরক্ষা কোর্স প্রকাশ করুন
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-300">
+            আপনার প্রস্তুতকৃত প্র্যাকটিক্যাল মানসিক স্বাস্থ্য ও সুরক্ষা কোর্সটি জমা দিন। অ্যাডমিন পর্যালোচনার পর এটি ডিজিটাল সুরক্ষা একাডেমিতে যুক্ত হবে।
+        </p>
+    </div>
+
+    <div class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm">
+        <form asp-action="Create" method="post" class="space-y-6">
+            @Html.AntiForgeryToken()
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Title English -->
+                <div class="space-y-1">
+                    <label class="block text-xs font-extrabold text-slate-800">কোর্সের শিরোনাম (ইংরেজি / Title En) *</label>
+                    <input type="text" asp-for="TitleEn" required placeholder="e.g. Cyberbullying & Digital Footprint Defense" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none" />
+                </div>
+
+                <!-- Title Bangla -->
+                <div class="space-y-1">
+                    <label class="block text-xs font-extrabold text-slate-800">কোর্সের শিরোনাম (বাংলা / Title Bn) *</label>
+                    <input type="text" asp-for="TitleBn" required placeholder="যেমন: সাইবার বুলিং ও ডিজিটাল প্রতিরক্ষা" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none" />
+                </div>
+
+                <!-- Category -->
+                <div class="space-y-1">
+                    <label class="block text-xs font-extrabold text-slate-800">বিষয়শ্রেণী (Category) *</label>
+                    <select asp-for="CategoryEn" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-700 focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                        <option value="Cyber Safety">সাইবার নিরাপত্তা (Cyber Safety)</option>
+                        <option value="Personal Safety">ব্যক্তিগত সুরক্ষা (Personal Safety)</option>
+                        <option value="Mental Health">মানসিক স্বাস্থ্য (Mental Health)</option>
+                        <option value="Parenting & Guidance">অভিভাবকত্ব (Parenting & Guidance)</option>
+                    </select>
+                </div>
+
+                <!-- Mandatory Age Range Tag -->
+                <div class="space-y-1">
+                    <label class="block text-xs font-extrabold text-slate-800">উপযোগী বয়স সীমা ট্যাগ (Mandatory Age Range Tag) *</label>
+                    <select asp-for="TargetGen" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-700 focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                        <option value="Gen Z & Alpha (10-24y)">🏷️ Gen Z & Alpha (10-24y)</option>
+                        <option value="Young Adults (18-25y)">🏷️ Young Adults (18-25y)</option>
+                        <option value="Parents & Guardians">🏷️ Parents & Guardians (25y+)</option>
+                    </select>
+                </div>
+
+                <!-- Mandatory Course Language Tag -->
+                <div class="space-y-1">
+                    <label class="block text-xs font-extrabold text-slate-800">কোর্সের প্রধান ভাষা (Mandatory Course Language Tag) *</label>
+                    <select asp-for="Language" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-700 focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                        <option value="Bangla">🌐 বাংলা (Bangla)</option>
+                        <option value="English">🌐 English</option>
+                        <option value="Bilingual">🌐 দ্বিভাষিক (Bangla & English)</option>
+                    </select>
+                </div>
+
+                <!-- Estimated Duration -->
+                <div class="space-y-1">
+                    <label class="block text-xs font-extrabold text-slate-800">আনুমানিক সময় (Estimated Duration) *</label>
+                    <input type="text" asp-for="Duration" value="45 mins" placeholder="e.g. 45 mins" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none" />
+                </div>
+
+                <!-- Pricing Model -->
+                <div class="space-y-2 md:col-span-2">
+                    <label class="block text-xs font-extrabold text-slate-800">মূল্য নির্ধারণ (Pricing Model)</label>
+                    <div class="flex items-center gap-6 pt-1">
+                        <label class="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-700">
+                            <input type="checkbox" asp-for="IsFree" checked class="w-4 h-4 text-teal-700 rounded" />
+                            <span>সম্পূর্ণ ফ্রি (Free)</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-700">
+                            <input type="checkbox" asp-for="IsPayWhatYouWant" class="w-4 h-4 text-purple-700 rounded" />
+                            <span>সাধ্যমতো অনুদান (PWYW)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="space-y-1">
+                <label class="block text-xs font-extrabold text-slate-800">কোর্সের বিবরণ (Description) *</label>
+                <textarea asp-for="DescriptionBn" rows="3" required placeholder="কোর্সের মূল উদ্দেশ্য ও প্র্যাকটিক্যাল নির্দেশিকা লিখুন..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none"></textarea>
+            </div>
+
+            <!-- Modules Section with Dynamic Add Module Button -->
+            <div class="pt-4 border-t border-slate-100 space-y-4">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div>
+                        <h3 class="text-sm font-black text-slate-900">কোর্স মডিউল সমূহ (Course Modules)</h3>
+                        <p class="text-xs text-slate-500">আপনার প্রয়োজন অনুসারে যত খুশি মডিউল যুক্ত করুন</p>
+                    </div>
+
+                    <button type="button" onclick="addNewModuleBlock()" class="px-4 py-2 bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-300 font-extrabold text-xs rounded-xl transition flex items-center gap-1.5 shadow-2xs shrink-0">
+                        <span>➕</span>
+                        <span>নতুন মডিউল যোগ করুন (Add Module)</span>
+                    </button>
+                </div>
+
+                <div id="modulesContainer" class="space-y-4">
+                    @for (int i = 0; i < Model.Modules.Count; i++)
+                    {
+                        <div class="module-card-item p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 relative" data-index="@i">
+                            <div class="flex items-center justify-between">
+                                <span class="module-header-title font-extrabold text-xs text-teal-800">মডিউল #@(i + 1)</span>
+                                <input type="hidden" name="Modules[@i].StepNumber" class="step-number-input" value="@(i + 1)" />
+                                @if (i > 0)
+                                {
+                                    <button type="button" onclick="removeModuleBlock(this)" class="text-rose-600 hover:text-rose-800 font-bold text-xs">
+                                        ✕ মুছে ফেলুন (Remove)
+                                    </button>
+                                }
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-700 mb-1">মডিউলের শিরোনাম (বাংলা) *</label>
+                                    <input type="text" name="Modules[@i].TitleBn" value="@Model.Modules[i].TitleBn" required placeholder="যেমন: সূচনা ও নিরাপত্তা মূলনীতি" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs" />
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-700 mb-1">Module Title (English) *</label>
+                                    <input type="text" name="Modules[@i].TitleEn" value="@Model.Modules[i].TitleEn" required placeholder="Module Title in English" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs" />
+                                </div>
+                            </div>
+
+                            <!-- Short Description -->
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-700 mb-1">মডিউলের সংক্ষিপ্ত বিবরণ (Short Description)</label>
+                                <input type="text" name="Modules[@i].ShortDescriptionBn" value="@Model.Modules[i].ShortDescriptionBn" placeholder="মডিউল সেশনের ১-২ লাইনের মূল সারসংক্ষেপ..." class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs" />
+                            </div>
+
+                            <!-- Detailed Lesson Markdown -->
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-700 mb-1">বিস্তারিত লেসন টেক্সট (Detailed Lesson Markdown Text)</label>
+                                <textarea name="Modules[@i].ContentMarkdown" rows="2" placeholder="মডিউলের লেসন পাঠ ও নির্দেশিকা (Markdown format)..." class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs">@Model.Modules[i].ContentMarkdown</textarea>
+                            </div>
+
+                            <!-- Optional Materials Resource Links -->
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-700 mb-1">সহায়ক রিসোর্স লিঙ্ক/ফাইল (Optional Materials Links or File URLs)</label>
+                                <input type="text" name="Modules[@i].OptionalMaterials" value="@Model.Modules[i].OptionalMaterials" placeholder="https://haven.org/resources/guide.pdf" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                <a asp-action="Index" class="px-5 py-2.5 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-200 transition">
+                    বাতিল (Cancel)
+                </a>
+                <button type="submit" class="px-6 py-2.5 bg-teal-800 hover:bg-teal-900 text-white font-extrabold text-xs rounded-xl shadow-md transition">
+                    কোর্স জমা দিন (Submit for Approval)
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        function addNewModuleBlock() {
+            const container = document.getElementById('modulesContainer');
+            const currentCount = container.children.length;
+            const newIndex = currentCount;
+
+            const div = document.createElement('div');
+            div.className = 'module-card-item p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 relative';
+            div.setAttribute('data-index', newIndex);
+
+            div.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span class="module-header-title font-extrabold text-xs text-teal-800">মডিউল #${newIndex + 1}</span>
+                    <input type="hidden" name="Modules[${newIndex}].StepNumber" class="step-number-input" value="${newIndex + 1}" />
+                    <button type="button" onclick="removeModuleBlock(this)" class="text-rose-600 hover:text-rose-800 font-bold text-xs">
+                        ✕ মুছে ফেলুন (Remove)
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 mb-1">মডিউলের শিরোনাম (বাংলা) *</label>
+                        <input type="text" name="Modules[${newIndex}].TitleBn" required placeholder="যেমন: নতুন মডিউলের পাঠ" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs" />
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 mb-1">Module Title (English) *</label>
+                        <input type="text" name="Modules[${newIndex}].TitleEn" required placeholder="New Module Title in English" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs" />
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1">মডিউলের সংক্ষিপ্ত বিবরণ (Short Description)</label>
+                    <input type="text" name="Modules[${newIndex}].ShortDescriptionBn" placeholder="মডিউল সেশনের ১-২ লাইনের মূল সারসংক্ষেপ..." class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs" />
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1">বিস্তারিত লেসন টেক্সট (Detailed Lesson Markdown Text)</label>
+                    <textarea name="Modules[${newIndex}].ContentMarkdown" rows="2" placeholder="মডিউলের লেসন পাঠ ও নির্দেশিকা (Markdown format)..." class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1">সহায়ক রিসোর্স লিঙ্ক/ফাইল (Optional Materials Links or File URLs)</label>
+                    <input type="text" name="Modules[${newIndex}].OptionalMaterials" placeholder="https://haven.org/resources/guide.pdf" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs" />
+                </div>
+            `;
+
+            container.appendChild(div);
+            reindexModules();
+        }
+
+        function removeModuleBlock(btn) {
+            const item = btn.closest('.module-card-item');
+            if (item) {
+                item.remove();
+                reindexModules();
+            }
+        }
+
+        function reindexModules() {
+            const container = document.getElementById('modulesContainer');
+            const items = container.querySelectorAll('.module-card-item');
+            items.forEach((item, idx) => {
+                item.setAttribute('data-index', idx);
+                const titleSpan = item.querySelector('.module-header-title');
+                if (titleSpan) titleSpan.innerText = `মডিউল #${idx + 1}`;
+
+                const stepInput = item.querySelector('.step-number-input');
+                if (stepInput) {
+                    stepInput.name = `Modules[${idx}].StepNumber`;
+                    stepInput.value = idx + 1;
+                }
+
+                item.querySelectorAll('input, textarea').forEach(input => {
+                    if (input.name && input.name.startsWith('Modules[')) {
+                        input.name = input.name.replace(/Modules\[\d+\]/, `Modules[${idx}]`);
+                    }
+                });
+            });
+        }
+    </script>
+}

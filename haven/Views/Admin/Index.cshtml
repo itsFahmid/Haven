@@ -15,7 +15,7 @@
                 হেভেন অ্যাডমিন ও সিকিউরিটি কন্ট্রোল
             </h1>
             <p class="text-xs text-slate-300 mt-1">
-                লাইসেন্স ভেরিফিকেশন, সংকট অ্যালার্ট অডিট এবং সিস্টেম অডিট ট্রেইল (FR-10, FR-12)
+                লাইসেন্স ভেরিফিকেশন, থেরাপিস্ট কোর্স অনুমোদন এবং সিস্টেম অডিট ট্রেইল (FR-9, FR-10, FR-12)
             </p>
         </div>
 
@@ -25,17 +25,82 @@
                 <div class="text-[10px] text-slate-400">মোট ইউজার</div>
             </div>
             <div class="bg-slate-800 px-4 py-2.5 rounded-2xl border border-slate-700">
-                <div class="text-lg font-black text-amber-400">@Model.PendingTherapists.Count</div>
-                <div class="text-[10px] text-slate-400">পেন্ডিং লাইসেন্স</div>
+                <div class="text-lg font-black text-amber-400">@Model.PendingCourses.Count</div>
+                <div class="text-[10px] text-slate-400">পেন্ডিং কোর্স</div>
             </div>
             <div class="bg-slate-800 px-4 py-2.5 rounded-2xl border border-slate-700">
-                <div class="text-lg font-black text-sky-400">@Model.TotalAppointmentsCount</div>
-                <div class="text-[10px] text-slate-400">থেরাপি সেশন</div>
+                <div class="text-lg font-black text-sky-400">@Model.PendingTherapists.Count</div>
+                <div class="text-[10px] text-slate-400">পেন্ডিং লাইসেন্স</div>
             </div>
         </div>
     </div>
 
-    <!-- Section 1: Pending Therapist License Review (FR-10, UC-24) -->
+    <!-- Section 1: Pending Course Review & Approval (FR-9, UC-22) -->
+    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+                <h3 class="text-base font-bold text-slate-900" data-bn="থেরাপিস্ট প্রকাশিত পেন্ডিং কোর্স অনুমোদন (FR-9, UC-22)" data-en="Pending Course Approvals">
+                    থেরাপিস্ট প্রকাশিত পেন্ডিং কোর্স অনুমোদন (FR-9, UC-22)
+                </h3>
+                <p class="text-xs text-slate-500">থেরাপিস্টদের প্রস্তুতকৃত কোর্সসমূহ পর্যালোচনা করে পাবলিক ক্যাটালগে অনুমোদনের ব্যবস্থা করুন</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900">
+                @Model.PendingCourses.Count Pending Courses
+            </span>
+        </div>
+
+        @if (!Model.PendingCourses.Any())
+        {
+            <div class="text-center py-8 text-xs text-slate-500 bg-slate-50 rounded-2xl border border-slate-100">
+                কোনো পেন্ডিং কোর্স আবেদন নেই। সকল থেরাপিস্ট কোর্স অনুমোদিত।
+            </div>
+        }
+        else
+        {
+            <div class="space-y-4">
+                @foreach (var course in Model.PendingCourses)
+                {
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                        <div class="space-y-1 max-w-2xl">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-teal-100 text-teal-800">
+                                    🏷️ @course.TargetGen
+                                </span>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 text-slate-700">
+                                    @course.CategoryEn
+                                </span>
+                            </div>
+                            <h4 class="text-sm font-black text-slate-900">@course.TitleBn (@course.TitleEn)</h4>
+                            <p class="text-xs text-slate-600 line-clamp-2">@course.DescriptionBn</p>
+                            <p class="text-[11px] text-slate-500">
+                                লেখক (Author): <strong class="text-slate-800">@(course.Author?.FullName ?? "Therapist")</strong> • ⏱️ @course.DurationEn • @course.Modules.Count মডিউল
+                            </p>
+                        </div>
+
+                        <div class="flex items-center gap-2 shrink-0">
+                            <form asp-action="ApproveCourse" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@course.Id" />
+                                <button type="submit" class="px-4 py-2 bg-emerald-700 text-white font-bold text-xs rounded-xl hover:bg-emerald-800 transition">
+                                    অনুমোদন (Approve) ✓
+                                </button>
+                            </form>
+
+                            <form asp-action="RejectCourse" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@course.Id" />
+                                <button type="submit" class="px-4 py-2 bg-rose-100 text-rose-800 font-bold text-xs rounded-xl hover:bg-rose-200 transition">
+                                    বাতিল (Reject) ✕
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <!-- Section 2: Pending Therapist License Review (FR-10, UC-24) -->
     <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
         <div class="flex items-center justify-between pb-4 border-b border-slate-100">
             <div>
@@ -58,28 +123,26 @@
         else
         {
             <div class="space-y-3">
-                @foreach (var prof in Model.PendingTherapists)
+                @foreach (var therapist in Model.PendingTherapists)
                 {
-                    <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                         <div>
-                            <div class="text-xs font-bold text-slate-900">@(prof.User?.FullName ?? "Therapist Profile #" + prof.Id)</div>
-                            <div class="text-[11px] text-slate-600">বিশেষজ্ঞতা: @prof.Specialty | লাইসেন্স নং: <span class="font-mono font-bold">@prof.LicenseNo</span></div>
-                            <div class="text-[10px] text-slate-400">আবেদনের সময়: @prof.SubmittedAt.ToString("g")</div>
+                            <h4 class="text-xs font-bold text-slate-900">@(therapist.User?.FullName ?? "Unknown")</h4>
+                            <p class="text-xs text-slate-600">BMDC: @therapist.LicenseNo • @therapist.Specialty</p>
                         </div>
-
                         <div class="flex items-center gap-2">
-                            <form asp-action="ApproveTherapist" method="post" class="inline">
+                            <form asp-action="ApproveTherapist" method="post">
                                 @Html.AntiForgeryToken()
-                                <input type="hidden" name="id" value="@prof.Id" />
-                                <button type="submit" class="px-3 py-1.5 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl shadow-xs transition">
-                                    অনুমোদন দিন (Approve)
+                                <input type="hidden" name="id" value="@therapist.Id" />
+                                <button type="submit" class="px-3.5 py-1.5 bg-emerald-700 text-white font-bold text-xs rounded-xl hover:bg-emerald-800 transition">
+                                    Approve
                                 </button>
                             </form>
-                            <form asp-action="RejectTherapist" method="post" class="inline">
+                            <form asp-action="RejectTherapist" method="post">
                                 @Html.AntiForgeryToken()
-                                <input type="hidden" name="id" value="@prof.Id" />
-                                <button type="submit" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs rounded-xl transition">
-                                    বাতিল করুন
+                                <input type="hidden" name="id" value="@therapist.Id" />
+                                <button type="submit" class="px-3.5 py-1.5 bg-rose-100 text-rose-800 font-bold text-xs rounded-xl hover:bg-rose-200 transition">
+                                    Reject
                                 </button>
                             </form>
                         </div>
@@ -89,36 +152,32 @@
         }
     </div>
 
-    <!-- Section 2: Security & Admin Audit Logs (FR-12, UC-25) -->
+    <!-- Section 3: Audit Trail Log (FR-12) -->
     <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
-        <div class="pb-4 border-b border-slate-100">
-            <h3 class="text-base font-bold text-slate-900" data-bn="সিকিউরিটি ও সিস্টেম অ্যাডমিন অডিট লগ (FR-12)" data-en="System Audit & Security Logs (FR-12)">
-                সিকিউরিটি ও সিস্টেম অ্যাডমিন অডিট লগ (FR-12)
-            </h3>
-            <p class="text-xs text-slate-500">সংবেদনশীল ডেটা এক্সেস ও প্রশাসনিক পদক্ষেপের ইতিহাস</p>
+        <h3 class="text-base font-bold text-slate-900">অ্যাডমিন ক্রিয়াকলাপ অডিট ট্রেইল (FR-12 Security Audit Log)</h3>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+                <thead>
+                    <tr class="border-b border-slate-200 text-slate-500 font-bold uppercase">
+                        <th class="py-2.5">Time</th>
+                        <th class="py-2.5">Action</th>
+                        <th class="py-2.5">Target</th>
+                        <th class="py-2.5">Details</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    @foreach (var log in Model.AuditLogs)
+                    {
+                        <tr>
+                            <td class="py-2.5 text-slate-400">@log.ExecutedAt.ToString("HH:mm:ss dd MMM")</td>
+                            <td class="py-2.5 font-bold text-slate-800">@log.ActionType</td>
+                            <td class="py-2.5 font-mono text-slate-600">@log.TargetResource</td>
+                            <td class="py-2.5 text-slate-600">@log.ActionDetails</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-
-        @if (!Model.AuditLogs.Any())
-        {
-            <div class="text-center py-6 text-xs text-slate-400 bg-slate-50 rounded-2xl">
-                এখনো কোনো অডিট লগ নেই।
-            </div>
-        }
-        else
-        {
-            <div class="space-y-2">
-                @foreach (var log in Model.AuditLogs)
-                {
-                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
-                        <div>
-                            <span class="font-bold text-teal-800">@log.ActionType</span>
-                            <span class="text-slate-600 ml-2">@log.ActionDetails</span>
-                        </div>
-                        <span class="text-[10px] text-slate-400 font-mono">@log.ExecutedAt.ToString("g")</span>
-                    </div>
-                }
-            </div>
-        }
     </div>
 
 </div>
