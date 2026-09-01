@@ -25,6 +25,98 @@
         </a>
     </div>
 
+    @{
+        var submittedCourses = ViewBag.SubmittedCourses as List<Haven.Models.CourseViewModel> ?? new List<Haven.Models.CourseViewModel>();
+        bool isTherapistOrAdmin = User.IsInRole("Professional") || User.IsInRole("Admin");
+    }
+
+    @if (isTherapistOrAdmin)
+    {
+        <!-- Therapist Submitted Courses Dashboard (Top Section for Therapists) -->
+        <div class="bg-teal-900 text-white rounded-3xl p-6 sm:p-8 border border-teal-800 shadow-xl space-y-6">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-teal-800">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <span class="px-3 py-1 bg-amber-400/20 text-amber-300 border border-amber-400/30 rounded-full text-xs font-black uppercase">
+                            🩺 Therapist Publishing Hub
+                        </span>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-black" data-bn="আপনার জমাদানকৃত কোর্স ও অনুমোদন স্ট্যাটাস" data-en="Your Submitted Courses & Approval Status">
+                        আপনার জমাদানকৃত কোর্স ও অনুমোদন স্ট্যাটাস
+                    </h2>
+                    <p class="text-xs text-teal-200">
+                        আপনার দ্বারা রিভিউয়ের জন্য জমাদানকৃত কোর্স এবং সেগুলোর অ্যাডমিন অনুমোদন পর্যবেক্ষণ করুন।
+                    </p>
+                </div>
+
+                <a asp-action="Create" class="px-5 py-2.5 bg-amber-400 hover:bg-amber-300 text-teal-950 font-black text-xs rounded-2xl shadow-md transition shrink-0 flex items-center gap-1.5">
+                    <span>+</span>
+                    <span>নতুন কোর্স প্রস্তাব জমা দিন (Create Course)</span>
+                </a>
+            </div>
+
+            @if (!submittedCourses.Any())
+            {
+                <div class="bg-teal-950/60 rounded-2xl p-6 text-center border border-teal-800 space-y-2">
+                    <p class="text-xs text-teal-200 font-semibold">আপনি এখনো কোনো নতুন কোর্স জমা দেননি।</p>
+                    <a asp-action="Create" class="inline-block text-xs font-bold text-amber-300 hover:underline">
+                        প্রথম কোর্স তৈরি করুন ➔
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @foreach (var c in submittedCourses)
+                    {
+                        <div class="bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-3 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-800 text-teal-300 border border-slate-700">
+                                        @c.CategoryEn
+                                    </span>
+
+                                    @if (c.ApprovalStatus == "Pending")
+                                    {
+                                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse">
+                                            ⏳ অনুমোদনের অপেক্ষায় (Pending)
+                                        </span>
+                                    }
+                                    else if (c.ApprovalStatus == "Approved")
+                                    {
+                                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                                            ✅ অনুমোদিত (Approved)
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                                            ❌ প্রত্যাখ্যাত (Rejected)
+                                        </span>
+                                    }
+                                </div>
+
+                                <h3 class="text-base font-bold text-white leading-snug">
+                                    @c.TitleBn
+                                </h3>
+                                <p class="text-xs text-slate-400 line-clamp-2">
+                                    @c.DescriptionBn
+                                </p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
+                                <span>📚 মডিউল: @c.ModuleCount টি</span>
+                                <a asp-action="Details" asp-route-id="@c.Id" class="text-teal-400 hover:text-teal-300 font-bold transition">
+                                    প্রিভিউ দেখুন ➔
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+
     @if (!Model.Any())
     {
         <div class="bg-white rounded-3xl p-12 text-center border border-slate-200 space-y-4">

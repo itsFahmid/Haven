@@ -37,6 +37,7 @@ public class CourseViewModel
     public double Rating { get; set; } = 4.9; // Capped at 5.0
     public int EnrolledCount { get; set; } = 1420;
     public string ApprovalStatus { get; set; } = "Approved"; // Pending, Approved, Rejected
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public string BadgeEn { get; set; } = "Essential";
     public string BadgeBn { get; set; } = "অপরিহার্য";

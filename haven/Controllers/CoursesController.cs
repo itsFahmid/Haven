@@ -212,6 +212,41 @@ public class CoursesController : Controller
             enrolledCourses.Add(vm);
         }
 
+        List<CourseViewModel> submittedCourses = new();
+        if (User.IsInRole("Professional") || User.IsInRole("Admin"))
+        {
+            var authorCourses = await _db.Courses
+                .Include(c => c.Modules)
+                .Where(c => c.AuthorId == userId)
+                .OrderByDescending(c => c.CreatedAt)
+                .ToListAsync();
+
+            submittedCourses = authorCourses.Select(c => new CourseViewModel
+            {
+                Id = c.Id,
+                TitleEn = c.TitleEn,
+                TitleBn = c.TitleBn,
+                DescriptionEn = c.DescriptionEn,
+                DescriptionBn = c.DescriptionBn,
+                CategoryEn = c.CategoryEn,
+                CategoryBn = c.CategoryBn,
+                TargetGen = c.TargetGen,
+                TargetGenBn = GetTargetGenBn(c.TargetGen),
+                Language = string.IsNullOrWhiteSpace(c.Language) ? "Bangla" : c.Language,
+                Duration = c.DurationEn,
+                DurationBn = c.DurationBn,
+                ModuleCount = c.Modules.Count,
+                IsFree = c.IsFree,
+                IsPayWhatYouWant = c.IsPayWhatYouWant,
+                SuggestedFeeBDT = c.Price,
+                Rating = c.Rating,
+                ApprovalStatus = c.ApprovalStatus,
+                CreatedAt = c.CreatedAt
+            }).ToList();
+        }
+
+        ViewBag.SubmittedCourses = submittedCourses;
+
         return View("MyCourses", enrolledCourses);
     }
 
