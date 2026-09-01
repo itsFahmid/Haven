@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "মনোবিজ্ঞান ও সুরক্ষা নিবন্ধ হাব | Safety Articles";
     var selectedCategory = ViewData["SelectedCategory"] as string ?? "All";
+    var bookmarkedArticleIds = ViewBag.BookmarkedArticleIds as List<int> ?? new List<int>();
 }
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
@@ -20,25 +21,38 @@
             </p>
         </div>
 
-        @if (User.Identity?.IsAuthenticated == true)
-        {
-            <a asp-action="Create" class="px-5 py-3 bg-teal-700 hover:bg-teal-600 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-2 shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                <span data-bn="নতুন নিবন্ধ লিখুন (FR-9)" data-en="Publish Article (FR-9)">নতুন নিবন্ধ লিখুন (FR-9)</span>
-            </a>
-        }
+        <div class="flex items-center gap-3 shrink-0">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <a asp-controller="Account" asp-action="Bookmarks" class="px-4 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-xs transition flex items-center gap-1.5">
+                    <span>🔖</span>
+                    <span>আমার বুকমার্কস</span>
+                </a>
+            }
+
+            @if (User.IsInRole("Professional") || User.IsInRole("Admin"))
+            {
+                <a asp-action="Create" class="px-4 py-3 bg-teal-600 hover:bg-teal-500 text-white font-black text-xs rounded-xl shadow-xs transition flex items-center gap-1.5">
+                    <span>✍️</span>
+                    <span>নতুন নিবন্ধ লিখুন</span>
+                </a>
+            }
+        </div>
     </div>
 
     <!-- Category Filter Bar -->
-    <div class="bg-white rounded-2xl p-2.5 border border-slate-200 shadow-sm flex items-center gap-2 overflow-x-auto">
-        <a asp-action="Index" asp-route-category="All" class="px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap @(selectedCategory == "All" ? "bg-teal-700 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200")">
-            সকল নিবন্ধ
+    <div class="bg-white rounded-2xl p-3 border border-slate-200 shadow-sm flex items-center gap-2 overflow-x-auto">
+        <a asp-action="Index" asp-route-category="All" class="px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap @(selectedCategory == "All" ? "bg-teal-800 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200")">
+            সকল নিবন্ধ (All)
         </a>
-        <a asp-action="Index" asp-route-category="Grooming Prevention" class="px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap @(selectedCategory == "Grooming Prevention" ? "bg-teal-700 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200")">
-            গ্রুমিং প্রতিরোধ
+        <a asp-action="Index" asp-route-category="Grooming Prevention" class="px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap @(selectedCategory == "Grooming Prevention" ? "bg-teal-800 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200")">
+            গ্রুমিং প্রতিরোধ (Grooming)
         </a>
-        <a asp-action="Index" asp-route-category="Cyber Harassment" class="px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap @(selectedCategory == "Cyber Harassment" ? "bg-teal-700 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200")">
+        <a asp-action="Index" asp-route-category="Cyber Harassment" class="px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap @(selectedCategory == "Cyber Harassment" ? "bg-teal-800 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200")">
             সাইবার ব্ল্যাকমেইল ও বুলিং
+        </a>
+        <a asp-action="Index" asp-route-category="Mental Health" class="px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap @(selectedCategory == "Mental Health" ? "bg-teal-800 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200")">
+            মানসিক স্বাস্থ্য (Mental Health)
         </a>
     </div>
 
@@ -46,23 +60,45 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         @foreach (var article in Model)
         {
+            var isSaved = bookmarkedArticleIds.Contains(article.Id);
             <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
                 <div class="space-y-3">
-                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200">
-                        @article.Category
-                    </span>
-                    <h3 class="text-lg font-bold text-slate-900 leading-snug">
-                        @article.TitleBn
-                    </h3>
-                    <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">
-                        @article.ContentMarkdown
-                    </p>
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-black bg-teal-50 text-teal-800 border border-teal-200 uppercase">
+                            @article.Category
+                        </span>
+
+                        <!-- Bookmark Button Toggle -->
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <form asp-action="ToggleBookmark" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="articleId" value="@article.Id" />
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                <button type="submit" class="px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1 @(isSaved ? "bg-amber-100 text-amber-900 border border-amber-300" : "bg-slate-100 text-slate-600 hover:bg-amber-50 hover:text-amber-800")">
+                                    <span>🔖</span>
+                                    <span>@(isSaved ? "সংরক্ষিত" : "বুকমার্ক")</span>
+                                </button>
+                            </form>
+                        }
+                    </div>
+
+                    <a asp-action="Details" asp-route-id="@article.Id" class="block space-y-2 group">
+                        <h3 class="text-lg font-black text-slate-900 group-hover:text-teal-700 transition leading-snug">
+                            @article.TitleBn
+                        </h3>
+                        <p class="text-xs text-slate-500 font-semibold">@article.TitleEn</p>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed pt-1">
+                            @article.ContentMarkdown
+                        </p>
+                    </a>
                 </div>
 
                 <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-                    <span class="text-[11px] text-slate-400 font-medium">@article.CreatedAt.ToString("MMM dd, yyyy")</span>
-                    <a asp-action="Details" asp-route-id="@article.Id" class="text-xs font-bold text-teal-700 hover:text-teal-800 transition">
-                        সম্পূর্ণ পড়ুন ➔
+                    <span class="text-[11px] text-slate-400 font-medium">📅 @article.CreatedAt.ToString("MMM dd, yyyy")</span>
+                    <a asp-action="Details" asp-route-id="@article.Id" class="text-xs font-bold text-teal-800 hover:text-teal-900 transition flex items-center gap-1">
+                        <span>সম্পূর্ণ পড়ুন</span>
+                        <span>➔</span>
                     </a>
                 </div>
             </div>

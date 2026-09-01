@@ -246,7 +246,21 @@ public class AccountController : Controller
     [Authorize]
     public async Task<IActionResult> Bookmarks()
     {
-        var bookmarkedArticles = await _db.Articles.OrderByDescending(a => a.CreatedAt).Take(6).ToListAsync();
+        int userId = 0;
+        var claim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (int.TryParse(claim, out int uid))
+        {
+            userId = uid;
+        }
+
+        var bookmarkedArticles = await _db.ArticleBookmarks
+            .Include(b => b.Article)
+                .ThenInclude(a => a!.Author)
+            .Where(b => b.UserId == userId && b.Article != null)
+            .OrderByDescending(b => b.BookmarkedAt)
+            .Select(b => b.Article!)
+            .ToListAsync();
+
         return View(bookmarkedArticles);
     }
 
