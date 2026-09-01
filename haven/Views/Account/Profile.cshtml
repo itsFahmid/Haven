@@ -10,17 +10,20 @@
         <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             
             <div class="flex items-center gap-5">
-                <div class="relative group">
+                <div class="relative group cursor-pointer shrink-0" onclick="openFullPhotoModal('@(string.IsNullOrWhiteSpace(Model.ProfilePictureUrl) ? "" : Model.ProfilePictureUrl)', '@Model.FullName')" title="পূর্ণ ছবি দেখুন / View Full Picture">
                     @if (!string.IsNullOrWhiteSpace(Model.ProfilePictureUrl))
                     {
-                        <img src="@Model.ProfilePictureUrl" alt="@Model.FullName" class="w-20 h-20 rounded-2xl object-cover border-2 border-teal-500/50 shadow-md" />
+                        <img src="@Model.ProfilePictureUrl" alt="@Model.FullName" class="w-20 h-20 rounded-2xl object-cover border-2 border-teal-500/50 shadow-md group-hover:scale-105 transition-transform" />
                     }
                     else
                     {
-                        <div class="w-20 h-20 rounded-2xl bg-teal-700 text-white flex items-center justify-center text-3xl font-black shadow-md shrink-0">
+                        <div class="w-20 h-20 rounded-2xl bg-teal-700 text-white flex items-center justify-center text-3xl font-black shadow-md shrink-0 group-hover:scale-105 transition-transform">
                             @(string.IsNullOrWhiteSpace(Model.FullName) ? "H" : Model.FullName.Substring(0, 1).ToUpper())
                         </div>
                     }
+                    <div class="absolute inset-0 bg-slate-900/40 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold">
+                        🔍 বড় করে দেখুন
+                    </div>
                 </div>
 
                 <div class="space-y-1">
@@ -315,6 +318,18 @@
     </div>
 </div>
 
+<!-- 5. Full Photo Lightbox Preview Modal -->
+<div id="fullPhotoModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md" onclick="closeProfileModal('fullPhotoModal')">
+    <div class="relative max-w-xl w-full p-4 flex flex-col items-center justify-center space-y-4 my-auto" onclick="event.stopPropagation()">
+        <button type="button" onclick="closeProfileModal('fullPhotoModal')" class="absolute -top-10 right-2 text-white/80 hover:text-white text-2xl font-bold">✕</button>
+        <div class="rounded-3xl overflow-hidden shadow-2xl border border-slate-700 max-h-[80vh] flex items-center justify-center bg-slate-900 p-2 w-full">
+            <img id="fullPhotoImage" src="" alt="Full Profile Photo" class="max-h-[75vh] max-w-full w-auto h-auto object-contain rounded-2xl" />
+            <div id="fullPhotoInitial" class="w-44 h-44 rounded-3xl bg-teal-700 text-white flex items-center justify-center text-6xl font-black hidden"></div>
+        </div>
+        <p id="fullPhotoCaption" class="text-sm font-extrabold text-white tracking-wide text-center"></p>
+    </div>
+</div>
+
 <script>
     function openProfileModal(id) {
         const m = document.getElementById(id);
@@ -328,6 +343,28 @@
         if (m) {
             m.classList.add('hidden');
             m.style.display = 'none';
+        }
+    }
+    function openFullPhotoModal(url, name) {
+        const m = document.getElementById('fullPhotoModal');
+        const img = document.getElementById('fullPhotoImage');
+        const init = document.getElementById('fullPhotoInitial');
+        const caption = document.getElementById('fullPhotoCaption');
+        
+        if (url && url.trim() !== '') {
+            img.src = url;
+            img.classList.remove('hidden');
+            init.classList.add('hidden');
+        } else {
+            img.classList.add('hidden');
+            init.classList.remove('hidden');
+            init.innerText = name ? name.substring(0, 1).toUpperCase() : 'H';
+        }
+        caption.innerText = name ? name + " - Profile Photo" : "Profile Photo";
+        
+        if (m) {
+            m.classList.remove('hidden');
+            m.style.display = 'flex';
         }
     }
 </script>
