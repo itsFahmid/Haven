@@ -18,9 +18,21 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 
-// Register Microsoft SQL Server Entity Framework Core Database
+// Register Entity Framework Core Database with automatic SQLite fallback for Cloud/Docker environments
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<HavenDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    if (string.IsNullOrWhiteSpace(connectionString) || connectionString.Contains("SQLEXPRESS") || connectionString.Contains("haven.db"))
+    {
+        string dbPath = Path.Combine(builder.Environment.ContentRootPath, "haven.db");
+        options.UseSqlite($"Data Source={dbPath}");
+    }
+    else
+    {
+        options.UseSqlServer(connectionString);
+    }
+});
 
 // Register Security & Authentication Services
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
@@ -61,17 +73,20 @@ using (var scope = app.Services.CreateScope())
         var db = scope.ServiceProvider.GetRequiredService<HavenDbContext>();
         try
         {
-            db.Database.Migrate();
+            if (db.Database.IsSqlServer())
+            {
+                db.Database.Migrate();
+            }
+            else
+            {
+                db.Database.EnsureCreated();
+            }
         }
         catch (Exception migEx)
         {
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-            logger.LogWarning(migEx, "SQL Server migration skipped or connection pending. Creating schema fallback.");
-            try
-            {
-                db.Database.EnsureCreated();
-            }
-            catch { }
+            logger.LogWarning(migEx, "Database migration fallback triggered.");
+            try { db.Database.EnsureCreated(); } catch { }
         }
 
         var hasher = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.IPasswordHasher<User>>();
