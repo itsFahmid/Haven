@@ -37,5 +37,13 @@ public class CourseModule
     [MaxLength(50)]
     public string DurationEn { get; set; } = "10 Mins";
 
+    [MaxLength(500)]
+    public string ShortDescriptionBn { get; set; } = string.Empty;
+
+    [MaxLength(500)]
+    public string ShortDescriptionEn { get; set; } = string.Empty;
+
     public string ContentMarkdown { get; set; } = string.Empty;
+
+    public string OptionalMaterials { get; set; } = string.Empty; // Resource links, downloadable materials
 }

@@ -50,6 +50,9 @@ public class Course
     [MaxLength(50)]
     public string TargetGen { get; set; } = "Gen Z & Alpha";
 
+    [MaxLength(50)]
+    public string Language { get; set; } = "Bangla"; // Bangla, English, Bilingual
+
     public double Rating { get; set; } = 4.9;
 
     public int EnrolledCount { get; set; } = 0;
