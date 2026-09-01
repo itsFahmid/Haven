@@ -1,2 +1,3 @@
 checkpoint progress step 1
 checkpoint progress step 2
+checkpoint progress step 3
