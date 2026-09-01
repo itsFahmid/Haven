@@ -1,0 +1,56 @@
+@{
+    ViewData["Title"] = "১৮+ বয়সসীমা ও নিরাপত্তা গেটওয়ে | Age-Gated Safe Space";
+    var reason = ViewBag.AgeGateReason as string ?? "কমিউনিটি সেকশনটিতে প্রবেশের জন্য আপনার বয়স ১৮+ হতে হবে।";
+    var isUnderage = ViewBag.IsUnderage == true;
+}
+
+<div class="max-w-3xl mx-auto px-4 py-16 text-center space-y-8">
+
+    <div class="w-20 h-20 rounded-3xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center mx-auto text-3xl font-black shadow-md animate-bounce">
+        🔞
+    </div>
+
+    <div class="space-y-3">
+        <span class="px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300">
+            HAVEN 18+ Safe Sanctuary Protection
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight" data-bn="১৮+ বয়সসীমা ও নিরাপত্তা গেটওয়ে" data-en="18+ Age-Restricted Sanctuary">
+            ১৮+ বয়সসীমা ও নিরাপত্তা গেটওয়ে
+        </h1>
+        <p class="text-sm sm:text-base text-slate-600 max-w-xl mx-auto leading-relaxed">
+            @reason
+        </p>
+    </div>
+
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm max-w-md mx-auto space-y-4 text-left">
+        <h3 class="text-xs font-black text-slate-900 uppercase tracking-wider">📌 বয়সসীমা নীতি (Safety Protocol):</h3>
+        <ul class="text-xs text-slate-600 space-y-2">
+            <li class="flex items-start gap-2">
+                <span class="text-teal-700 font-bold">✓</span>
+                <span>পিয়ার-টু-পিয়ার গল্প ও অভিজ্ঞতা বিনিময়ের প্ল্যাটফর্মটি শুধুমাত্র ১৮ বছর বা তদূর্ধ্ব তরুণদের জন্য।</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-teal-700 font-bold">✓</span>
+                <span>কিশোর ও শিশুদের নিরাপত্তার জন্য আমাদের ১৮ বছরের কম বয়সের ইউজারদের ক্ষেত্রে বিশেষ ফিল্টারিং প্রয়োগ করা হয়।</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-teal-700 font-bold">✓</span>
+                <span>আপনার সুরক্ষা সংক্রান্ত যেকোনো কোর্স বা নির্দেশিকা পেতে আমাদের কোর্স হাবে ফ্রিতে অংশ নিন।</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+        @if (User.Identity?.IsAuthenticated != true)
+        {
+            <a asp-controller="Account" asp-action="Login" class="px-6 py-3 bg-teal-800 hover:bg-teal-900 text-white font-extrabold text-xs rounded-2xl shadow-md transition w-full sm:w-auto">
+                লগইন করে বয়স নিশ্চিত করুন 🔐
+            </a>
+        }
+        
+        <a asp-controller="Courses" asp-action="Index" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-2xl transition w-full sm:w-auto">
+            সুরক্ষা কোর্স হাব দেখুন ➔
+        </a>
+    </div>
+
+</div>

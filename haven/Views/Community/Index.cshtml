@@ -1,61 +1,170 @@
-@model IEnumerable<Haven.Controllers.CommunityPost>
+@model IEnumerable<Haven.Models.CommunityPost>
 @{
-    ViewData["Title"] = "বেনামী সাপোর্ট ফোরাম & রিপোর্ট | Anonymous Community";
+    ViewData["Title"] = "১৮+ পিয়ার সাপোর্ট ও গল্প বিনিময় কমিউনিটি | Community Sanctuary";
+    var selectedCategory = ViewData["SelectedCategory"] as string ?? "All";
 }
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-    
-    <!-- Hero Header -->
-    <div class="bg-slate-900 text-white rounded-3xl p-8 border border-slate-800 shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div class="max-w-2xl space-y-3">
-            <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full text-xs font-bold uppercase tracking-wider">
-                Anonymous Peer Support & Incident Guard
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+
+    <!-- Hero Header Bar -->
+    <div class="bg-slate-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl border border-slate-800 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+        <div class="space-y-3 max-w-3xl">
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-full text-xs font-black uppercase tracking-wider">
+                <span>🔞 18+ Peer Support Sanctuary</span>
             </span>
-            <h1 class="text-3xl sm:text-4xl font-black tracking-tight" data-bn="বেনামী সমমনা সাপোর্ট ফোরাম (UC-20)" data-en="Anonymous Peer Support Community (UC-20)">
-                বেনামী সমমনা সাপোর্ট ফোরাম (UC-20)
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight" data-bn="গল্প ও অভিজ্ঞতা বিনিময় কমিউনিটি" data-en="Stories & Peer Experience Community">
+                গল্প ও অভিজ্ঞতা বিনিময় কমিউনিটি
             </h1>
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                র্যান্ডম অ্যালিয়াস (Random Aliases) ব্যবহার করে নিজের পরিচয় গোপন রেখে অভিজ্ঞতার কথা শুনুন এবং জানুন।
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed" data-bn="১৮+ তরুণদের নিরাপদ ওপেন স্পেস। সাইবার হয়রানি প্রতিরোধ, মানসিক সহনশীলতা ও বাস্তব অভিজ্ঞতা শেয়ার করুন। সম্পূর্ণ বেনামী থেকে অন্যদের অনুপ্রেরণা দিন।" data-en="Safe peer space for 18+ youth. Share stories, real life experiences, advice, and support others with complete anonymity option.">
+                ১৮+ তরুণদের নিরাপদ ওপেন স্পেস। সাইবার হয়রানি প্রতিরোধ, মানসিক সহনশীলতা ও বাস্তব অভিজ্ঞতা শেয়ার করুন। সম্পূর্ণ বেনামী থেকে অন্যদের অনুপ্রেরণা দিন।
             </p>
         </div>
 
-        <a asp-action="ReportIncident" class="px-5 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-2 shrink-0">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-            <span data-bn="নিরাপত্তা ঘটনা রিপোর্ট করুন (UC-21)" data-en="Report Safety Incident (UC-21)">নিরাপত্তা ঘটনা রিপোর্ট করুন (UC-21)</span>
+        <!-- Renamed "Post Here" Action Button per User Request -->
+        <div class="shrink-0 w-full lg:w-auto">
+            <a asp-action="CreatePost" class="w-full lg:w-auto px-6 py-4 bg-teal-500 hover:bg-teal-400 text-slate-950 font-black text-sm rounded-2xl shadow-lg transition flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" /></svg>
+                <span data-bn="এখানে আপনার গল্প লিখুন (Post Here)" data-en="Post Here">Post Here</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="flex flex-wrap items-center gap-2 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+        <span class="text-xs font-bold text-slate-500 mr-2">বিষয়শ্রেণী:</span>
+        <a asp-action="Index" asp-route-category="All" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition @(selectedCategory == "All" ? "bg-teal-800 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200")">
+            সকল পোস্ট (All)
+        </a>
+        <a asp-action="Index" asp-route-category="Story" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition @(selectedCategory == "Story" ? "bg-teal-800 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200")">
+            গল্প (Story)
+        </a>
+        <a asp-action="Index" asp-route-category="Experience" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition @(selectedCategory == "Experience" ? "bg-teal-800 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200")">
+            বাস্তব অভিজ্ঞতা (Experience)
+        </a>
+        <a asp-action="Index" asp-route-category="Advice" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition @(selectedCategory == "Advice" ? "bg-teal-800 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200")">
+            পরামর্শ (Advice)
         </a>
     </div>
 
-    <!-- Posts Feed Grid -->
-    <div class="space-y-4">
-        @foreach (var post in Model)
-        {
-            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-3">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <span class="w-8 h-8 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-xs font-mono">
-                            @post.AnonymousAlias.Substring(0, 2)
-                        </span>
-                        <div>
-                            <div class="text-xs font-bold text-slate-800">@post.AnonymousAlias</div>
-                            <div class="text-[10px] text-slate-400">@post.CreatedAt.ToString("g")</div>
-                        </div>
-                    </div>
-                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200">
-                        @post.Topic
-                    </span>
-                </div>
-
-                <h3 class="text-base font-bold text-slate-900">@post.Title</h3>
-                <p class="text-xs text-slate-600 leading-relaxed">@post.Content</p>
-
-                <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                    <span>💬 @post.CommentCount টি মন্তব্য</span>
-                    <button type="button" onclick="showToast('মন্তব্য সেশন গোপন রাখা হয়েছে')" class="text-teal-700 font-bold hover:underline">
-                        মন্তব্য যুক্ত করুন ➔
-                    </button>
-                </div>
+    <!-- Community Posts Grid & Comment Feed -->
+    @if (!Model.Any())
+    {
+        <div class="bg-white rounded-3xl p-12 text-center border border-slate-200 space-y-4">
+            <div class="w-16 h-16 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center mx-auto text-2xl font-bold">
+                💬
             </div>
-        }
-    </div>
+            <h3 class="text-lg font-bold text-slate-800">এখনো কোনো গল্প/অভিজ্ঞতা শেয়ার করা হয়নি</h3>
+            <p class="text-xs text-slate-500 max-w-md mx-auto">প্রথম ব্যক্তি হিসেবে আপনার বাস্তব অভিজ্ঞতা বা গল্প কমিউনিটির সাথে শেয়ার করুন!</p>
+            <a asp-action="CreatePost" class="inline-block px-5 py-2.5 bg-teal-800 text-white text-xs font-bold rounded-xl hover:bg-teal-900 transition">
+                Post Here ➔
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="space-y-6">
+            @foreach (var post in Model)
+            {
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+                    
+                    <!-- Post Header -->
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="space-y-1.5">
+                            <div class="flex items-center gap-2">
+                                <span class="px-3 py-1 bg-teal-50 text-teal-800 border border-teal-200 rounded-full text-[11px] font-black uppercase">
+                                    @post.Category
+                                </span>
+                                <span class="text-xs text-slate-400 font-medium">• @post.CreatedAt.ToString("dd MMM, yyyy - hh:mm tt")</span>
+                            </div>
+
+                            <h2 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">
+                                @post.Title
+                            </h2>
+
+                            <!-- Author Anonymity Check -->
+                            <div class="flex items-center gap-2 pt-1 text-xs text-slate-600 font-semibold">
+                                <div class="w-7 h-7 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center justify-center">
+                                    @(post.IsAnonymous || post.User == null ? "👤" : post.User.FullName.Substring(0, 1).ToUpper())
+                                </div>
+                                <span>
+                                    @(post.IsAnonymous || post.User == null ? "Anonymous Youth (বেনামী ব্যবহারকারী)" : post.User.FullName)
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Report Post Button -->
+                        <form asp-action="ReportPost" method="post" onsubmit="return confirm('আপনি কি নিশ্চিত যে এই পোস্টটির বিরুদ্ধে রিপোর্ট করতে চান?');">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="postId" value="@post.Id" />
+                            <button type="submit" class="px-3 py-1.5 bg-slate-100 hover:bg-rose-50 hover:text-rose-700 text-slate-500 font-bold text-xs rounded-xl border border-slate-200 transition flex items-center gap-1 shrink-0" title="Report this post">
+                                <span>🚩</span>
+                                <span>রিপোর্ট করুন</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Post Body Content -->
+                    <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200 text-xs sm:text-sm text-slate-800 leading-relaxed font-sans whitespace-pre-wrap">
+                        @post.Content
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="pt-4 border-t border-slate-100 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs font-black uppercase tracking-wider text-slate-700">
+                                মন্তব্য সমূহ (Comments - @post.Comments.Count)
+                            </h4>
+                        </div>
+
+                        <!-- Existing Comments Feed -->
+                        @if (post.Comments.Any())
+                        {
+                            <div class="space-y-2.5">
+                                @foreach (var comment in post.Comments.OrderBy(c => c.CreatedAt))
+                                {
+                                    <div class="p-3.5 rounded-2xl bg-white border border-slate-200 text-xs space-y-1">
+                                        <div class="flex items-center justify-between">
+                                            <span class="font-bold text-slate-900">
+                                                @(comment.IsAnonymous || comment.User == null ? "👤 Anonymous Youth" : comment.User.FullName)
+                                            </span>
+                                            <span class="text-[10px] text-slate-400">@comment.CreatedAt.ToString("dd MMM, hh:mm tt")</span>
+                                        </div>
+                                        <p class="text-slate-700">@comment.CommentText</p>
+                                    </div>
+                                }
+                            </div>
+                        }
+
+                        <!-- Add Comment Form -->
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <form asp-action="AddComment" method="post" class="space-y-3 pt-2">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="postId" value="@post.Id" />
+
+                                <div class="flex flex-col sm:flex-row items-end gap-3">
+                                    <div class="w-full space-y-1">
+                                        <input type="text" name="commentText" required placeholder="আপনার মতামত বা অনুপ্রেরণামূলক মন্তব্য লিখুন..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none" />
+                                    </div>
+
+                                    <div class="flex items-center gap-3 shrink-0">
+                                        <label class="flex items-center gap-1.5 cursor-pointer text-xs font-bold text-slate-700 select-none">
+                                            <input type="checkbox" name="isAnonymous" value="true" checked class="w-4 h-4 text-teal-700 rounded" />
+                                            <span>বেনামী (Anonymous)</span>
+                                        </label>
+
+                                        <button type="submit" class="px-4 py-3 bg-teal-800 hover:bg-teal-900 text-white font-extrabold text-xs rounded-2xl transition shadow-xs">
+                                            মন্তব্য করুন ➔
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        }
+                    </div>
+
+                </div>
+            }
+        </div>
+    }
 
 </div>

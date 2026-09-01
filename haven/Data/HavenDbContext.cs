@@ -23,6 +23,10 @@ public class HavenDbContext : DbContext
     public DbSet<CrisisAlert> CrisisAlerts => Set<CrisisAlert>();
     public DbSet<AdminAuditLog> AdminAuditLogs => Set<AdminAuditLog>();
     public DbSet<Review> Reviews => Set<Review>();
+    public DbSet<ArticleBookmark> ArticleBookmarks => Set<ArticleBookmark>();
+    public DbSet<CommunityPost> CommunityPosts => Set<CommunityPost>();
+    public DbSet<CommunityComment> CommunityComments => Set<CommunityComment>();
+    public DbSet<PostReport> PostReports => Set<PostReport>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

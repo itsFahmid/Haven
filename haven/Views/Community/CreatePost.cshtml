@@ -1,0 +1,72 @@
+@model Haven.Models.CommunityPost
+@{
+    ViewData["Title"] = "গল্প ও অভিজ্ঞতা শেয়ার করুন (Post Here) | Community";
+}
+
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    
+    <div class="p-8 rounded-3xl bg-slate-900 text-white shadow-xl border border-slate-800 space-y-2">
+        <span class="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-full text-xs font-black uppercase tracking-wider">
+            🔞 18+ Peer Support Sanctuary
+        </span>
+        <h1 class="text-2xl sm:text-3xl font-black" data-bn="আপনার গল্প বা অভিজ্ঞতা শেয়ার করুন" data-en="Share Your Story or Experience">
+            আপনার গল্প বা অভিজ্ঞতা শেয়ার করুন
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-300">
+            সাইবার নিরাপত্তা, ব্যক্তিগত ভীতি জয় করা বা মানসিক স্থিতিস্থাপকতার বাস্তব অভিজ্ঞতা শেয়ার করে অন্যান্য তরুণদের সাহায্য করুন।
+        </p>
+    </div>
+
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+        <form asp-action="CreatePost" method="post" class="space-y-6">
+            @Html.AntiForgeryToken()
+
+            <!-- Topic Category -->
+            <div class="space-y-1">
+                <label class="block text-xs font-extrabold text-slate-800">পোস্টের ক্যাটাগরি (Topic Category) *</label>
+                <select asp-for="Category" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-700 focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                    <option value="Experience">বাস্তব অভিজ্ঞতা (Experience)</option>
+                    <option value="Story">গল্প (Story)</option>
+                    <option value="Advice">পরামর্শ (Advice)</option>
+                    <option value="General">সাধারণ আলোচনা (General)</option>
+                </select>
+            </div>
+
+            <!-- Title -->
+            <div class="space-y-1">
+                <label class="block text-xs font-extrabold text-slate-800">পোস্টের শিরোনাম (Post Title) *</label>
+                <input type="text" asp-for="Title" required placeholder="যেমন: মেসেঞ্জারে অনাকাঙ্ক্ষিত মেসেজ আসার পর যেভাবে নিজেকে নিরাপদ রেখেছিলাম..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none" />
+            </div>
+
+            <!-- Story / Experience Text Content -->
+            <div class="space-y-1">
+                <label class="block text-xs font-extrabold text-slate-800">আপনার গল্প বা বিস্তারিত অভিজ্ঞতা (Story & Content) *</label>
+                <textarea asp-for="Content" rows="6" required placeholder="আপনার ঘটনাটি কীভাবে ঘটেছিল, আপনি কীভাবে মোকাবিলা করেছিলেন এবং অন্যদের জন্য কী শিক্ষা রয়েছে তা বিস্তারিত লিখুন..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none leading-relaxed"></textarea>
+            </div>
+
+            <!-- Anonymity Choice -->
+            <div class="p-4 bg-teal-50 rounded-2xl border border-teal-200 flex items-center justify-between">
+                <div class="space-y-0.5">
+                    <h4 class="text-xs font-black text-teal-950">বেনামী পরিচিতি নীতি (Anonymous Option):</h4>
+                    <p class="text-[11px] text-teal-800">টিক চিহ্ন দেওয়া থাকলে পোস্টে আপনার নাম বা প্রোফাইল ছবি গোপন রাখা হবে (Anonymous Youth)।</p>
+                </div>
+                <label class="flex items-center gap-2 cursor-pointer text-xs font-black text-teal-900 shrink-0 select-none">
+                    <input type="checkbox" asp-for="IsAnonymous" checked class="w-5 h-5 text-teal-700 rounded" />
+                    <span>বেনামী থাকুন</span>
+                </label>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                <a asp-action="Index" class="px-5 py-2.5 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-200 transition">
+                    বাতিল (Cancel)
+                </a>
+                <button type="submit" class="px-6 py-2.5 bg-teal-800 hover:bg-teal-900 text-white font-extrabold text-xs rounded-xl shadow-md transition">
+                    পোস্ট প্রকাশ করুন (Publish Post) ➔
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
