@@ -156,7 +156,7 @@ public class AccountController : Controller
     [HttpPost]
     [Authorize]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdateProfile(string fullName, string? profilePictureUrl)
+    public async Task<IActionResult> UpdateProfile(string fullName, IFormFile? profileImage, [FromServices] IWebHostEnvironment env)
     {
         var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (int.TryParse(idClaim, out int userId) && !string.IsNullOrWhiteSpace(fullName))
@@ -165,10 +165,36 @@ public class AccountController : Controller
             if (user != null)
             {
                 user.FullName = fullName.Trim();
-                if (!string.IsNullOrWhiteSpace(profilePictureUrl))
+
+                if (profileImage != null && profileImage.Length > 0)
                 {
-                    user.ProfilePictureUrl = profilePictureUrl.Trim();
+                    try
+                    {
+                        string uploadsFolder = Path.Combine(env.WebRootPath, "uploads", "avatars");
+                        if (!Directory.Exists(uploadsFolder))
+                        {
+                            Directory.CreateDirectory(uploadsFolder);
+                        }
+
+                        string ext = Path.GetExtension(profileImage.FileName);
+                        if (string.IsNullOrEmpty(ext)) ext = ".jpg";
+
+                        string uniqueFileName = $"avatar_{userId}_{DateTime.UtcNow.Ticks}{ext}";
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await profileImage.CopyToAsync(stream);
+                        }
+
+                        user.ProfilePictureUrl = "/uploads/avatars/" + uniqueFileName;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Failed to upload profile picture");
+                    }
                 }
+
                 await _db.SaveChangesAsync();
                 await SignInUserAsync(user, isPersistent: true);
                 TempData["SuccessMessage"] = "আপনার প্রোফাইল সফলভাবে আপডেট করা হয়েছে।";
