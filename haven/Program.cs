@@ -54,11 +54,86 @@ using (var scope = app.Services.CreateScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<HavenDbContext>();
         db.Database.Migrate();
+
+        var hasher = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.IPasswordHasher<User>>();
+
+        // 1. Seed / Ensure Admin
+        var admin = db.Users.FirstOrDefault(u => u.Email == "admin@haven.org");
+        if (admin == null)
+        {
+            admin = new User
+            {
+                FullName = "HAVEN Chief Admin",
+                Email = "admin@haven.org",
+                Role = "Admin",
+                UserType = "Individual",
+                Age = 30,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
+            };
+            admin.PasswordHash = hasher.HashPassword(admin, "Admin123!");
+            db.Users.Add(admin);
+        }
+        else
+        {
+            admin.Role = "Admin";
+            admin.IsActive = true;
+            admin.PasswordHash = hasher.HashPassword(admin, "Admin123!");
+        }
+        db.SaveChanges();
+
+        // 2. Seed / Ensure Therapist
+        var therapist = db.Users.FirstOrDefault(u => u.Email == "therapist@haven.org");
+        if (therapist == null)
+        {
+            therapist = new User
+            {
+                FullName = "Dr. Anika Rahman (Child & Clinical Psychologist)",
+                Email = "therapist@haven.org",
+                Role = "Professional",
+                UserType = "Individual",
+                Age = 34,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
+            };
+            therapist.PasswordHash = hasher.HashPassword(therapist, "Therapist123!");
+            db.Users.Add(therapist);
+        }
+        else
+        {
+            therapist.Role = "Professional";
+            therapist.IsActive = true;
+            therapist.PasswordHash = hasher.HashPassword(therapist, "Therapist123!");
+        }
+        db.SaveChanges();
+
+        // 3. Seed / Ensure Default User
+        var defaultUser = db.Users.FirstOrDefault(u => u.Email == "user@haven.org");
+        if (defaultUser == null)
+        {
+            defaultUser = new User
+            {
+                FullName = "Tanvir Ahmed",
+                Email = "user@haven.org",
+                Role = "User",
+                UserType = "Individual",
+                Age = 19,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
+            };
+            defaultUser.PasswordHash = hasher.HashPassword(defaultUser, "User123!");
+            db.Users.Add(defaultUser);
+        }
+        else
+        {
+            defaultUser.PasswordHash = hasher.HashPassword(defaultUser, "User123!");
+        }
+        db.SaveChanges();
     }
     catch (Exception ex)
     {
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while applying SQL Server database migrations.");
+        logger.LogError(ex, "An error occurred while applying SQL Server database migrations or seeding default accounts.");
     }
 }
 

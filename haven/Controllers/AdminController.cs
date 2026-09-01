@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace Haven.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class AdminController : Controller
 {
     private readonly HavenDbContext _db;
@@ -27,6 +27,12 @@ public class AdminController : Controller
             .Where(p => p.ApprovalStatus == "Pending")
             .ToListAsync();
 
+        var pendingCourses = await _db.Courses
+            .Include(c => c.Author)
+            .Include(c => c.Modules)
+            .Where(c => c.ApprovalStatus == "Pending")
+            .ToListAsync();
+
         var recentAlerts = await _db.CrisisAlerts
             .OrderByDescending(c => c.CreatedAt)
             .Take(10)
@@ -40,6 +46,7 @@ public class AdminController : Controller
         var model = new AdminDashboardViewModel
         {
             PendingTherapists = pendingTherapists,
+            PendingCourses = pendingCourses,
             RecentCrisisAlerts = recentAlerts,
             AuditLogs = auditLogs,
             TotalUsersCount = await _db.Users.CountAsync(),
@@ -62,7 +69,6 @@ public class AdminController : Controller
             prof.IsBmdcVerified = true;
             prof.VerifiedAt = DateTime.UtcNow;
 
-            // Log admin audit action (FR-12)
             int adminId = GetCurrentUserId();
             _db.AdminAuditLogs.Add(new AdminAuditLog
             {
@@ -106,6 +112,58 @@ public class AdminController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    // UC-22 / FR-9: Approve Therapist Submitted Course
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ApproveCourse(int id)
+    {
+        var course = await _db.Courses.FindAsync(id);
+        if (course != null)
+        {
+            course.ApprovalStatus = "Approved";
+
+            int adminId = GetCurrentUserId();
+            _db.AdminAuditLogs.Add(new AdminAuditLog
+            {
+                AdminUserId = adminId,
+                ActionType = "ApproveCourse",
+                TargetResource = $"Course:{id}",
+                ActionDetails = $"Approved safety course '{course.TitleEn}'",
+                ExecutedAt = DateTime.UtcNow
+            });
+
+            await _db.SaveChangesAsync();
+            TempData["SuccessMessage"] = $"কোর্স '{course.TitleEn}' সফলভাবে অনুমোদন করা হয়েছে! / Course approved successfully!";
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
+    // UC-22 / FR-9: Reject Therapist Submitted Course
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RejectCourse(int id)
+    {
+        var course = await _db.Courses.FindAsync(id);
+        if (course != null)
+        {
+            course.ApprovalStatus = "Rejected";
+
+            int adminId = GetCurrentUserId();
+            _db.AdminAuditLogs.Add(new AdminAuditLog
+            {
+                AdminUserId = adminId,
+                ActionType = "RejectCourse",
+                TargetResource = $"Course:{id}",
+                ActionDetails = $"Rejected safety course '{course.TitleEn}'",
+                ExecutedAt = DateTime.UtcNow
+            });
+
+            await _db.SaveChangesAsync();
+            TempData["InfoMessage"] = $"কোর্স '{course.TitleEn}' বাতিল করা হয়েছে। / Course rejected.";
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
     private int GetCurrentUserId()
     {
         var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -116,6 +174,7 @@ public class AdminController : Controller
 public class AdminDashboardViewModel
 {
     public List<ProfessionalProfile> PendingTherapists { get; set; } = new();
+    public List<Course> PendingCourses { get; set; } = new();
     public List<CrisisAlert> RecentCrisisAlerts { get; set; } = new();
     public List<AdminAuditLog> AuditLogs { get; set; } = new();
     public int TotalUsersCount { get; set; }
