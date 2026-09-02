@@ -14,11 +14,8 @@
             <h1 class="text-2xl sm:text-3xl font-black mt-2 tracking-tight">
                 হেভেন অ্যাডমিন ও সিকিউরিটি কন্ট্রোল
             </h1>
-            <p class="text-xs text-slate-300 mt-1 flex flex-wrap items-center gap-2">
-                <span>লাইসেন্স ভেরিফিকেশন, থেরাপিস্ট কোর্স অনুমোদন এবং সিস্টেম অডিট ট্রেইল</span>
-                <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold @(Model.DatabaseProvider.Contains("Npgsql") || Model.DatabaseProvider.Contains("Postgres") ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40" : "bg-rose-500/20 text-rose-300 border border-rose-500/40")">
-                    🗄️ Database: @(Model.DatabaseProvider.Contains("Npgsql") ? "Render PostgreSQL (Persistent)" : Model.DatabaseProvider.Contains("Sqlite") ? "SQLite (Ephemeral Disk)" : Model.DatabaseProvider)
-                </span>
+            <p class="text-xs text-slate-300 mt-1">
+                লাইসেন্স ভেরিফিকেশন, থেরাপিস্ট কোর্স অনুমোদন এবং ইউজার সেফটি অডিট ট্রেইল
             </p>
         </div>
 
@@ -155,7 +152,70 @@
         }
     </div>
 
-    <!-- Section 3: Audit Trail Log -->
+    <!-- Section 3: Reported Content & User Safety Moderation -->
+    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+                <h3 class="text-base font-bold text-slate-900" data-bn="ইউজার রিপোর্টকৃত পোস্ট ও সাইবার মডারেশন" data-en="Reported Content & User Safety Moderation">
+                    ইউজার রিপোর্টকৃত পোস্ট ও সাইবার মডারেশন
+                </h3>
+                <p class="text-xs text-slate-500">কমিউনিটি ইউজারদের জমা দেওয়া পোস্ট রিপোর্ট পর্যালোচনা করে মডারেশন অ্যাকশন নিন</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-900">
+                @Model.ReportedPosts.Count Reported Posts
+            </span>
+        </div>
+
+        @if (!Model.ReportedPosts.Any())
+        {
+            <div class="text-center py-8 text-xs text-slate-500 bg-slate-50 rounded-2xl border border-slate-100">
+                কোনো আপত্তিজনক বা রিপোর্টকৃত পোস্ট পাওয়া যায়নি। কমিউনিটি নিরাপদ ও পরিষ্কার।
+            </div>
+        }
+        else
+        {
+            <div class="space-y-4">
+                @foreach (var post in Model.ReportedPosts)
+                {
+                    <div class="p-5 rounded-2xl bg-rose-50/50 border border-rose-200 space-y-3">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-600 text-white">
+                                        🚨 @post.ReportCount Reports
+                                    </span>
+                                    <span class="text-xs font-bold text-slate-900">@post.Title</span>
+                                </div>
+                                <p class="text-xs text-slate-600 mt-1 line-clamp-2">@post.Content</p>
+                                <div class="text-[11px] text-slate-400 mt-1">
+                                    লেখক: <strong>@(post.IsAnonymous ? "Anonymous User" : post.User?.FullName ?? "User")</strong> | তারিখ: @post.CreatedAt.ToString("MMM dd, yyyy - HH:mm")
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2 shrink-0">
+                                <form asp-action="DismissReport" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@post.Id" />
+                                    <button type="submit" class="px-3.5 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs rounded-xl transition">
+                                        Dismiss Report
+                                    </button>
+                                </form>
+                                <form asp-action="DeletePost" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@post.Id" />
+                                    <button type="submit" class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-xs transition">
+                                        Delete Post
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <!-- Section 4: Audit Trail Log -->
     <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
         <h3 class="text-base font-bold text-slate-900">অ্যাডমিন ক্রিয়াকলাপ অডিট ট্রেইল (Security Audit Log)</h3>
         <div class="overflow-x-auto">

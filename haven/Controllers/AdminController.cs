@@ -33,6 +33,12 @@ public class AdminController : Controller
             .Where(c => c.ApprovalStatus == "Pending")
             .ToListAsync();
 
+        var reportedPosts = await _db.CommunityPosts
+            .Include(p => p.User)
+            .Where(p => p.IsReported || p.ReportCount > 0)
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync();
+
         var recentAlerts = await _db.CrisisAlerts
             .OrderByDescending(c => c.CreatedAt)
             .Take(10)
@@ -47,6 +53,7 @@ public class AdminController : Controller
         {
             PendingTherapists = pendingTherapists,
             PendingCourses = pendingCourses,
+            ReportedPosts = reportedPosts,
             RecentCrisisAlerts = recentAlerts,
             AuditLogs = auditLogs,
             TotalUsersCount = await _db.Users.CountAsync(),
@@ -56,6 +63,65 @@ public class AdminController : Controller
         };
 
         return View(model);
+    }
+
+    // Dismiss User Post Report
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DismissReport(int id)
+    {
+        var post = await _db.CommunityPosts.FindAsync(id);
+        if (post != null)
+        {
+            post.IsReported = false;
+            post.ReportCount = 0;
+
+            int adminId = GetCurrentUserId();
+            _db.AdminAuditLogs.Add(new AdminAuditLog
+            {
+                AdminUserId = adminId,
+                ActionType = "DismissReport",
+                TargetResource = $"CommunityPost:{id}",
+                ActionDetails = $"Dismissed user reports for post #{id}",
+                ExecutedAt = DateTime.UtcNow
+            });
+
+            await _db.SaveChangesAsync();
+            TempData["SuccessMessage"] = $"পোস্ট #{id} এর রিপোর্ট বাতিল/খারিজ করা হয়েছে। / Report dismissed for Post #{id}.";
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
+    // Delete Inappropriate Reported Post
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeletePost(int id)
+    {
+        var post = await _db.CommunityPosts.FindAsync(id);
+        if (post != null)
+        {
+            var reports = await _db.PostReports.Where(r => r.PostId == id).ToListAsync();
+            _db.PostReports.RemoveRange(reports);
+
+            var comments = await _db.CommunityComments.Where(c => c.PostId == id).ToListAsync();
+            _db.CommunityComments.RemoveRange(comments);
+
+            _db.CommunityPosts.Remove(post);
+
+            int adminId = GetCurrentUserId();
+            _db.AdminAuditLogs.Add(new AdminAuditLog
+            {
+                AdminUserId = adminId,
+                ActionType = "DeleteReportedPost",
+                TargetResource = $"CommunityPost:{id}",
+                ActionDetails = $"Deleted reported post #{id}: '{post.Title}'",
+                ExecutedAt = DateTime.UtcNow
+            });
+
+            await _db.SaveChangesAsync();
+            TempData["InfoMessage"] = $"রিপোর্টকৃত পোস্ট #{id} স্থায়ীভাবে মুছে ফেলা হয়েছে। / Reported Post #{id} deleted.";
+        }
+        return RedirectToAction(nameof(Index));
     }
 
     // FR-10 / UC-24: Approve Therapist Credential Verification
@@ -176,6 +242,7 @@ public class AdminDashboardViewModel
 {
     public List<ProfessionalProfile> PendingTherapists { get; set; } = new();
     public List<Course> PendingCourses { get; set; } = new();
+    public List<CommunityPost> ReportedPosts { get; set; } = new();
     public List<CrisisAlert> RecentCrisisAlerts { get; set; } = new();
     public List<AdminAuditLog> AuditLogs { get; set; } = new();
     public int TotalUsersCount { get; set; }
