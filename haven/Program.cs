@@ -26,7 +26,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 
 // Register Entity Framework Core Database with automatic PostgreSQL, SQL Server, and SQLite fallback for Cloud/Docker environments
-var rawConnection = builder.Configuration["DATABASE_URL"] 
+var rawConnection = Environment.GetEnvironmentVariable("DATABASE_URL")
+                    ?? builder.Configuration["DATABASE_URL"] 
                     ?? builder.Configuration.GetConnectionString("DefaultConnection") 
                     ?? builder.Configuration["DefaultConnection"];
 
