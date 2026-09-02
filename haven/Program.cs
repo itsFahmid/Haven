@@ -14,23 +14,45 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnCh
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: false);
 builder.Configuration.AddEnvironmentVariables();
 
+// Support dynamic port binding on cloud hosts like Render
+var renderPort = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(renderPort))
+{
+    builder.WebHost.UseUrls($"http://*:{renderPort}");
+}
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 
-// Register Entity Framework Core Database with automatic SQLite fallback for Cloud/Docker environments
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Register Entity Framework Core Database with automatic PostgreSQL, SQL Server, and SQLite fallback for Cloud/Docker environments
+var rawConnection = builder.Configuration["DATABASE_URL"] 
+                    ?? builder.Configuration.GetConnectionString("DefaultConnection") 
+                    ?? builder.Configuration["DefaultConnection"];
 
 builder.Services.AddDbContext<HavenDbContext>(options =>
 {
-    if (string.IsNullOrWhiteSpace(connectionString) || connectionString.Contains("SQLEXPRESS") || connectionString.Contains("haven.db"))
+    if (!string.IsNullOrWhiteSpace(rawConnection) &&
+        (rawConnection.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) ||
+         rawConnection.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase) ||
+         rawConnection.Contains("Port=5432") ||
+         rawConnection.Contains("User Id=") ||
+         rawConnection.Contains("Username=")))
     {
-        string dbPath = Path.Combine(builder.Environment.ContentRootPath, "haven.db");
-        options.UseSqlite($"Data Source={dbPath}");
+        string pgConnectionString = ConvertPostgresUrlToConnectionString(rawConnection);
+        options.UseNpgsql(pgConnectionString);
+    }
+    else if (!string.IsNullOrWhiteSpace(rawConnection) &&
+             !rawConnection.Contains("SQLEXPRESS") &&
+             !rawConnection.Contains("haven.db") &&
+             rawConnection.Contains("Server="))
+    {
+        options.UseSqlServer(rawConnection);
     }
     else
     {
-        options.UseSqlServer(connectionString);
+        string dbPath = Path.Combine(builder.Environment.ContentRootPath, "haven.db");
+        options.UseSqlite($"Data Source={dbPath}");
     }
 });
 
@@ -178,6 +200,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
+});
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
@@ -198,3 +225,29 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+static string ConvertPostgresUrlToConnectionString(string url)
+{
+    if (string.IsNullOrWhiteSpace(url)) return url;
+    if (url.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) ||
+        url.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
+    {
+        try
+        {
+            var uri = new Uri(url);
+            var userInfo = uri.UserInfo.Split(':', 2);
+            var user = Uri.UnescapeDataString(userInfo[0]);
+            var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "";
+            var host = uri.Host;
+            var port = uri.Port > 0 ? uri.Port : 5432;
+            var database = uri.AbsolutePath.TrimStart('/');
+
+            return $"Host={host};Port={port};Database={database};Username={user};Password={password};SSL Mode=Require;Trust Server Certificate=true";
+        }
+        catch
+        {
+            return url;
+        }
+    }
+    return url;
+}

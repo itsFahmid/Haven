@@ -43,7 +43,18 @@ public class HavenDbContext : DbContext
             entity.Property(u => u.Role).HasMaxLength(50).HasDefaultValue("User");
             entity.Property(u => u.UserType).HasMaxLength(50).HasDefaultValue("Individual");
             entity.Property(u => u.IsActive).HasDefaultValue(true);
-            entity.Property(u => u.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+            if (Database.IsSqlServer())
+            {
+                entity.Property(u => u.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+            }
+            else if (Database.IsNpgsql())
+            {
+                entity.Property(u => u.CreatedAt).HasDefaultValueSql("NOW()");
+            }
+            else
+            {
+                entity.Property(u => u.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            }
         });
 
         modelBuilder.Entity<ChildProfile>(entity =>
