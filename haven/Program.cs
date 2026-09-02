@@ -51,7 +51,9 @@ builder.Services.AddDbContext<HavenDbContext>(options =>
     }
     else
     {
-        string dbPath = Path.Combine(builder.Environment.ContentRootPath, "haven.db");
+        string dataDir = Environment.GetEnvironmentVariable("DATA_DIR") ?? builder.Environment.ContentRootPath;
+        if (!Directory.Exists(dataDir)) Directory.CreateDirectory(dataDir);
+        string dbPath = Path.Combine(dataDir, "haven.db");
         options.UseSqlite($"Data Source={dbPath}");
     }
 });
@@ -134,7 +136,10 @@ using (var scope = app.Services.CreateScope())
         {
             admin.Role = "Admin";
             admin.IsActive = true;
-            admin.PasswordHash = hasher.HashPassword(admin, "Admin123!");
+            if (string.IsNullOrEmpty(admin.PasswordHash))
+            {
+                admin.PasswordHash = hasher.HashPassword(admin, "Admin123!");
+            }
         }
         db.SaveChanges();
 
@@ -159,7 +164,10 @@ using (var scope = app.Services.CreateScope())
         {
             therapist.Role = "Professional";
             therapist.IsActive = true;
-            therapist.PasswordHash = hasher.HashPassword(therapist, "Therapist123!");
+            if (string.IsNullOrEmpty(therapist.PasswordHash))
+            {
+                therapist.PasswordHash = hasher.HashPassword(therapist, "Therapist123!");
+            }
         }
         db.SaveChanges();
 
@@ -182,14 +190,17 @@ using (var scope = app.Services.CreateScope())
         }
         else
         {
-            defaultUser.PasswordHash = hasher.HashPassword(defaultUser, "User123!");
+            if (string.IsNullOrEmpty(defaultUser.PasswordHash))
+            {
+                defaultUser.PasswordHash = hasher.HashPassword(defaultUser, "User123!");
+            }
         }
         db.SaveChanges();
     }
     catch (Exception ex)
     {
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while applying SQL Server database migrations or seeding default accounts.");
+        logger.LogError(ex, "An error occurred while database initialization or seeding default accounts.");
     }
 }
 
@@ -242,7 +253,7 @@ static string ConvertPostgresUrlToConnectionString(string url)
             var port = uri.Port > 0 ? uri.Port : 5432;
             var database = uri.AbsolutePath.TrimStart('/');
 
-            return $"Host={host};Port={port};Database={database};Username={user};Password={password};SSL Mode=Require;Trust Server Certificate=true";
+            return $"Host={host};Port={port};Database={database};Username={user};Password={password};SSL Mode=Prefer;Trust Server Certificate=true";
         }
         catch
         {
