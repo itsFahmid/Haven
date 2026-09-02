@@ -131,7 +131,15 @@ public class AccountController : Controller
         }
 
         var childProfiles = await _db.ChildProfiles.Where(c => c.ParentUserId == userId).ToListAsync();
-        var bookmarkedArticles = await _db.Articles.OrderByDescending(a => a.CreatedAt).Take(3).ToListAsync();
+        var bookmarkedArticles = await _db.ArticleBookmarks
+            .Include(b => b.Article)
+            .Where(b => b.UserId == userId && b.Article != null)
+            .Select(b => b.Article!)
+            .ToListAsync();
+
+        int completedCourses = await _db.Enrollments.CountAsync(e => e.UserId == userId && e.IsCompleted);
+        int enrolledCourses = await _db.Enrollments.CountAsync(e => e.UserId == userId);
+        int bookedSessions = await _db.Appointments.CountAsync(a => a.UserId == userId);
 
         var profileModel = new UserProfileViewModel
         {
@@ -144,8 +152,9 @@ public class AccountController : Controller
             ProfilePictureUrl = user.ProfilePictureUrl,
             CreatedAt = user.CreatedAt,
             LastLoginAt = user.LastLoginAt,
-            CompletedCoursesCount = 2,
-            BookedSessionsCount = 1,
+            CompletedCoursesCount = completedCourses,
+            EnrolledCoursesCount = enrolledCourses,
+            BookedSessionsCount = bookedSessions,
             ChildProfiles = childProfiles,
             BookmarkedArticles = bookmarkedArticles
         };

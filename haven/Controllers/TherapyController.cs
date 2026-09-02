@@ -104,6 +104,80 @@ public class TherapyController : Controller
         }
         return Json(new { success = false, message = "Appointment not found." });
     }
+
+    // FR-10 / UC-24: Therapist / Professional Credential Application Portal
+    [HttpGet]
+    public async Task<IActionResult> Apply()
+    {
+        if (User.Identity?.IsAuthenticated != true)
+        {
+            TempData["InfoMessage"] = "থেরাপিস্ট বা পেশাদার হিসেবে আবেদন করতে অনুগ্রহ করে আপনার অ্যাকাউন্টে লগইন করুন। / Please log in to submit your professional verification application.";
+            return RedirectToAction("Login", "Account", new { returnUrl = Url.Action("Apply", "Therapy") });
+        }
+
+        int userId = GetUserId();
+        var existingProfile = await _db.ProfessionalProfiles.FirstOrDefaultAsync(p => p.UserId == userId);
+        ViewBag.ExistingProfile = existingProfile;
+
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Apply(string titleEn, string titleBn, string specialty, string licenseNo, decimal hourlyRateBDT)
+    {
+        if (User.Identity?.IsAuthenticated != true)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        if (string.IsNullOrWhiteSpace(titleEn) || string.IsNullOrWhiteSpace(licenseNo) || string.IsNullOrWhiteSpace(specialty))
+        {
+            TempData["ErrorMessage"] = "অনুগ্রহ করে আপনার ডিগ্রি/পদবি, স্পেশালিটি ও বিএমডিসি লাইসেন্স নম্বর প্রদান করুন। / Title, Specialty, and BMDC License No are required.";
+            return RedirectToAction(nameof(Apply));
+        }
+
+        int userId = GetUserId();
+        var profile = await _db.ProfessionalProfiles.FirstOrDefaultAsync(p => p.UserId == userId);
+
+        if (profile == null)
+        {
+            profile = new ProfessionalProfile
+            {
+                UserId = userId,
+                TitleEn = titleEn.Trim(),
+                TitleBn = string.IsNullOrWhiteSpace(titleBn) ? titleEn.Trim() : titleBn.Trim(),
+                Specialty = specialty.Trim(),
+                LicenseNo = licenseNo.Trim(),
+                HourlyRateBDT = hourlyRateBDT > 0 ? hourlyRateBDT : 500,
+                ApprovalStatus = "Pending",
+                IsBmdcVerified = false,
+                SubmittedAt = DateTime.UtcNow
+            };
+            _db.ProfessionalProfiles.Add(profile);
+        }
+        else
+        {
+            profile.TitleEn = titleEn.Trim();
+            profile.TitleBn = string.IsNullOrWhiteSpace(titleBn) ? titleEn.Trim() : titleBn.Trim();
+            profile.Specialty = specialty.Trim();
+            profile.LicenseNo = licenseNo.Trim();
+            profile.HourlyRateBDT = hourlyRateBDT > 0 ? hourlyRateBDT : 500;
+            profile.ApprovalStatus = "Pending";
+            profile.SubmittedAt = DateTime.UtcNow;
+        }
+
+        await _db.SaveChangesAsync();
+
+        TempData["SuccessMessage"] = "আপনার থেরাপিস্ট ভেরিফিকেশন আবেদনটি সফলভাবে অ্যাডমিন প্যানেলে জমা দেওয়া হয়েছে! যাচাইকরণ শেষে আপনার অ্যাকাউন্ট অনুমোদন করা হবে। / Your verification application has been submitted for admin approval!";
+        return RedirectToAction(nameof(Apply));
+    }
+
+    private int GetUserId()
+    {
+        var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        return int.TryParse(idClaim, out int uid) ? uid : 0;
+    }
 }
 
 public class BookingRequest

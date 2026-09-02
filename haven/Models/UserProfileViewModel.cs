@@ -11,8 +11,9 @@ public class UserProfileViewModel
     public string? ProfilePictureUrl { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? LastLoginAt { get; set; }
-    public int CompletedCoursesCount { get; set; } = 2;
-    public int BookedSessionsCount { get; set; } = 1;
+    public int CompletedCoursesCount { get; set; }
+    public int EnrolledCoursesCount { get; set; }
+    public int BookedSessionsCount { get; set; }
     public List<ChildProfile> ChildProfiles { get; set; } = new();
     public List<Article> BookmarkedArticles { get; set; } = new();
 }

@@ -88,7 +88,7 @@
                 <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-100 text-sky-800">Learning</span>
             </div>
             <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider" data-bn="সম্পন্ন সুরক্ষা পাঠ" data-en="Completed Safety Modules">সম্পন্ন সুরক্ষা পাঠ</h3>
-            <p class="text-2xl font-extrabold text-teal-800 mt-1">2 / 4 Courses</p>
+            <p class="text-2xl font-extrabold text-teal-800 mt-1">@Model.CompletedCoursesCount / @(Model.EnrolledCoursesCount > 0 ? Model.EnrolledCoursesCount : 4) Courses</p>
             <a asp-controller="Courses" asp-action="Index" class="text-xs font-bold text-teal-700 hover:text-teal-800 mt-2 inline-block">কোর্স ক্যাটালগ দেখুন ➔</a>
         </div>
 

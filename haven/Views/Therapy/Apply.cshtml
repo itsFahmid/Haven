@@ -1,0 +1,120 @@
+@{
+    ViewData["Title"] = "পেশাদার থেরাপিস্ট নিবন্ধন ও ভেরিফিকেশন | Apply as Therapist";
+    var existing = ViewBag.ExistingProfile as Haven.Models.ProfessionalProfile;
+}
+
+<div class="py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-8">
+    
+    <!-- Header Banner -->
+    <div class="bg-gradient-to-r from-slate-900 via-teal-950 to-slate-900 text-white rounded-3xl p-8 md:p-10 shadow-xl border border-teal-900/50">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div class="space-y-2">
+                <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-full text-xs font-bold uppercase tracking-wider">
+                    🛡️ BMDC & Clinical Practitioner Network
+                </span>
+                <h1 class="text-2xl sm:text-3xl font-black" data-bn="হেভেন ভেরিফায়েড থেরাপিস্ট প্যানেলে যোগ দিন" data-en="Apply to Join HAVEN Verified Practitioner Panel">
+                    হেভেন ভেরিফায়েড থেরাপিস্ট প্যানেলে যোগ দিন
+                </h1>
+                <p class="text-sm text-slate-300 max-w-xl" data-bn="আপনি কি একজন বিএমডিসি নিবন্ধিত মনোচিকিৎসক, শিশু মনস্তত্ত্ববিদ বা ক্লিনিক্যাল সাইকোলজিস্ট? তরুণ ও কিশোরদের মানসিক সুরক্ষায় আপনার সেবা প্রদান করুন।" data-en="Are you a BMDC registered psychiatrist or certified clinical psychologist? Join HAVEN to offer safe, confidential tele-therapy.">
+                    আপনি কি একজন বিএমডিসি নিবন্ধিত মনোচিকিৎসক, শিশু মনস্তত্ত্ববিদ বা ক্লিনিক্যাল সাইকোলজিস্ট? তরুণ ও কিশোরদের মানসিক সুরক্ষায় আপনার সেবা প্রদান করুন।
+                </p>
+            </div>
+            <a asp-action="Index" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl border border-slate-700 transition flex-shrink-0">
+                ➔ থেরাপি ডিরেক্টরি দেখুন
+            </a>
+        </div>
+    </div>
+
+    <!-- Application Status Callout if existing -->
+    @if (existing != null)
+    {
+        <div class="p-6 rounded-3xl border @(existing.ApprovalStatus == "Approved" ? "bg-emerald-50 border-emerald-200 text-emerald-900" : existing.ApprovalStatus == "Rejected" ? "bg-rose-50 border-rose-200 text-rose-900" : "bg-amber-50 border-amber-200 text-amber-900") flex items-center justify-between gap-4">
+            <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                    <span class="font-extrabold text-sm">আবেদন স্ট্যাটাস / Status:</span>
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider @(existing.ApprovalStatus == "Approved" ? "bg-emerald-200 text-emerald-900" : existing.ApprovalStatus == "Rejected" ? "bg-rose-200 text-rose-900" : "bg-amber-200 text-amber-900")">
+                        @existing.ApprovalStatus
+                    </span>
+                </div>
+                <p class="text-xs">
+                    লাইসেন্স নম্বর: <strong>@existing.LicenseNo</strong> | জমা দেওয়ার তারিখ: @existing.SubmittedAt.ToString("MMM dd, yyyy")
+                </p>
+            </div>
+            @if (existing.ApprovalStatus == "Approved")
+            {
+                <a asp-controller="Courses" asp-action="Create" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-xs transition">
+                    + নতুন কোর্স প্রকাশ করুন
+                </a>
+            }
+        </div>
+    }
+
+    <!-- Verification Application Form -->
+    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
+        <div class="border-b border-slate-100 pb-4">
+            <h2 class="text-lg font-bold text-slate-900" data-bn="প্রফেশনাল ভেরিফিকেশন তথ্য প্রদান করুন" data-en="Submit Professional Verification Details">
+                প্রফেশনাল ভেরিফিকেশন তথ্য প্রদান করুন
+            </h2>
+            <p class="text-xs text-slate-500">আপনার পেশাগত লাইসেন্স তথ্য প্রদান করুন। আমাদের অ্যাডমিন প্যানেল সরাসরি যাচাইকরণ সম্পন্ন করবে।</p>
+        </div>
+
+        <form asp-action="Apply" method="post" class="space-y-5">
+            @Html.AntiForgeryToken()
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1" data-bn="পদবি ও শিক্ষাগত যোগ্যতা (ইংরেজি) *" data-en="Title & Qualifications (English) *">
+                        Title & Qualifications (English) *
+                    </label>
+                    <input type="text" name="titleEn" value="@(existing?.TitleEn ?? "")" required placeholder="e.g. Dr. Samira Tasneem, MBBS, MPhil (Psychiatry)" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white" />
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1" data-bn="পদবি ও শিক্ষাগত যোগ্যতা (বাংলা)" data-en="Title & Qualifications (Bangla)">
+                        Title & Qualifications (Bangla)
+                    </label>
+                    <input type="text" name="titleBn" value="@(existing?.TitleBn ?? "")" placeholder="যেমন: ডাঃ সামিরা তাসনীম, এমবিবিএস, এমফিল" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white" />
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1" data-bn="বিশেষজ্ঞতার ক্ষেত্র (Specialty) *" data-en="Primary Specialty *">
+                        Primary Specialty *
+                    </label>
+                    <select name="specialty" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white">
+                        <option value="Adolescent Trauma">Adolescent Trauma / কিশোর ট্রমা</option>
+                        <option value="Clinical Depression">Clinical Depression / ক্লিনিক্যাল ডিপ্রেশন</option>
+                        <option value="Cyber Harassment Recovery">Cyber Harassment Recovery / সাইবার হয়রানি নিরাময়</option>
+                        <option value="Child Sexual Abuse Recovery">Child Sexual Abuse Recovery / শিশু নির্যাতন নিরাময়</option>
+                        <option value="Panic & OCD">Panic & OCD / প্যানিক ও ওসিডি</option>
+                        <option value="Substance & Screen Addiction">Substance & Screen Addiction / আসক্তি মুক্তি</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1" data-bn="বিএমডিসি বা বিসিপিএস লাইসেন্স নং *" data-en="BMDC / Professional Registration No *">
+                        BMDC / Professional Registration No *
+                    </label>
+                    <input type="text" name="licenseNo" value="@(existing?.LicenseNo ?? "")" required placeholder="e.g. BMDC Reg: A-74291 or BCPS Reg: CP-1082" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white" />
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1" data-bn="সেশন ফি (টাকা) / Hourly Session Fee (BDT)" data-en="Hourly Session Fee (BDT)">
+                    Hourly Session Fee (BDT)
+                </label>
+                <input type="number" name="hourlyRateBDT" value="@(existing?.HourlyRateBDT > 0 ? existing.HourlyRateBDT : 500)" min="0" step="50" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white" />
+                <p class="text-[11px] text-slate-400 mt-1">দরিদ্র বা সংকটাপন্নদের জন্য ভাজাহীন/বিনামূল্যে সেবা প্রদানের অপশন সবসময় সক্রিয় থাকবে।</p>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                <a asp-action="Index" class="text-xs font-bold text-slate-600 hover:text-slate-900">ফিরে যান</a>
+                <button type="submit" class="px-6 py-3 bg-teal-700 hover:bg-teal-800 text-white font-extrabold text-sm rounded-xl shadow-md transition">
+                    @(existing != null ? "আবেদন আপডেট করুন / Update Application" : "ভেরিফিকেশন আবেদন জমা দিন / Submit Application")
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
