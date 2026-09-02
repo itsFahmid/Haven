@@ -14,8 +14,11 @@
             <h1 class="text-2xl sm:text-3xl font-black mt-2 tracking-tight">
                 হেভেন অ্যাডমিন ও সিকিউরিটি কন্ট্রোল
             </h1>
-            <p class="text-xs text-slate-300 mt-1">
-                লাইসেন্স ভেরিফিকেশন, থেরাপিস্ট কোর্স অনুমোদন এবং সিস্টেম অডিট ট্রেইল
+            <p class="text-xs text-slate-300 mt-1 flex flex-wrap items-center gap-2">
+                <span>লাইসেন্স ভেরিফিকেশন, থেরাপিস্ট কোর্স অনুমোদন এবং সিস্টেম অডিট ট্রেইল</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold @(Model.DatabaseProvider.Contains("Npgsql") || Model.DatabaseProvider.Contains("Postgres") ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40" : "bg-rose-500/20 text-rose-300 border border-rose-500/40")">
+                    🗄️ Database: @(Model.DatabaseProvider.Contains("Npgsql") ? "Render PostgreSQL (Persistent)" : Model.DatabaseProvider.Contains("Sqlite") ? "SQLite (Ephemeral Disk)" : Model.DatabaseProvider)
+                </span>
             </p>
         </div>
 

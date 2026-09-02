@@ -51,7 +51,8 @@ public class AdminController : Controller
             AuditLogs = auditLogs,
             TotalUsersCount = await _db.Users.CountAsync(),
             TotalCoursesCount = await _db.Courses.CountAsync(),
-            TotalAppointmentsCount = await _db.Appointments.CountAsync()
+            TotalAppointmentsCount = await _db.Appointments.CountAsync(),
+            DatabaseProvider = _db.Database.ProviderName ?? "Unknown"
         };
 
         return View(model);
@@ -180,4 +181,5 @@ public class AdminDashboardViewModel
     public int TotalUsersCount { get; set; }
     public int TotalCoursesCount { get; set; }
     public int TotalAppointmentsCount { get; set; }
+    public string DatabaseProvider { get; set; } = string.Empty;
 }
