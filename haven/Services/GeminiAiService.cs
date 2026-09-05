@@ -77,30 +77,43 @@ Output valid JSON only matching:
     {
         try
         {
-            var apiKey = _configuration["GeminiApiKey"] ?? _configuration["Gemini:ApiKey"];
+            var apiKey = _configuration["GeminiApiKey"] 
+                ?? _configuration["Gemini:ApiKey"]
+                ?? _configuration["GEMINI_API_KEY"]
+                ?? _configuration["Gemini__ApiKey"]
+                ?? _configuration["Gemini_API"]
+                ?? _configuration["GEMINI_API"]
+                ?? Environment.GetEnvironmentVariable("GEMINI_API_KEY")
+                ?? Environment.GetEnvironmentVariable("GeminiApiKey")
+                ?? Environment.GetEnvironmentVariable("Gemini_API")
+                ?? Environment.GetEnvironmentVariable("GEMINI_API");
 
             if (string.IsNullOrWhiteSpace(apiKey))
             {
-                _logger.LogWarning("GeminiApiKey is missing or empty. Skipping AI crisis analysis.");
+                _logger.LogWarning("GeminiApiKey / GEMINI_API_KEY is missing or empty. Skipping AI crisis analysis.");
                 return null;
             }
 
-            var configuredModel = _configuration["GeminiModel"] ?? _configuration["Gemini:Model"];
+            var configuredModel = _configuration["GeminiModel"] 
+                ?? _configuration["Gemini:Model"]
+                ?? _configuration["GEMINI_MODEL"]
+                ?? Environment.GetEnvironmentVariable("GEMINI_MODEL");
             var model = !string.IsNullOrWhiteSpace(configuredModel) ? configuredModel : "gemini-2.0-flash";
 
             var response = await SendGeminiRequestAsync(model, apiKey, userMessage, language);
 
-            // If the model returns 404 (e.g. deprecated/unavailable model version), fallback gracefully to gemini-3.6-flash
-            if (response != null && response.StatusCode == HttpStatusCode.NotFound && !model.Equals("gemini-3.6-flash", StringComparison.OrdinalIgnoreCase))
+            // If the model returns 404 (e.g. deprecated/unavailable model version), fallback gracefully to gemini-1.5-flash
+            if (response != null && response.StatusCode == HttpStatusCode.NotFound && !model.Equals("gemini-1.5-flash", StringComparison.OrdinalIgnoreCase))
             {
-                _logger.LogInformation("Gemini model '{Model}' returned 404. Retrying with 'gemini-3.6-flash'.", model);
+                _logger.LogInformation("Gemini model '{Model}' returned 404. Retrying with 'gemini-1.5-flash'.", model);
                 response.Dispose();
-                response = await SendGeminiRequestAsync("gemini-3.6-flash", apiKey, userMessage, language);
+                response = await SendGeminiRequestAsync("gemini-1.5-flash", apiKey, userMessage, language);
             }
 
             if (response == null || !response.IsSuccessStatusCode)
             {
-                _logger.LogWarning("Gemini API call returned non-success status code {StatusCode}.", response?.StatusCode);
+                var errorBody = response != null ? await response.Content.ReadAsStringAsync() : "No response";
+                _logger.LogWarning("Gemini API call returned non-success status code {StatusCode}. Error: {ErrorBody}", response?.StatusCode, errorBody);
                 response?.Dispose();
                 return null;
             }
