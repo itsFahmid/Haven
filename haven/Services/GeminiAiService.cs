@@ -100,8 +100,7 @@ Output valid JSON only matching:
 
             if (response == null || !response.IsSuccessStatusCode)
             {
-                var errorBody = response != null ? await response.Content.ReadAsStringAsync() : "No response";
-                _logger.LogWarning("Gemini API call returned non-success status code {StatusCode}: {Error}", response?.StatusCode, errorBody);
+                _logger.LogWarning("Gemini API call returned non-success status code {StatusCode}.", response?.StatusCode);
                 response?.Dispose();
                 return null;
             }
@@ -204,7 +203,7 @@ Output valid JSON only matching:
         }
         catch (JsonException ex)
         {
-            _logger.LogError(ex, "Failed to parse JSON response from Gemini API: {Raw}", rawResponse);
+            _logger.LogError(ex, "Failed to parse JSON response from Gemini API.");
             return null;
         }
         catch (Exception ex)
