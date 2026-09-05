@@ -9,3 +9,6 @@
 # Local tool state
 .impeccable/live/
 .cursor/
+*.db
+*.db-shm
+*.db-wal
