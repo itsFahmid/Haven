@@ -6,6 +6,13 @@ namespace Haven.Controllers;
 
 public class HotlineController : Controller
 {
+    private readonly ICrisisAiService _crisisAiService;
+
+    public HotlineController(ICrisisAiService crisisAiService)
+    {
+        _crisisAiService = crisisAiService;
+    }
+
     public IActionResult Index()
     {
         var model = new HotlineViewModel
@@ -21,7 +28,7 @@ public class HotlineController : Controller
     }
 
     [HttpPost]
-    public IActionResult SendMessage([FromBody] ChatMessageRequest request)
+    public async Task<IActionResult> SendMessage([FromBody] ChatMessageRequest request)
     {
         if (string.IsNullOrWhiteSpace(request?.Text))
         {
@@ -30,7 +37,24 @@ public class HotlineController : Controller
 
         var text = request.Text.Trim();
 
-        // Crisis keywords trigger detection (Bengali & English)
+        // 1. Primary: Gemini AI Analysis
+        var aiResult = await _crisisAiService.AnalyzeMessageAsync(text, request.Lang);
+        if (aiResult != null)
+        {
+            var aiResponse = new ChatResponse
+            {
+                IsHighRisk = aiResult.IsCrisis,
+                MessageEn = aiResult.MessageEn,
+                MessageBn = aiResult.MessageBn,
+                TriggerEscalationModal = aiResult.IsCrisis,
+                CrisisHelpline = aiResult.IsCrisis ? "1098 / 01779554391" : null,
+                Timestamp = DateTime.UtcNow.ToString("hh:mm tt")
+            };
+
+            return Json(aiResponse);
+        }
+
+        // 2. Safety Net Fallback: Crisis keywords trigger detection (Bengali & English)
         var highRiskKeywords = new[]
         {
             "suicide", "kill myself", "die", "end my life", "hanging", "poison", "self harm", "cut myself", "depressed",
