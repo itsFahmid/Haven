@@ -239,30 +239,47 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // SignalR Anonymous Hotline WebSocket Connection (FR-8)
+            // SignalR Anonymous Hotline WebSocket Connection
             const connection = new signalR.HubConnectionBuilder()
                 .withUrl("/hubs/hotline")
                 .withAutomaticReconnect()
+                .configureLogging(signalR.LogLevel.Warning)
                 .build();
 
-            connection.start().then(function () {
-                console.log("Connected to HAVEN SignalR Anonymous Hotline Hub");
-                connection.invoke("JoinHotlineSession", "AnonymousHotline").catch(err => console.error(err));
-            }).catch(err => console.warn("SignalR fallback to HTTP polling:", err));
+            // Expose connection on HavenChat so sendMessage can use it
+            window.HavenChat.signalRConnection = connection;
 
+            connection.start().then(function () {
+                console.log("Connected to HAVEN SignalR Hotline Hub");
+                connection.invoke("JoinHotlineSession", "AnonymousHotline")
+                    .catch(function (err) { console.error("JoinHotlineSession error:", err); });
+            }).catch(function (err) {
+                console.warn("SignalR unavailable, HTTP fallback active:", err);
+            });
+
+            // Session confirmed
             connection.on("SessionInitialized", function (data) {
                 console.log("Hotline Session Initialized:", data);
             });
 
-            connection.on("AcuteDangerAlert", function (data) {
-                if (data && data.escalate) {
-                    triggerCrisisEscalation("SignalR Acute Keyword Trigger");
+            // AI triage response — stream it via HavenChat
+            connection.on("ReceiveBotResponse", function (data) {
+                if (window.HavenChat && typeof window.HavenChat.handleBotResponse === 'function') {
+                    window.HavenChat.handleBotResponse(data);
                 }
             });
 
+            // Acute danger alert from server — trigger escalation modal directly
+            connection.on("AcuteDangerAlert", function (data) {
+                if (data && data.escalate && typeof window.triggerCrisisEscalation === 'function') {
+                    window.triggerCrisisEscalation("SignalR Acute Danger Alert");
+                }
+            });
+
+            // User's own message echoed back (not a bot message)
             connection.on("ReceiveMessage", function (data) {
-                if (data && data.isAcuteDanger) {
-                    triggerCrisisEscalation("Acute Distress Detected");
+                if (data && data.isAcuteDanger && typeof window.triggerCrisisEscalation === 'function') {
+                    window.triggerCrisisEscalation("Acute Distress Detected");
                 }
             });
         });
