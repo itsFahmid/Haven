@@ -98,16 +98,16 @@ Output valid JSON only matching:
                 ?? _configuration["Gemini:Model"]
                 ?? _configuration["GEMINI_MODEL"]
                 ?? Environment.GetEnvironmentVariable("GEMINI_MODEL");
-            var model = !string.IsNullOrWhiteSpace(configuredModel) ? configuredModel : "gemini-2.0-flash";
+            var model = !string.IsNullOrWhiteSpace(configuredModel) ? configuredModel : "gemini-3.6-flash";
 
             var response = await SendGeminiRequestAsync(model, apiKey, userMessage, language);
 
-            // If the model returns 404 (e.g. deprecated/unavailable model version), fallback gracefully to gemini-1.5-flash
-            if (response != null && response.StatusCode == HttpStatusCode.NotFound && !model.Equals("gemini-1.5-flash", StringComparison.OrdinalIgnoreCase))
+            // If the model returns 404 (e.g. deprecated/unavailable model version), fallback gracefully to gemini-3.6-flash
+            if (response != null && response.StatusCode == HttpStatusCode.NotFound && !model.Equals("gemini-3.6-flash", StringComparison.OrdinalIgnoreCase))
             {
-                _logger.LogInformation("Gemini model '{Model}' returned 404. Retrying with 'gemini-1.5-flash'.", model);
+                _logger.LogInformation("Gemini model '{Model}' returned 404. Retrying with 'gemini-3.6-flash'.", model);
                 response.Dispose();
-                response = await SendGeminiRequestAsync("gemini-1.5-flash", apiKey, userMessage, language);
+                response = await SendGeminiRequestAsync("gemini-3.6-flash", apiKey, userMessage, language);
             }
 
             if (response == null || !response.IsSuccessStatusCode)
