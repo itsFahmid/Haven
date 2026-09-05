@@ -67,6 +67,12 @@
                 document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
             });
 
+            // Explicitly purge active chat stream and inputs
+            const chatStream = document.getElementById('chatMessagesStream');
+            if (chatStream) chatStream.innerHTML = '';
+            const chatInput = document.getElementById('chatMessageInput');
+            if (chatInput) chatInput.value = '';
+
             // Overwrite document DOM immediately to prevent flashing on back-press
             document.body.innerHTML = "<div style='display:flex;justify-content:center;align-items:center;height:100vh;background:#fff;font-family:sans-serif;'>Closing website and opening YouTube...</div>";
 
@@ -86,6 +92,16 @@
             window.location.href = "https://www.youtube.com";
         }
     };
+
+    // Purge in-memory chat session state on browser tab close or navigation away
+    const purgeChatState = function () {
+        const chatStream = document.getElementById('chatMessagesStream');
+        if (chatStream) chatStream.innerHTML = '';
+        const chatInput = document.getElementById('chatMessageInput');
+        if (chatInput) chatInput.value = '';
+    };
+    window.addEventListener('pagehide', purgeChatState);
+    window.addEventListener('beforeunload', purgeChatState);
 
     // Listen for ESC key emergency escape
     window.addEventListener('keydown', function (e) {

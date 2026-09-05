@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.SignalR;
-using Haven.Data;
 using Haven.Models;
 using Haven.Services;
 
@@ -7,16 +6,14 @@ namespace Haven.Hubs;
 
 public class HotlineHub : Hub
 {
-    private readonly HavenDbContext _db;
     private static readonly HashSet<string> AcuteKeywords = new(StringComparer.OrdinalIgnoreCase)
     {
         "suicide", "self-harm", "self harm", "kill myself", "want to die",
         "আত্মহত্যা", "নিজের ক্ষতি", "মরে যেতে চাই", "বাঁচতে চাই না", "অত্যাচার", "রেপ", "rape"
     };
 
-    public HotlineHub(HavenDbContext db)
+    public HotlineHub()
     {
-        _db = db;
     }
 
     public async Task JoinHotlineSession(string sessionType = "AnonymousHotline")
