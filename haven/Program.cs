@@ -12,6 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.Sources.Clear();
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: false);
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddUserSecrets<Program>(optional: true);
+}
 builder.Configuration.AddEnvironmentVariables();
 
 // Support dynamic port binding on cloud hosts like Render
@@ -62,6 +66,9 @@ builder.Services.AddDbContext<HavenDbContext>(options =>
 // Register Security & Authentication Services
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+// Register Gemini AI Services
+builder.Services.AddHttpClient<ICrisisAiService, GeminiAiService>();
 
 // Configure Cookie Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
