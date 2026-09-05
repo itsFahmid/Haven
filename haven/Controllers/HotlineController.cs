@@ -17,24 +17,56 @@ public class HotlineController : Controller
     }
 
     [HttpGet]
-    public IActionResult GeminiStatus()
+    public async Task<IActionResult> GeminiStatus()
     {
-        var apiKey = _configuration["GeminiApiKey"]
-            ?? _configuration["Gemini:ApiKey"]
-            ?? _configuration["GEMINI_API_KEY"]
-            ?? _configuration["Gemini__ApiKey"]
-            ?? _configuration["Gemini_API"]
-            ?? _configuration["GEMINI_API"]
-            ?? Environment.GetEnvironmentVariable("GEMINI_API_KEY")
-            ?? Environment.GetEnvironmentVariable("GeminiApiKey")
-            ?? Environment.GetEnvironmentVariable("Gemini_API")
-            ?? Environment.GetEnvironmentVariable("GEMINI_API");
+        static string? Resolve(params string?[] candidates) =>
+            candidates.FirstOrDefault(v => !string.IsNullOrWhiteSpace(v));
 
-        var model = _configuration["GeminiModel"]
-            ?? _configuration["Gemini:Model"]
-            ?? _configuration["GEMINI_MODEL"]
-            ?? Environment.GetEnvironmentVariable("GEMINI_MODEL")
-            ?? "gemini-3.6-flash (default)";
+        var apiKey = Resolve(
+            _configuration["GeminiApiKey"],
+            _configuration["Gemini:ApiKey"],
+            _configuration["GEMINI_API_KEY"],
+            _configuration["Gemini__ApiKey"],
+            _configuration["Gemini_API"],
+            _configuration["GEMINI_API"],
+            Environment.GetEnvironmentVariable("GEMINI_API_KEY"),
+            Environment.GetEnvironmentVariable("GeminiApiKey"),
+            Environment.GetEnvironmentVariable("Gemini_API"),
+            Environment.GetEnvironmentVariable("GEMINI_API")
+        );
+
+        var model = Resolve(
+            _configuration["GeminiModel"],
+            _configuration["Gemini:Model"],
+            _configuration["GEMINI_MODEL"],
+            Environment.GetEnvironmentVariable("GEMINI_MODEL")
+        ) ?? "gemini-3.6-flash";
+
+        string? liveTestStatus = null;
+        string? liveTestBody = null;
+
+        if (!string.IsNullOrWhiteSpace(apiKey))
+        {
+            try
+            {
+                using var http = new System.Net.Http.HttpClient();
+                http.Timeout = TimeSpan.FromSeconds(15);
+                var endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={apiKey}";
+                var payload = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    contents = new[] { new { parts = new[] { new { text = "hi" } } } }
+                });
+                var resp = await http.PostAsync(endpoint, new System.Net.Http.StringContent(payload, System.Text.Encoding.UTF8, "application/json"));
+                liveTestStatus = ((int)resp.StatusCode).ToString() + " " + resp.StatusCode.ToString();
+                var body = await resp.Content.ReadAsStringAsync();
+                liveTestBody = body.Length > 500 ? body[..500] + "..." : body;
+            }
+            catch (Exception ex)
+            {
+                liveTestStatus = "Exception";
+                liveTestBody = ex.Message;
+            }
+        }
 
         return Json(new
         {
@@ -42,6 +74,8 @@ public class HotlineController : Controller
             keyPrefix = string.IsNullOrWhiteSpace(apiKey) ? null : apiKey.Substring(0, Math.Min(8, apiKey.Length)) + "...",
             keyLength = apiKey?.Length ?? 0,
             model,
+            liveTestStatus,
+            liveTestBody,
             allEnvKeys = System.Environment.GetEnvironmentVariables().Keys
                 .Cast<string>()
                 .Where(k => k.Contains("GEMINI", StringComparison.OrdinalIgnoreCase) || k.Contains("Gemini", StringComparison.OrdinalIgnoreCase))
