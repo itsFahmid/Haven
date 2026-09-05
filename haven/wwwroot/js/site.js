@@ -67,6 +67,12 @@
                 document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
             });
 
+            // Cancel any active streaming timers
+            if (window.HavenChat && window.HavenChat.activeTypingTimers) {
+                window.HavenChat.activeTypingTimers.forEach(function (t) { clearInterval(t); });
+                window.HavenChat.activeTypingTimers = [];
+            }
+
             // Explicitly purge active chat stream and inputs
             const chatStream = document.getElementById('chatMessagesStream');
             if (chatStream) chatStream.innerHTML = '';
@@ -184,6 +190,9 @@
     // 5. Interactive Anonymous AI Chatbot Engine
     // -------------------------------------------------------------
     window.HavenChat = {
+        signalRConnection: null,
+        activeTypingTimers: [],
+
         highRiskPatterns: [
             /suicide/i, /kill myself/i, /end my life/i, /hang myself/i, /poison/i, /cut myself/i, /die/i,
             /আত্মহত্যা/i, /মরে যাব/i, /মরতে চাই/i, /বাঁচতে চাই না/i, /ফাঁস/i, /বিষ খাব/i, /নিজেকে শেষ/i, /হাত কাটা/i
@@ -195,14 +204,14 @@
             const text = input.value.trim();
             if (!text) return;
 
-            const chatStream = document.getElementById('chatMessagesStream');
+            const lang = (window.HavenLang && window.HavenLang.current) || 'bn';
             const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-            // 1. Append User Message
+            // 1. Append User Message immediately
             this.appendMessage('user', text, timeStr);
             input.value = '';
 
-            // 2. Check for High-Risk Crisis Keywords
+            // 2. Client-side high-risk keyword check (instant escalation modal)
             let matchedTerm = null;
             for (let regex of this.highRiskPatterns) {
                 if (regex.test(text)) {
@@ -210,24 +219,131 @@
                     break;
                 }
             }
-
             if (matchedTerm) {
-                // Trigger instant crisis escalation modal
-                setTimeout(() => {
-                    window.triggerCrisisEscalation(matchedTerm);
-                }, 300);
+                setTimeout(function () { window.triggerCrisisEscalation(matchedTerm); }, 300);
             }
 
-            // 3. Show Bot Typing Indicator
+            // 3. Show typing indicator
             this.showTypingIndicator();
 
-            // 4. Fetch / Simulate Bot Response
-            setTimeout(() => {
-                this.hideTypingIndicator();
-                const response = this.generateEmpatheticReply(text, matchedTerm);
-                this.appendMessage(response.isCrisis ? 'crisis' : 'bot', response.message, new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), response.helpline);
-            }, 900);
+            // 4. Send via SignalR (response arrives via ReceiveBotResponse), else HTTP, else offline
+            const self = this;
+            if (this.signalRConnection &&
+                typeof signalR !== 'undefined' &&
+                this.signalRConnection.state === signalR.HubConnectionState.Connected) {
+                this.signalRConnection.invoke('SendMessage', 'Anonymous Ally', text, lang)
+                    .catch(function (err) {
+                        console.warn('SignalR invoke failed, using HTTP fallback:', err);
+                        self._fetchHttpResponse(text, lang, matchedTerm);
+                    });
+            } else {
+                self._fetchHttpResponse(text, lang, matchedTerm);
+            }
         },
+
+        _fetchHttpResponse: function (text, lang, matchedTerm) {
+            const self = this;
+            fetch('/Hotline/SendMessage', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                body: JSON.stringify({ text: text, lang: lang })
+            })
+            .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+            .then(function (data) {
+                self.handleBotResponse({
+                    messageEn: data.messageEn,
+                    messageBn: data.messageBn,
+                    isHighRisk: data.isHighRisk,
+                    triggerEscalationModal: data.triggerEscalationModal,
+                    crisisHelpline: data.crisisHelpline,
+                    timestamp: data.timestamp
+                });
+            })
+            .catch(function () {
+                // Offline fallback
+                self.hideTypingIndicator();
+                const response = self.generateEmpatheticReply(text, matchedTerm);
+                const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                self.streamBotMessage(response.isCrisis ? 'crisis' : 'bot', response.message, time, response.helpline || null);
+                if (response.isCrisis && window.triggerCrisisEscalation) {
+                    setTimeout(function () { window.triggerCrisisEscalation('Offline Crisis Match'); }, 400);
+                }
+            });
+        },
+
+        handleBotResponse: function (data) {
+            this.hideTypingIndicator();
+            if (!data) return;
+            const lang = (window.HavenLang && window.HavenLang.current) || 'bn';
+            const msg = lang === 'bn' ? (data.messageBn || data.messageEn) : (data.messageEn || data.messageBn);
+            const time = data.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const type = (data.isHighRisk || data.triggerEscalationModal) ? 'crisis' : 'bot';
+            const helpline = (data.isHighRisk || data.triggerEscalationModal) ? (data.crisisHelpline || '1098 / 999') : null;
+            this.streamBotMessage(type, msg, time, helpline);
+            if (data.triggerEscalationModal && window.triggerCrisisEscalation) {
+                setTimeout(function () { window.triggerCrisisEscalation('AI Crisis Signal'); }, 500);
+            }
+        },
+
+        streamBotMessage: function (type, fullText, time, helpline) {
+            const chatStream = document.getElementById('chatMessagesStream');
+            if (!chatStream || !fullText) return;
+
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'flex flex-col items-start mb-4 animate-fade-in';
+
+            const bubbleClass = type === 'crisis' ? 'chat-bubble-crisis' : 'chat-bubble-bot';
+
+            let helplineHtml = '';
+            if (helpline) {
+                helplineHtml =
+                    '<div class="mt-3 pt-3 border-t border-rose-200 flex flex-wrap items-center gap-2">' +
+                    '<a href="tel:1098" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-medium text-xs rounded-lg transition shadow-sm">' +
+                    '\uD83D\uDCDE Child Helpline 1098</a>' +
+                    '<a href="tel:999" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs rounded-lg transition shadow-sm">' +
+                    '\uD83D\uDEA8 National Emergency 999</a>' +
+                    '<a href="tel:01779554391" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-700 hover:bg-teal-800 text-white font-medium text-xs rounded-lg transition shadow-sm">' +
+                    '\uD83D\uDC9A Kaan Pete Roi</a>' +
+                    '</div>';
+            }
+
+            msgDiv.innerHTML =
+                '<div class="max-w-[85%] md:max-w-[80%] p-4 ' + bubbleClass + ' text-sm leading-relaxed shadow-sm">' +
+                '<span class="bot-text-content"></span>' +
+                '<span class="stream-cursor inline-block w-1.5 h-3.5 bg-current ml-0.5 animate-pulse"></span>' +
+                '<div class="bot-helpline-container hidden">' + helplineHtml + '</div>' +
+                '</div>' +
+                '<span class="text-[11px] text-slate-400 mt-1 px-1">' + time + '</span>';
+
+            chatStream.appendChild(msgDiv);
+            chatStream.scrollTop = chatStream.scrollHeight;
+
+            const contentSpan = msgDiv.querySelector('.bot-text-content');
+            const cursorSpan = msgDiv.querySelector('.stream-cursor');
+            const helplineContainer = msgDiv.querySelector('.bot-helpline-container');
+            const self = this;
+            let index = 0;
+            const textLength = fullText.length;
+            const step = textLength > 200 ? 4 : 2;
+
+            const timer = setInterval(function () {
+                index += step;
+                if (index >= textLength) {
+                    index = textLength;
+                    clearInterval(timer);
+                    if (cursorSpan) cursorSpan.remove();
+                    if (contentSpan) contentSpan.innerHTML = self.formatMarkdown(fullText);
+                    if (helplineContainer && helpline) helplineContainer.classList.remove('hidden');
+                } else {
+                    if (contentSpan) contentSpan.textContent = fullText.substring(0, index);
+                }
+                chatStream.scrollTop = chatStream.scrollHeight;
+            }, 18);
+
+            this.activeTypingTimers.push(timer);
+        },
+
+
 
         appendMessage: function (type, text, time, helpline) {
             const chatStream = document.getElementById('chatMessagesStream');
@@ -296,7 +412,7 @@
         },
 
         generateEmpatheticReply: function (rawText, isCrisisMatched) {
-            const lang = window.HavenLang.current;
+            const lang = (window.HavenLang && window.HavenLang.current) || 'bn';
             const text = rawText.toLowerCase();
 
             if (isCrisisMatched) {
@@ -344,9 +460,10 @@
         },
 
         sendQuickPrompt: function (btn) {
-            const text = window.HavenLang.current === 'bn' ? btn.getAttribute('data-bn') : btn.getAttribute('data-en');
+            const lang = (window.HavenLang && window.HavenLang.current) || 'bn';
+            const text = lang === 'bn' ? btn.getAttribute('data-bn') : btn.getAttribute('data-en');
             const input = document.getElementById('chatMessageInput');
-            if (input) {
+            if (input && text) {
                 input.value = text;
                 this.sendMessage();
             }
