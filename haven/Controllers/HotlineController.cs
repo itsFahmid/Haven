@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Haven.Models;
 using Haven.Services;
 
@@ -7,10 +8,45 @@ namespace Haven.Controllers;
 public class HotlineController : Controller
 {
     private readonly ICrisisAiService _crisisAiService;
+    private readonly IConfiguration _configuration;
 
-    public HotlineController(ICrisisAiService crisisAiService)
+    public HotlineController(ICrisisAiService crisisAiService, IConfiguration configuration)
     {
         _crisisAiService = crisisAiService;
+        _configuration = configuration;
+    }
+
+    [HttpGet]
+    public IActionResult GeminiStatus()
+    {
+        var apiKey = _configuration["GeminiApiKey"]
+            ?? _configuration["Gemini:ApiKey"]
+            ?? _configuration["GEMINI_API_KEY"]
+            ?? _configuration["Gemini__ApiKey"]
+            ?? _configuration["Gemini_API"]
+            ?? _configuration["GEMINI_API"]
+            ?? Environment.GetEnvironmentVariable("GEMINI_API_KEY")
+            ?? Environment.GetEnvironmentVariable("GeminiApiKey")
+            ?? Environment.GetEnvironmentVariable("Gemini_API")
+            ?? Environment.GetEnvironmentVariable("GEMINI_API");
+
+        var model = _configuration["GeminiModel"]
+            ?? _configuration["Gemini:Model"]
+            ?? _configuration["GEMINI_MODEL"]
+            ?? Environment.GetEnvironmentVariable("GEMINI_MODEL")
+            ?? "gemini-3.6-flash (default)";
+
+        return Json(new
+        {
+            keyFound = !string.IsNullOrWhiteSpace(apiKey),
+            keyPrefix = string.IsNullOrWhiteSpace(apiKey) ? null : apiKey.Substring(0, Math.Min(8, apiKey.Length)) + "...",
+            keyLength = apiKey?.Length ?? 0,
+            model,
+            allEnvKeys = System.Environment.GetEnvironmentVariables().Keys
+                .Cast<string>()
+                .Where(k => k.Contains("GEMINI", StringComparison.OrdinalIgnoreCase) || k.Contains("Gemini", StringComparison.OrdinalIgnoreCase))
+                .ToList()
+        });
     }
 
     public IActionResult Index()
