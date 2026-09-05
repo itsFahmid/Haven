@@ -105,23 +105,41 @@ Output valid JSON only matching:
                 _configuration["GEMINI_MODEL"],
                 Environment.GetEnvironmentVariable("GEMINI_MODEL")
             );
-            var model = !string.IsNullOrWhiteSpace(configuredModel) ? configuredModel : "gemini-3.6-flash";
 
-            var response = await SendGeminiRequestAsync(model, apiKey, userMessage, language);
-
-            // If the model returns 404 (e.g. deprecated/unavailable model version), fallback gracefully to gemini-3.6-flash
-            if (response != null && response.StatusCode == HttpStatusCode.NotFound && !model.Equals("gemini-3.6-flash", StringComparison.OrdinalIgnoreCase))
+            // Candidate models in order of priority: configured model, gemini-3.5-flash-lite, gemini-3.1-flash-lite, gemini-3.5-flash
+            var candidateModels = new List<string>();
+            if (!string.IsNullOrWhiteSpace(configuredModel))
             {
-                _logger.LogInformation("Gemini model '{Model}' returned 404. Retrying with 'gemini-3.6-flash'.", model);
-                response.Dispose();
-                response = await SendGeminiRequestAsync("gemini-3.6-flash", apiKey, userMessage, language);
+                candidateModels.Add(configuredModel);
+            }
+            candidateModels.AddRange(new[] { "gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.5-flash", "gemini-3.6-flash" });
+
+            // Remove duplicates preserving order
+            var modelsToTry = candidateModels.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+
+            HttpResponseMessage? response = null;
+            string lastError = string.Empty;
+
+            foreach (var currentModel in modelsToTry)
+            {
+                response = await SendGeminiRequestAsync(currentModel, apiKey, userMessage, language);
+                if (response != null && response.IsSuccessStatusCode)
+                {
+                    break;
+                }
+
+                if (response != null)
+                {
+                    lastError = await response.Content.ReadAsStringAsync();
+                    _logger.LogWarning("Gemini model '{Model}' returned status {StatusCode}. Error: {Error}. Retrying with fallback if available...", currentModel, response.StatusCode, lastError);
+                    response.Dispose();
+                    response = null;
+                }
             }
 
             if (response == null || !response.IsSuccessStatusCode)
             {
-                var errorBody = response != null ? await response.Content.ReadAsStringAsync() : "No response";
-                _logger.LogWarning("Gemini API call returned non-success status code {StatusCode}. Error: {ErrorBody}", response?.StatusCode, errorBody);
-                response?.Dispose();
+                _logger.LogWarning("All Gemini models failed. Last error: {Error}", lastError);
                 return null;
             }
 

@@ -40,7 +40,7 @@ public class HotlineController : Controller
             _configuration["Gemini:Model"],
             _configuration["GEMINI_MODEL"],
             Environment.GetEnvironmentVariable("GEMINI_MODEL")
-        ) ?? "gemini-3.6-flash";
+        ) ?? "gemini-3.5-flash-lite";
 
         string? liveTestStatus = null;
         string? liveTestBody = null;
