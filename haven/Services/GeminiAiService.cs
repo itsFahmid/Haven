@@ -77,16 +77,21 @@ Output valid JSON only matching:
     {
         try
         {
-            var apiKey = _configuration["GeminiApiKey"] 
-                ?? _configuration["Gemini:ApiKey"]
-                ?? _configuration["GEMINI_API_KEY"]
-                ?? _configuration["Gemini__ApiKey"]
-                ?? _configuration["Gemini_API"]
-                ?? _configuration["GEMINI_API"]
-                ?? Environment.GetEnvironmentVariable("GEMINI_API_KEY")
-                ?? Environment.GetEnvironmentVariable("GeminiApiKey")
-                ?? Environment.GetEnvironmentVariable("Gemini_API")
-                ?? Environment.GetEnvironmentVariable("GEMINI_API");
+            static string? Resolve(params string?[] candidates) =>
+                candidates.FirstOrDefault(v => !string.IsNullOrWhiteSpace(v));
+
+            var apiKey = Resolve(
+                _configuration["GeminiApiKey"],
+                _configuration["Gemini:ApiKey"],
+                _configuration["GEMINI_API_KEY"],
+                _configuration["Gemini__ApiKey"],
+                _configuration["Gemini_API"],
+                _configuration["GEMINI_API"],
+                Environment.GetEnvironmentVariable("GEMINI_API_KEY"),
+                Environment.GetEnvironmentVariable("GeminiApiKey"),
+                Environment.GetEnvironmentVariable("Gemini_API"),
+                Environment.GetEnvironmentVariable("GEMINI_API")
+            );
 
             if (string.IsNullOrWhiteSpace(apiKey))
             {
@@ -94,10 +99,12 @@ Output valid JSON only matching:
                 return null;
             }
 
-            var configuredModel = _configuration["GeminiModel"] 
-                ?? _configuration["Gemini:Model"]
-                ?? _configuration["GEMINI_MODEL"]
-                ?? Environment.GetEnvironmentVariable("GEMINI_MODEL");
+            var configuredModel = Resolve(
+                _configuration["GeminiModel"],
+                _configuration["Gemini:Model"],
+                _configuration["GEMINI_MODEL"],
+                Environment.GetEnvironmentVariable("GEMINI_MODEL")
+            );
             var model = !string.IsNullOrWhiteSpace(configuredModel) ? configuredModel : "gemini-3.6-flash";
 
             var response = await SendGeminiRequestAsync(model, apiKey, userMessage, language);
