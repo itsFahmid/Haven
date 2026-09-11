@@ -1,4 +1,5 @@
 @using System.Text.Encodings.Web
+@using Haven.Services
 @model List<Haven.Models.CourseViewModel>
 @{
     ViewData["Title"] = "আমার অ্যানরোলকৃত কোর্স সমূহ | My Enrolled Courses";
@@ -232,9 +233,11 @@
                                         }
 
                                         <!-- Full Detailed Lesson Text (Markdown) -->
-                                        <div class="prose prose-sm max-w-none text-slate-800 space-y-2">
+                                        <div class="space-y-2">
                                             <h5 class="text-xs font-black uppercase tracking-wider text-slate-600">বিস্তারিত লেসন টেক্সট (Detailed Lesson Content):</h5>
-                                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 leading-relaxed font-sans text-slate-800 whitespace-pre-wrap">@mod.ContentMarkdown</div>
+                                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 article-markdown-body font-sans text-slate-800">
+                                                @Html.Raw(MarkdownHelper.ToHtml(mod.ContentMarkdown))
+                                            </div>
                                         </div>
 
                                         <!-- Optional Materials Section -->

@@ -1,3 +1,4 @@
+@using Haven.Services
 @model Haven.Models.Article
 @{
     ViewData["Title"] = Model.TitleBn + " | Article Details";
@@ -52,8 +53,8 @@
         </div>
 
         <!-- Content Markdown Body -->
-        <div class="prose prose-slate max-w-none text-slate-800 leading-relaxed font-sans text-sm sm:text-base whitespace-pre-wrap space-y-4">
-            @Model.ContentMarkdown
+        <div class="article-markdown-body font-sans">
+            @Html.Raw(MarkdownHelper.ToHtml(Model.ContentMarkdown))
         </div>
 
         <!-- Footer Action -->

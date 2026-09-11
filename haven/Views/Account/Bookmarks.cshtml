@@ -1,3 +1,4 @@
+@using Haven.Services
 @model IEnumerable<Haven.Models.Article>
 @{
     ViewData["Title"] = "বুকমার্ক করা নিবন্ধ সমূহ | Bookmarked Articles";
@@ -71,7 +72,7 @@
                         </a>
 
                         <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">
-                            @article.ContentMarkdown
+                            @MarkdownHelper.ToPlainText(article.ContentMarkdown)
                         </p>
                     </div>
 
