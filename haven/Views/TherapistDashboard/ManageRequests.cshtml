@@ -1,0 +1,263 @@
+@model Haven.Models.TherapistDashboardViewModel
+@{
+    ViewData["Title"] = "থেরাপিস্ট ড্যাশবোর্ড - বুকিং অনুরোধ ব্যবস্থাপনা | Manage Booking Requests";
+    var therapistName = Model.Therapist?.User?.FullName ?? "Dr. Specialist";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    
+    <!-- Top Dashboard Header -->
+    <div class="bg-gradient-to-r from-teal-950 via-slate-900 to-teal-900 rounded-3xl p-8 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="space-y-2">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30 text-xs font-bold uppercase tracking-wider">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>Therapist Clinical Portal</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black text-white">অ্যাপয়েন্টমেন্ট ও সেশন রিকোয়েস্ট ম্যানেজমেন্ট</h1>
+            <p class="text-xs sm:text-sm text-teal-200">
+                স্বাগতম, <span class="font-bold text-white">@therapistName</span>। রোগীদের প্রেরিত সকল অ্যাপয়েন্টমেন্ট যাচাই ও অনুমোদন করুন।
+            </p>
+        </div>
+
+        <div class="flex items-center gap-3">
+            @if (Model.Therapist != null)
+            {
+                <a asp-controller="Therapist" asp-action="Profile" asp-route-id="@Model.Therapist.Id" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl border border-white/20 transition">
+                    👁️ পাবলিক প্রোফাইল প্রিভিউ
+                </a>
+            }
+        </div>
+    </div>
+
+    <!-- Metric Summary Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">মোট আবেদন</span>
+                <span class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-sm">📋</span>
+            </div>
+            <div class="text-3xl font-black text-slate-900 mt-2">@Model.TotalRequestsCount</div>
+            <p class="text-[11px] text-slate-500 mt-1">সর্বমোট সেশন অনুরোধ</p>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 border border-amber-200 bg-amber-50/40 shadow-2xs">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-700 uppercase tracking-wider">অপেক্ষমান (Pending)</span>
+                <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-sm">⏳</span>
+            </div>
+            <div class="text-3xl font-black text-amber-700 mt-2">@Model.PendingRequestsCount</div>
+            <p class="text-[11px] text-amber-800 mt-1">অবিলম্বে সিদ্ধান্ত নিন</p>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 border border-emerald-200 bg-emerald-50/40 shadow-2xs">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-emerald-700 uppercase tracking-wider">অনুমোদিত (Approved)</span>
+                <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-sm">✓</span>
+            </div>
+            <div class="text-3xl font-black text-emerald-700 mt-2">@Model.ApprovedRequestsCount</div>
+            <p class="text-[11px] text-emerald-800 mt-1">নিশ্চিতকৃত সেশন</p>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 border border-rose-200 bg-rose-50/40 shadow-2xs">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-rose-700 uppercase tracking-wider">বাতিল / প্রত্যাখ্যাত</span>
+                <span class="w-8 h-8 rounded-xl bg-rose-100 text-rose-800 flex items-center justify-center font-bold text-sm">✕</span>
+            </div>
+            <div class="text-3xl font-black text-rose-700 mt-2">@Model.RejectedRequestsCount</div>
+            <p class="text-[11px] text-rose-800 mt-1">প্রত্যাখ্যাত অনুরোধ</p>
+        </div>
+
+    </div>
+
+    <!-- Filter Tabs & Requests Table -->
+    <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden space-y-0">
+        
+        <!-- Table Control Toolbar -->
+        <div class="p-6 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-2">ফিল্টার:</span>
+                <a asp-action="ManageRequests" asp-route-statusFilter="All" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition @(Model.CurrentFilter == "All" ? "bg-teal-700 text-white shadow-xs" : "bg-slate-100 text-slate-600 hover:bg-slate-200")">
+                    সকল (@Model.TotalRequestsCount)
+                </a>
+                <a asp-action="ManageRequests" asp-route-statusFilter="Pending" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition @(Model.CurrentFilter == "Pending" ? "bg-amber-600 text-white shadow-xs" : "bg-amber-50 text-amber-800 hover:bg-amber-100")">
+                    পেন্ডিং (@Model.PendingRequestsCount)
+                </a>
+                <a asp-action="ManageRequests" asp-route-statusFilter="Approved" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition @(Model.CurrentFilter == "Approved" ? "bg-emerald-600 text-white shadow-xs" : "bg-emerald-50 text-emerald-800 hover:bg-emerald-100")">
+                    অনুমোদিত (@Model.ApprovedRequestsCount)
+                </a>
+                <a asp-action="ManageRequests" asp-route-statusFilter="Rejected" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition @(Model.CurrentFilter == "Rejected" ? "bg-rose-600 text-white shadow-xs" : "bg-rose-50 text-rose-800 hover:bg-rose-100")">
+                    প্রত্যাখ্যাত (@Model.RejectedRequestsCount)
+                </a>
+            </div>
+
+            <div class="text-xs text-slate-500 font-semibold">
+                মোট আবেদন: @Model.Requests.Count টি
+            </div>
+        </div>
+
+        <!-- Data Table UI -->
+        @if (Model.Requests == null || !Model.Requests.Any())
+        {
+            <div class="p-12 text-center space-y-3">
+                <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto text-xl">
+                    📁
+                </div>
+                <h3 class="text-base font-bold text-slate-800">কোনো বুকিং অনুরোধ পাওয়া যায়নি</h3>
+                <p class="text-xs text-slate-500">
+                    বর্তমানে এই ফিল্টারে কোনো অ্যাপয়েন্টমেন্ট অনুরোধ নেই।
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/90 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200">
+                            <th class="py-3.5 px-6">রেফারেন্স ও তারিখ</th>
+                            <th class="py-3.5 px-6">রোগীর নাম (Patient)</th>
+                            <th class="py-3.5 px-6">সেশন সময় ও মাধ্যম</th>
+                            <th class="py-3.5 px-6">রোগীর নোট (Notes)</th>
+                            <th class="py-3.5 px-6">বর্তমান স্থিতি</th>
+                            <th class="py-3.5 px-6 text-right">পদক্ষেপ (Actions)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+                        @foreach (var request in Model.Requests)
+                        {
+                            var patientName = request.User?.FullName ?? "Anonymous Patient";
+                            var patientEmail = request.User?.Email ?? "confidential@haven.org";
+                            var status = request.Status;
+
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                
+                                <!-- Reference & Created Date -->
+                                <td class="py-4 px-6">
+                                    <span class="font-mono font-bold text-teal-800 bg-teal-50 px-2 py-0.5 rounded border border-teal-200 text-[11px]">
+                                        @request.BookingReference
+                                    </span>
+                                    <div class="text-[11px] text-slate-400 mt-1">
+                                        @request.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")
+                                    </div>
+                                </td>
+
+                                <!-- Patient Name -->
+                                <td class="py-4 px-6">
+                                    <div class="font-bold text-slate-900">@patientName</div>
+                                    <div class="text-[11px] text-slate-500 truncate max-w-[150px]">@patientEmail</div>
+                                </td>
+
+                                <!-- Date, Time Slot & Mode -->
+                                <td class="py-4 px-6">
+                                    <div class="font-bold text-slate-800">
+                                        📅 @request.BookingDate.ToString("dd MMMM, yyyy")
+                                    </div>
+                                    <div class="text-teal-700 font-semibold mt-0.5">
+                                        ⏰ @request.TimeSlot
+                                    </div>
+                                    <div class="text-[10px] text-slate-400 mt-0.5">
+                                        🔒 @request.CommunicationMode
+                                    </div>
+                                </td>
+
+                                <!-- Notes -->
+                                <td class="py-4 px-6 max-w-xs">
+                                    @if (!string.IsNullOrEmpty(request.Notes))
+                                    {
+                                        <p class="text-slate-600 line-clamp-2 bg-slate-50 p-2 rounded-xl border border-slate-200 text-[11px]" title="@request.Notes">
+                                            @request.Notes
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-slate-400 italic">নোট নেই</span>
+                                    }
+                                    
+                                    @if (request.IsFeeSubsidized)
+                                    {
+                                        <span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
+                                            ফ্রি স্কলারশিপ আবেদন
+                                        </span>
+                                    }
+                                </td>
+
+                                <!-- Status Badge -->
+                                <td class="py-4 px-6">
+                                    @if (status == Haven.Models.BookingStatus.Pending)
+                                    {
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                            <span>Pending</span>
+                                        </span>
+                                    }
+                                    else if (status == Haven.Models.BookingStatus.Approved)
+                                    {
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                                            <span>Approved</span>
+                                        </span>
+                                    }
+                                    else if (status == Haven.Models.BookingStatus.Rejected)
+                                    {
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span>
+                                            <span>Rejected</span>
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700">
+                                            @status
+                                        </span>
+                                    }
+                                </td>
+
+                                <!-- Action Buttons: Approve & Reject -->
+                                <td class="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
+                                    @if (status == Haven.Models.BookingStatus.Pending)
+                                    {
+                                        <form asp-action="ApproveRequest" asp-route-id="@request.Id" method="post" class="inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs rounded-xl shadow-2xs transition inline-flex items-center gap-1">
+                                                <span>✓ অনুমোদন (Approve)</span>
+                                            </button>
+                                        </form>
+
+                                        <form asp-action="RejectRequest" asp-route-id="@request.Id" method="post" class="inline" onsubmit="return confirm('আপনি কি নিশ্চিত যে এই বুকিং অনুরোধটি প্রত্যাখ্যান করতে চান?');">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 active:scale-95 text-white font-bold text-xs rounded-xl shadow-2xs transition inline-flex items-center gap-1">
+                                                <span>✕ প্রত্যাখ্যান (Reject)</span>
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (status == Haven.Models.BookingStatus.Approved)
+                                    {
+                                        <form asp-action="RejectRequest" asp-route-id="@request.Id" method="post" class="inline" onsubmit="return confirm('অনুমোদন প্রত্যাহার করে প্রত্যাখ্যান করতে চান?');">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="px-2.5 py-1 bg-slate-100 hover:bg-rose-50 text-rose-700 font-semibold text-[11px] rounded-lg transition border border-slate-200">
+                                                বাতিল করুন
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (status == Haven.Models.BookingStatus.Rejected)
+                                    {
+                                        <form asp-action="ApproveRequest" asp-route-id="@request.Id" method="post" class="inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="px-2.5 py-1 bg-slate-100 hover:bg-emerald-50 text-emerald-700 font-semibold text-[11px] rounded-lg transition border border-slate-200">
+                                                পুনরায় অনুমোদন
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+    </div>
+
+</div>
