@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Users\\DST\\source\\repos\\haven\\haven\\haven.csproj": {}
+    "C:\\Users\\HP\\Desktop\\Haven\\haven\\haven.csproj": {}
   },
   "projects": {
-    "D:\\Users\\DST\\source\\repos\\haven\\haven\\haven.csproj": {
+    "C:\\Users\\HP\\Desktop\\Haven\\haven\\haven.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Users\\DST\\source\\repos\\haven\\haven\\haven.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\Desktop\\Haven\\haven\\haven.csproj",
         "projectName": "Haven",
-        "projectPath": "D:\\Users\\DST\\source\\repos\\haven\\haven\\haven.csproj",
-        "packagesPath": "C:\\Users\\DST\\.nuget\\packages\\",
-        "outputPath": "D:\\Users\\DST\\source\\repos\\haven\\haven\\obj\\",
+        "projectPath": "C:\\Users\\HP\\Desktop\\Haven\\haven\\haven.csproj",
+        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HP\\Desktop\\Haven\\haven\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\DST\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -51,6 +47,24 @@
         "net10.0": {
           "framework": "net10.0",
           "targetAlias": "net10.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[10.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.0.11, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

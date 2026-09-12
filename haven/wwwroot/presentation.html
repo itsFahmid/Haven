@@ -1,0 +1,2217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HAVEN — System Design Presentation (CSE 3224 Group 06)</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM & THEME VARIABLES
+       ========================================================================== */
+    :root {
+      --bg-primary: #090d16;
+      --bg-secondary: #0f172a;
+      --bg-card: rgba(30, 41, 59, 0.75);
+      --bg-card-hover: rgba(51, 65, 85, 0.85);
+      --border-color: rgba(148, 163, 184, 0.16);
+      
+      --accent-teal: #14b8a6;
+      --accent-teal-dark: #0d9488;
+      --accent-teal-glow: rgba(20, 184, 166, 0.3);
+      
+      --accent-rose: #f43f5e;
+      --accent-rose-glow: rgba(244, 63, 94, 0.3);
+      
+      --accent-cyan: #38bdf8;
+      --accent-indigo: #6366f1;
+      --accent-amber: #f59e0b;
+      
+      --text-white: #f8fafc;
+      --text-gray-100: #f1f5f9;
+      --text-gray-300: #cbd5e1;
+      --text-gray-400: #94a3b8;
+      --text-gray-500: #64748b;
+      
+      --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      --slide-width: 1280px;
+      --slide-height: 720px;
+      --border-radius-lg: 16px;
+      --border-radius-md: 10px;
+      --border-radius-sm: 6px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-gray-100);
+      font-family: var(--font-body);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient background gradient glow */
+    .ambient-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at 12% 18%, rgba(20, 184, 166, 0.1) 0%, transparent 40%),
+                  radial-gradient(circle at 88% 82%, rgba(99, 102, 241, 0.1) 0%, transparent 42%),
+                  radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.05) 0%, transparent 60%),
+                  #070b12;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       VIEWPORT & SLIDE CONTAINER (16:9 RATIO - 1280x720)
+       ========================================================================== */
+    .deck-viewport {
+      position: relative;
+      width: var(--slide-width);
+      height: var(--slide-height);
+      max-width: 96vw;
+      max-height: 90vh;
+      aspect-ratio: 16 / 9;
+      background: linear-gradient(135deg, #0b1120 0%, #0f172a 100%);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75),
+                  0 0 0 1px rgba(255, 255, 255, 0.05),
+                  0 0 45px var(--accent-teal-glow);
+      overflow: hidden;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 44px 56px 40px 56px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.985) translateY(8px);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+      z-index: 2;
+    }
+
+    /* ==========================================================================
+       HEADER & FOOTER DECORATIONS
+       ========================================================================== */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 22px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .slide-title-area {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .slide-category {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-teal);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .slide-category i {
+      font-size: 10px;
+    }
+
+    .slide-title {
+      font-family: var(--font-heading);
+      font-size: 27px;
+      font-weight: 800;
+      color: var(--text-white);
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+
+    .slide-badge {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-gray-300);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(8px);
+    }
+
+    .slide-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--accent-teal);
+      box-shadow: 0 0 8px var(--accent-teal);
+    }
+
+    .slide-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 5;
+      min-height: 0;
+    }
+
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      font-size: 11px;
+      color: var(--text-gray-500);
+      font-family: var(--font-mono);
+      z-index: 5;
+    }
+
+    .slide-footer-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slide-footer-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* ==========================================================================
+       CARDS, GRIDS & GLASSMORPHISM
+       ========================================================================== */
+    .glass-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      transition: all 0.25s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(20, 184, 166, 0.4);
+      background: var(--bg-card-hover);
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      height: 100%;
+    }
+
+    .grid-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      height: 100%;
+    }
+
+    .grid-4col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      height: 100%;
+    }
+
+    /* ==========================================================================
+       DEDICATED DIAGRAM IMAGE CONTAINER / PLACEHOLDER (HIGH-PRIORITY)
+       ========================================================================== */
+    .diagram-placeholder {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 230px;
+      border: 2px dashed rgba(20, 184, 166, 0.7);
+      background: radial-gradient(circle at center, rgba(20, 184, 166, 0.08) 0%, rgba(15, 23, 42, 0.85) 100%);
+      border-radius: var(--border-radius-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 22px;
+      text-align: center;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(10px);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .diagram-placeholder:hover {
+      border-color: #2dd4bf;
+      background: radial-gradient(circle at center, rgba(20, 184, 166, 0.16) 0%, rgba(15, 23, 42, 0.95) 100%);
+      box-shadow: 0 0 30px rgba(20, 184, 166, 0.3), inset 0 0 20px rgba(20, 184, 166, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .diagram-placeholder .ph-icon-box {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      background: rgba(20, 184, 166, 0.18);
+      border: 1px solid rgba(20, 184, 166, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: var(--accent-teal);
+      box-shadow: 0 0 20px rgba(20, 184, 166, 0.3);
+      animation: iconFloat 3s infinite ease-in-out;
+    }
+
+    @keyframes iconFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .diagram-placeholder .ph-title {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      color: #38bdf8;
+      background: linear-gradient(90deg, #38bdf8, #2dd4bf);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+    }
+
+    .diagram-placeholder .ph-desc {
+      font-size: 12px;
+      color: var(--text-gray-300);
+      max-width: 520px;
+      line-height: 1.5;
+    }
+
+    .diagram-placeholder .ph-action-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-gray-300);
+      transition: all 0.2s;
+    }
+
+    .diagram-placeholder:hover .ph-action-hint {
+      background: rgba(20, 184, 166, 0.28);
+      color: var(--text-white);
+      border-color: var(--accent-teal);
+    }
+
+    /* Hidden file input for interactive live upload */
+    .diagram-placeholder input[type="file"] {
+      display: none;
+    }
+
+    /* Live uploaded / inserted image preview */
+    .diagram-image-preview {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background-color: #0b1120;
+      border-radius: inherit;
+      display: none;
+      z-index: 10;
+    }
+
+    .diagram-image-preview.has-image {
+      display: block;
+    }
+
+    .remove-image-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--accent-rose);
+      color: var(--accent-rose);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 20;
+      display: none;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s;
+    }
+
+    .remove-image-btn:hover {
+      background: var(--accent-rose);
+      color: #fff;
+    }
+
+    .diagram-placeholder.has-image .remove-image-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* ==========================================================================
+       TABLES & MATRIX STYLING
+       ========================================================================== */
+    .custom-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 8px;
+      font-size: 12px;
+    }
+
+    .custom-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent-teal);
+      border-bottom: 1px solid rgba(20, 184, 166, 0.3);
+    }
+
+    .custom-table td {
+      padding: 12px 14px;
+      background: rgba(30, 41, 59, 0.6);
+      color: var(--text-gray-200);
+      vertical-align: middle;
+      line-height: 1.4;
+    }
+
+    .custom-table tr td:first-child {
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--accent-cyan);
+      white-space: nowrap;
+      width: 70px;
+    }
+
+    .custom-table tr td:nth-child(2) {
+      font-weight: 700;
+      color: var(--text-white);
+      width: 220px;
+    }
+
+    .custom-table tr td:nth-child(3) {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-amber);
+      width: 200px;
+    }
+
+    .custom-table tr td:last-child {
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    .custom-table tr:hover td {
+      background: rgba(51, 65, 85, 0.75);
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 600;
+      background: rgba(20, 184, 166, 0.15);
+      border: 1px solid rgba(20, 184, 166, 0.3);
+      color: #5eead4;
+      margin-right: 4px;
+      margin-bottom: 2px;
+    }
+
+    /* ==========================================================================
+       SLIDE-SPECIFIC DESIGNS
+       ========================================================================== */
+
+    /* Slide 1: Title Hero */
+    .slide-title-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100%;
+      position: relative;
+    }
+
+    .hero-logo-box {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #0f766e, #0d9488);
+      border: 2px solid rgba(20, 184, 166, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      color: #fff;
+      box-shadow: 0 0 35px rgba(20, 184, 166, 0.4);
+      margin-bottom: 16px;
+      animation: pulseGlow 3s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 20px rgba(20, 184, 166, 0.3); transform: translateY(0); }
+      100% { box-shadow: 0 0 45px rgba(20, 184, 166, 0.6); transform: translateY(-3px); }
+    }
+
+    .hero-main-title {
+      font-family: var(--font-heading);
+      font-size: 46px;
+      font-weight: 900;
+      color: var(--text-white);
+      letter-spacing: 2px;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .hero-main-title span {
+      background: linear-gradient(135deg, #14b8a6, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+      color: #cbd5e1;
+      max-width: 820px;
+      margin-bottom: 14px;
+      font-style: italic;
+    }
+
+    .hero-course-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(20, 184, 166, 0.3);
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #5eead4;
+      margin-bottom: 24px;
+    }
+
+    .hero-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      width: 100%;
+      max-width: 980px;
+      text-align: left;
+    }
+
+    .hero-meta-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 16px 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-meta-card h4 {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent-teal);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .member-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 12px;
+      font-size: 12px;
+    }
+
+    .member-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-gray-200);
+    }
+
+    .member-id {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--accent-cyan);
+      font-size: 11px;
+    }
+
+    .supervisor-item {
+      margin-bottom: 6px;
+      font-size: 12.5px;
+      color: var(--text-gray-100);
+    }
+
+    .supervisor-item strong {
+      color: #fff;
+    }
+
+    .supervisor-item span {
+      display: block;
+      font-size: 11px;
+      color: var(--text-gray-400);
+    }
+
+    /* Notation Cards */
+    .notation-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 22px 16px;
+      height: 100%;
+      border-radius: var(--border-radius-md);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      transition: all 0.25s;
+    }
+
+    .notation-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-teal);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+
+    .notation-visual {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      width: 100%;
+    }
+
+    .visual-entity {
+      background: linear-gradient(135deg, #0d9488, #0f766e);
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.4);
+    }
+
+    .visual-process {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      border: 2px solid #60a5fa;
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    }
+
+    .visual-datastore {
+      border-top: 2px solid #f59e0b;
+      border-bottom: 2px solid #f59e0b;
+      padding: 8px 24px;
+      font-family: var(--font-mono);
+      font-weight: 800;
+      color: #fbbf24;
+      background: rgba(245, 158, 11, 0.1);
+      font-size: 15px;
+      letter-spacing: 2px;
+    }
+
+    .visual-dataflow {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #f43f5e;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .visual-dataflow i {
+      font-size: 26px;
+      animation: arrowGlide 2s infinite ease-in-out;
+    }
+
+    @keyframes arrowGlide {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(6px); }
+    }
+
+    /* Sub-process Steps (Slide 13) */
+    .step-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #0d9488, #14b8a6);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      box-shadow: 0 0 10px rgba(20, 184, 166, 0.3);
+      flex-shrink: 0;
+    }
+
+    /* Split UI Layout for Focus Slides */
+    .split-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 22px;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .focus-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .focus-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 14px 16px;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s;
+    }
+
+    .focus-card:hover {
+      border-color: rgba(20, 184, 166, 0.5);
+      transform: translateX(4px);
+    }
+
+    .focus-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .focus-card-title {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .focus-card-body {
+      font-size: 12px;
+      color: var(--text-gray-300);
+      line-height: 1.45;
+    }
+
+    /* ==========================================================================
+       BOTTOM DECK CONTROLLER / NAV BAR
+       ========================================================================== */
+    .deck-controller {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 18px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid var(--border-color);
+      border-radius: 40px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      z-index: 100;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-gray-300);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: rgba(20, 184, 166, 0.2);
+      color: var(--accent-teal);
+      transform: scale(1.1);
+    }
+
+    .nav-btn:active {
+      transform: scale(0.95);
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-white);
+      padding: 0 10px;
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .slide-counter span.current {
+      color: var(--accent-teal);
+    }
+
+    .progress-bar-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 20;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 6.66%;
+      background: linear-gradient(90deg, #0d9488, #14b8a6, #38bdf8);
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px rgba(20, 184, 166, 0.5);
+    }
+
+    /* Modal / Drawer for Slide Index Preview */
+    .drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .drawer-overlay.open {
+      display: flex;
+    }
+
+    .drawer-content {
+      width: 100%;
+      max-width: 1100px;
+      max-height: 85vh;
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg);
+      padding: 24px 30px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .drawer-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .drawer-thumb {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .drawer-thumb:hover {
+      border-color: var(--accent-teal);
+      transform: translateY(-2px);
+      background: rgba(51, 65, 85, 0.8);
+    }
+
+    .drawer-thumb.active {
+      border-color: var(--accent-teal);
+      box-shadow: 0 0 15px rgba(20, 184, 166, 0.3);
+      background: rgba(20, 184, 166, 0.15);
+    }
+
+    .drawer-thumb-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-teal);
+    }
+
+    .drawer-thumb-title {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-white);
+      line-height: 1.3;
+    }
+
+    /* Keyboard Help Tooltip */
+    .keyboard-hint {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      font-size: 11px;
+      color: var(--text-gray-500);
+      background: rgba(15, 23, 42, 0.6);
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .keyboard-hint kbd {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px 5px;
+      border-radius: 4px;
+      color: var(--text-gray-300);
+      font-family: var(--font-mono);
+    }
+
+    /* Print Styles for clean 16:9 PDF Export */
+    @media print {
+      body {
+        background: #090d16 !important;
+        overflow: visible !important;
+      }
+      .ambient-bg, .deck-controller, .keyboard-hint, .drawer-overlay {
+        display: none !important;
+      }
+      .deck-viewport {
+        max-width: 100% !important;
+        max-height: 100% !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+      .slide {
+        position: relative !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        page-break-after: always !important;
+        height: 100vh !important;
+        width: 100vw !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient background glow -->
+  <div class="ambient-bg"></div>
+
+  <!-- Keyboard Shortcuts Hint -->
+  <div class="keyboard-hint">
+    <span>Shortcuts:</span>
+    <kbd>←</kbd><kbd>→</kbd> Navigate
+    <kbd>F</kbd> Fullscreen
+    <kbd>G</kbd> Grid View
+  </div>
+
+  <!-- ========================================================================
+       MAIN 16:9 DECK VIEWPORT (1280x720)
+       ======================================================================== -->
+  <main class="deck-viewport" id="deckViewport">
+    
+    <!-- Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- ======================================================================
+         SLIDE 1: TITLE SLIDE
+         ====================================================================== -->
+    <section class="slide active" data-slide="1">
+      <div class="slide-content">
+        <div class="slide-title-hero">
+          <div class="hero-logo-box">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <h1 class="hero-main-title"><span>HAVEN</span></h1>
+          <p class="hero-subtitle">An Integrated Platform for Digital Safety, Abuse Prevention, Crisis Response and Support</p>
+          
+          <div class="hero-course-tag">
+            <i class="fa-solid fa-graduation-cap"></i> CSE 3224 · Information System Design &amp; Software Engineering Lab
+          </div>
+
+          <div class="hero-meta-grid">
+            <!-- Prepared By -->
+            <div class="hero-meta-card">
+              <h4><i class="fa-solid fa-users"></i> Prepared By — Group 06, Section A2</h4>
+              <div class="member-list">
+                <div class="member-item"><span class="member-id">20230104033</span> Rabeya Bashri Mim</div>
+                <div class="member-item"><span class="member-id">20230104034</span> Silvia Rahaman</div>
+                <div class="member-item"><span class="member-id">20230104039</span> Faiyaz Fardin</div>
+                <div class="member-item"><span class="member-id">20230104046</span> Fahmid Siddique Ahmed</div>
+              </div>
+            </div>
+
+            <!-- Prepared For -->
+            <div class="hero-meta-card">
+              <h4><i class="fa-solid fa-chalkboard-user"></i> Prepared For</h4>
+              <div class="supervisor-item">
+                <strong>Dr. Taslim Taher</strong>
+                <span>Assistant Professor, Dept. of CSE</span>
+              </div>
+              <div class="supervisor-item">
+                <strong>Nabila Rahman</strong>
+                <span>Lecturer, Dept. of CSE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="slide-footer">
+        <div class="slide-footer-left">
+          <span>01.09.2026</span>
+          <span>•</span>
+          <span>Dept. of CSE, AUST</span>
+        </div>
+        <div class="slide-footer-right">
+          <span>Group 06 – HAVEN</span>
+          <span>Slide 01</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SLIDE 2: INTRODUCTION TO DFD
+         ====================================================================== -->
+    <section class="slide" data-slide="2">
+      <div class="slide-header">
+        <div class="slide-title-area">
+          <div class="slide-category"><i class="fa-solid fa-diagram-project"></i> Architectural Overview</div>
+          <h2 class="slide-title">Introduction to Data Flow Diagrams</h2>
+        </div>
+        <div class="slide-badge"><div class="dot"></div> System Dynamics</div>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2col">
+          <!-- Left Column -->
+          <div style="display: flex; flex-direction: column; gap: 16px; justify-content: center;">
+            <div class="glass-card">
+              <h3 style="font-family: var(--font-heading); font-size: 16px; color: var(--accent-teal); margin-bottom: 8px;">
+                <i class="fa-solid fa-arrows-spin"></i> Dynamic System Representation
+              </h3>
+              <p style="font-size: 13px; color: var(--text-gray-300); line-height: 1.6;">
+                A <strong>Data Flow Diagram (DFD)</strong> is a graphical representation of how data moves through a system — the external entities that supply or receive data, the processes that transform that data, the data stores where information is held, and the data flows that connect them.
+              </p>
+            </div>
+
+            <div class="glass-card" style="border-left: 3px solid var(--accent-cyan);">
+              <h3 style="font-family: var(--font-heading); font-size: 15px; color: var(--text-white); margin-bottom: 8px;">
+                <i class="fa-solid fa-database"></i> Complementing the ERD (Report 02)
+              </h3>
+              <p style="font-size: 12.5px; color: var(--text-gray-300); line-height: 1.55;">
+                While the ERD modeled the static structure of Haven's 13-entity database, the DFD models the <strong>dynamic movement and lifecycle of information</strong> — essential for understanding real-time crisis triage, content delivery, anonymous consultations, and automated safety workflows.
+              </p>
+            </div>
+          </div>
+
+          <!-- Right Column: Level Breakdown -->
+          <div style="display: flex; flex-direction: column; gap: 12px; justify-content: center;">
+            <div class="glass-card" style="border-left: 3px solid var(--accent-teal); padding: 14px 18px;">
+              <span style="font-family: var(--font-mono); font-size: 10px; font-weight: 700; color: var(--accent-teal); text-transform: uppercase;">Level 0</span>
+              <h4 style="font-family: var(--font-heading); font-size: 15px; color: #fff; margin: 2px 0 4px 0;">Context Diagram</h4>
+              <p style="font-size: 12px; color: var(--text-gray-400);">Broadest possible view treating Haven as a single central process interacting with 5 external entities.</p>
+            </div>
+
+            <div class="glass-card" style="border-left: 3px solid var(--accent-cyan); padding: 14px 18px;">
+              <span style="font-family: var(--font-mono); font-size: 10px; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase;">Level 1</span>
+              <h4 style="font-family: var(--font-heading); font-size: 15px; color: #fff; margin: 2px 0 4px 0;">Subsystem Diagram</h4>
+              <p style="font-size: 12px; color: var(--text-gray-400);">Decomposes the platform into 8 core functional subsystems and 9 primary database stores.</p>
+            </div>
+
+            <div class="glass-card" style="border-left: 3px solid var(--accent-rose); padding: 14px 18px;">
+              <span style="font-family: var(--font-mono); font-size: 10px; font-weight: 700; color: var(--accent-rose); text-transform: uppercase;">Level 2</span>
+              <h4 style="font-family: var(--font-heading); font-size: 15px; color: #fff; margin: 2px 0 4px 0;">Decomposition Diagram</h4>
+              <p style="font-size: 12px; color: var(--text-gray-400);">Zooms into Process 5.0 (AI Safety Assistant &amp; Crisis Triage) — spanning 5 granular sub-processes with external API integration.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="slide-footer-left"><span>01.09.2026</span> • <span>Section A2</span></div>
+        <div class="slide-footer-right"><span>Group 06 – HAVEN</span> <span>Slide 02</span></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SLIDE 3: NOTATION USED
+         ====================================================================== -->
+    <section class="slide" data-slide="3">
+      <div class="slide-header">
+        <div class="slide-title-area">
+          <div class="slide-category"><i class="fa-solid fa-shapes"></i> Standard Modeling Elements</div>
+          <h2 class="slide-title">Notation Used</h2>
+        </div>
+        <div class="slide-badge"><div class="dot"></div> Gane &amp; Sarson / Yourdon Standards</div>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-4col">
+          <!-- External Entity -->
+          <div class="notation-card">
+            <div class="notation-visual">
+              <div class="visual-entity"><i class="fa-regular fa-user" style="margin-right: 6px;"></i> External Entity</div>
+            </div>
+            <h4 style="font-family: var(--font-heading); font-size: 15px; color: #fff; margin-bottom: 8px;">External Entity</h4>
+            <p style="font-size: 12px; color: var(--text-gray-400); line-height: 1.5;">
+              Solid rectangle. A person or system outside Haven's boundary that supplies or consumes data — e.g. Guest / User, Verified Professional, Admin, or External AI Provider (Google Gemini API).
+            </p>
+          </div>
+
+          <!-- Process -->
+          <div class="notation-card">
+            <div class="notation-visual">
+              <div class="visual-process">1.0</div>
+            </div>
+            <h4 style="font-family: var(--font-heading); font-size: 15px; color: #fff; margin-bottom: 8px;">Process</h4>
+            <p style="font-size: 12px; color: var(--text-gray-400); line-height: 1.5;">
+              Circle / Bubble. An activity that transforms incoming data into outgoing data. Each process is numbered (e.g. 1.0, 5.2) to designate its position in the functional hierarchy.
+            </p>
+          </div>
+
+          <!-- Data Store -->
+          <div class="notation-card">
+            <div class="notation-visual">
+              <div class="visual-datastore">D# STORE</div>
+            </div>
+            <h4 style="font-family: var(--font-heading); font-size: 15px; color: #fff; margin-bottom: 8px;">Data Store (D#)</h4>
+            <p style="font-size: 12px; color: var(--text-gray-400); line-height: 1.5;">
+              Open-ended rectangle labelled D#. A repository where data is held for later use, corresponding directly to tables in the Haven database schema (e.g., D1 Users, D7 AI Logs).
+            </p>
+          </div>
+
+          <!-- Data Flow -->
+          <div class="notation-card">
+            <div class="notation-visual">
+              <div class="visual-dataflow">
+                <span>Payload Data</span>
+                <i class="fa-solid fa-arrow-right-long"></i>
+              </div>
+            </div>
+            <h4 style="font-family: var(--font-heading); font-size: 15px; color: #fff; margin-bottom: 8px;">Data Flow</h4>
+            <p style="font-size: 12px; color: var(--text-gray-400); line-height: 1.5;">
+              Labelled directional arrow. Represents the movement of a specific piece of data or event trigger between an entity, a process, and/or a data store.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="slide-footer-left"><span>01.09.2026</span> • <span>Section A2</span></div>
+        <div class="slide-footer-right"><span>Group 06 – HAVEN</span> <span>Slide 03</span></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SLIDE 4: LEVEL 0 DFD (CONTEXT DIAGRAM)
+         ====================================================================== -->
+    <section class="slide" data-slide="4">
+      <div class="slide-header">
+        <div class="slide-title-area">
+          <div class="slide-category"><i class="fa-solid fa-circle-nodes"></i> Global Scope</div>
+          <h2 class="slide-title">Level 0 DFD (Context Diagram)</h2>
+        </div>
+        <div class="slide-badge"><div class="dot"></div> Process 0.0 · Haven Platform</div>
+      </div>
+
+      <div class="slide-content">
+        <!-- DEDICATED DIAGRAM IMAGE CONTAINER FOR LEVEL 0 -->
+        <div class="diagram-placeholder" id="placeholder-level0" onclick="triggerUpload(this)">
+          <input type="file" accept="image/*" onchange="previewImage(this)" />
+          <img class="diagram-image-preview" alt="Level 0 Context Diagram Preview" />
+          <button class="remove-image-btn" onclick="removeImage(event, this)"><i class="fa-solid fa-trash"></i> Remove</button>
+          
+          <div class="ph-icon-box">
+            <i class="fa-regular fa-image"></i>
+          </div>
+          <div class="ph-title">📌 INSERT LEVEL 0 DFD DIAGRAM HERE</div>
+          <p class="ph-desc">
+            Place the <strong>Level 0 Context Diagram</strong> showing Process 0.0 (Haven Platform) interacting with Guest / Anonymous User, Registered User, Verified Professional, Admin, External AI Provider (Gemini API), and Emergency Gateways.
+          </p>
+          <div class="ph-action-hint">
+            <i class="fa-solid fa-arrow-up-from-bracket"></i> Click or Drag &amp; Drop Image to Embed Live
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="slide-footer-left"><span>01.09.2026</span> • <span>Section A2</span></div>
+        <div class="slide-footer-right"><span>Group 06 – HAVEN</span> <span>Slide 04</span></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SLIDE 5: DESCRIPTION — EXTERNAL ENTITIES
+         ====================================================================== -->
+    <section class="slide" data-slide="5">
+      <div class="slide-header">
+        <div class="slide-title-area">
+          <div class="slide-category"><i class="fa-solid fa-users-viewfinder"></i> Boundary Actors</div>
+          <h2 class="slide-title">Description — External Entities</h2>
+        </div>
+        <div class="slide-badge"><div class="dot"></div> 5 Core Entities</div>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2col" style="grid-template-rows: 1fr 1fr; gap: 14px;">
+          <!-- Guest / Anonymous User -->
+          <div class="glass-card" style="display: flex; gap: 14px; align-items: flex-start;">
+            <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(20, 184, 166, 0.15); border: 1px solid rgba(20, 184, 166, 0.3); display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--accent-teal); flex-shrink: 0;">
+              <i class="fa-solid fa-user-secret"></i>
+            </div>
+            <div>
+              <h4 style="font-family: var(--font-heading); font-size: 14px; color: #fff; margin-bottom: 4px;">Guest / Anonymous User</h4>
+              <p style="font-size: 11.5px; color: var(--text-gray-300); line-height: 1.45;">
+                Accesses emergency hotline contacts, psychoeducational articles, and instant crisis advice anonymously without mandatory registration. Can trigger the panic <strong>quick-exit screen mask</strong> immediately.
+              </p>
+            </div>
+          </div>
+
+          <!-- Registered User -->
+          <div class="glass-card" style="display: flex; gap: 14px; align-items: flex-start;">
+            <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--accent-cyan); flex-shrink: 0;">
+              <i class="fa-solid fa-user-graduate"></i>
+            </div>
+            <div>
+              <h4 style="font-family: var(--font-heading); font-size: 14px; color: #fff; margin-bottom: 4px;">Registered User (Parent / Youth)</h4>
+              <p style="font-size: 11.5px; color: var(--text-gray-300); line-height: 1.45;">
+                Manages personal profiles, tracks self-paced digital safety course progress, books confidential appointments with licensed clinicians, and submits peer discussions under randomized aliases.
+              </p>
+            </div>
+          </div>
+
+          <!-- Verified Professional -->
+          <div class="glass-card" style="display: flex; gap: 14px; align-items: flex-start;">
+            <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--accent-indigo); flex-shrink: 0;">
+              <i class="fa-solid fa-user-doctor"></i>
+            </div>
+            <div>
+              <h4 style="font-family: var(--font-heading); font-size: 14px; color: #fff; margin-bottom: 4px;">Verified Professional</h4>
+              <p style="font-size: 11.5px; color: var(--text-gray-300); line-height: 1.45;">
+                Uploads clinical credentials for admin verification, sets consultation availability, conducts confidential appointments, and handles escalated live crisis hotline cases.
+              </p>
+            </div>
+          </div>
+
+          <!-- Admin & External AI Provider -->
+          <div class="glass-card" style="display: flex; gap: 14px; align-items: flex-start;">
+            <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.3); display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--accent-rose); flex-shrink: 0;">
+              <i class="fa-solid fa-server"></i>
+            </div>
+            <div>
+              <h4 style="font-family: var(--font-heading); font-size: 14px; color: #fff; margin-bottom: 4px;">Admin &amp; External AI Provider</h4>
+              <p style="font-size: 11.5px; color: var(--text-gray-300); line-height: 1.45;">
+                <strong>Admin:</strong> Verifies clinicians, moderates community content, monitors system health. <br/>
+                <strong>External AI Provider (Gemini API):</strong> Evaluates natural language queries, scores crisis risk severity, and returns grounded safety advice.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="slide-footer-left"><span>01.09.2026</span> • <span>Section A2</span></div>
+        <div class="slide-footer-right"><span>Group 06 – HAVEN</span> <span>Slide 05</span></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SLIDE 6: LEVEL 1 DFD SUBSYSTEMS OVERVIEW
+         ====================================================================== -->
+    <section class="slide" data-slide="6">
+      <div class="slide-header">
+        <div class="slide-title-area">
+          <div class="slide-category"><i class="fa-solid fa-cubes-stacked"></i> Subsystems Architecture</div>
+          <h2 class="slide-title">Level 1 DFD Subsystems Overview</h2>
+        </div>
+        <div class="slide-badge"><div class="dot"></div> 8 Subsystems · 9 Data Stores</div>
+      </div>
+
+      <div class="slide-content">
+        <!-- DEDICATED DIAGRAM IMAGE CONTAINER FOR LEVEL 1 OVERVIEW -->
+        <div class="diagram-placeholder" id="placeholder-level1" onclick="triggerUpload(this)">
+          <input type="file" accept="image/*" onchange="previewImage(this)" />
+          <img class="diagram-image-preview" alt="Level 1 DFD Subsystems Overview Preview" />
+          <button class="remove-image-btn" onclick="removeImage(event, this)"><i class="fa-solid fa-trash"></i> Remove</button>
+          
+          <div class="ph-icon-box">
+            <i class="fa-regular fa-image"></i>
+          </div>
+          <div class="ph-title">📌 INSERT LEVEL 1 DFD DIAGRAM HERE</div>
+          <p class="ph-desc">
+            Insert the complete <strong>Level 1 Subsystems Overview Diagram</strong> displaying 8 processes (1.0 User Mgmt, 2.0 Learning Engine, 3.0 Crisis Triage, 4.0 Professional Care, 5.0 AI Assistant, 6.0 Anonymous Community, 7.0 Admin Oversight, 8.0 Article System) and Data Stores D1 through D9.
+          </p>
+          <div class="ph-action-hint">
+            <i class="fa-solid fa-arrow-up-from-bracket"></i> Click or Drag &amp; Drop Image to Embed Live
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="slide-footer-left"><span>01.09.2026</span> • <span>Section A2</span></div>
+        <div class="slide-footer-right"><span>Group 06 – HAVEN</span> <span>Slide 06</span></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SLIDE 7: LEVEL 1 DFD FOCUS SLIDE A (User Onboarding & Crisis Triage)
+         ====================================================================== -->
+    <section class="slide" data-slide="7">
+      <div class="slide-header">
+        <div class="slide-title-area">
+          <div class="slide-category"><i class="fa-solid fa-magnifying-glass-chart"></i> Subsystems 1.0 – 3.0</div>
+          <h2 class="slide-title">Level 1 DFD: User Onboarding &amp; Crisis Triage</h2>
+        </div>
+        <div class="slide-badge"><div class="dot"></div> Focus Slide A</div>
+      </div>
+
+      <div class="slide-content">
+        <div class="split-layout">
+          <!-- Left: Dedicated Diagram Image Container -->
+          <div class="diagram-placeholder" id="placeholder-level1-a" onclick="triggerUpload(this)">
+            <input type="file" accept="image/*" onchange="previewImage(this)" />
+            <img class="diagram-image-preview" alt="Focus A Diagram Preview" />
+            <button class="remove-image-btn" onclick="removeImage(event, this)"><i class="fa-solid fa-trash"></i> Remove</button>
+            
+            <div class="ph-icon-box">
+              <i class="fa-regular fa-image"></i>
+            </div>
+            <div class="ph-title">📌 INSERT LEVEL 1 FOCUS A DIAGRAM HERE</div>
+            <p class="ph-desc" style="font-size: 11px;">
+              Highlighted subsystem focus showing <strong>Processes 1.0, 2.0, and 3.0</strong> with Data Stores <strong>D1 Users, D3 Course Progress, D4 Catalog, and D5 Emergency Resources</strong>.
+            </p>
+            <div class="ph-action-hint">Click / Drop Image</div>
+          </div>
+
+          <!-- Right: Process Feature Bullets -->
+          <div class="focus-list">
+            <div class="focus-card">
+              <div class="focus-card-header">
+                <div class="focus-card-title"><span class="badge-pill">1.0</span> User &amp; Access Management</div>
+              </div>
+              <div class="focus-card-body">
+                Handles citizen, youth, and clinician registration and secure session authorization. Writes to <span class="badge-pill">D1 Users</span> and checks course access privileges in <span class="badge-pill">D4 Catalog</span>.
+              </div>
+            </div>
+
+            <div class="focus-card">
+              <div class="focus-card-header">
+                <div class="focus-card-title"><span class="badge-pill">2.0</span> Educational Learning Engine</div>
+              </div>
+              <div class="focus-card-body">
+                Facilitates self-paced safety modules, interactive quizzes, and trackable milestones. Syncs state with <span class="badge-pill">D3 Course Progress</span> and reads syllabus from <span class="badge-pill">D4 Catalog</span>.
+              </div>
+            </div>
+
+            <div class="focus-card">
+              <div class="focus-card-header">
+                <div class="focus-card-title"><span class="badge-pill" style="border-color: rgba(244,63,94,0.4); color: #fda4af;">3.0</span> Crisis Triage &amp; Emergency</div>
+              </div>
+              <div class="focus-card-body">
+                Enables immediate panic support, geolocation hotline routing (109 / 999), and emergency contact lookup from <span class="badge-pill">D5 Emergency Resources</span>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="slide-footer-left"><span>01.09.2026</span> • <span>Section A2</span></div>
+        <div class="slide-footer-right"><span>Group 06 – HAVEN</span> <span>Slide 07</span></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SLIDE 8: LEVEL 1 DFD FOCUS SLIDE B (Professional Care & AI Assistant)
+         ====================================================================== -->
+    <section class="slide" data-slide="8">
+      <div class="slide-header">
+        <div class="slide-title-area">
+          <div class="slide-category"><i class="fa-solid fa-magnifying-glass-chart"></i> Subsystems 4.0 – 6.0</div>
+          <h2 class="slide-title">Level 1 DFD: Professional Care &amp; AI Assistant</h2>
+        </div>
+        <div class="slide-badge"><div class="dot"></div> Focus Slide B</div>
+      </div>
+
+      <div class="slide-content">
+        <div class="split-layout">
+          <!-- Left: Dedicated Diagram Image Container -->
+          <div class="diagram-placeholder" id="placeholder-level1-b" onclick="triggerUpload(this)">
+            <input type="file" accept="image/*" onchange="previewImage(this)" />
+            <img class="diagram-image-preview" alt="Focus B Diagram Preview" />
+            <button class="remove-image-btn" onclick="removeImage(event, this)"><i class="fa-solid fa-trash"></i> Remove</button>
+            
+            <div class="ph-icon-box">
+              <i class="fa-regular fa-image"></i>
+            </div>
+            <div class="ph-title">📌 INSERT LEVEL 1 FOCUS B DIAGRAM HERE</div>
+            <p class="ph-desc" style="font-size: 11px;">
+              Highlighted subsystem focus showing <strong>Processes 4.0, 5.0, and 6.0</strong> with Data Stores <strong>D2 Profiles, D6 Appointments, D7 AI Logs, and D8 Forum Posts</strong>.
+            </p>
+            <div class="ph-action-hint">Click / Drop Image</div>
+          </div>
+
+          <!-- Right: Process Feature Bullets -->
+          <div class="focus-list">
+            <div class="focus-card">
+              <div class="focus-card-header">
+                <div class="focus-card-title"><span class="badge-pill">4.0</span> Professional Care &amp; Booking</div>
+              </div>
+              <div class="focus-card-body">
+                Allows verified searching of psychologists, booking slots, and recording consultation notes. Interacts directly with <span class="badge-pill">D2 Professional Profiles</span> and <span class="badge-pill">D6 Appointments</span>.
+              </div>
+            </div>
+
+            <div class="focus-card">
+              <div class="focus-card-header">
+                <div class="focus-card-title"><span class="badge-pill">5.0</span> AI Safety Assistant &amp; Triage</div>
+              </div>
+              <div class="focus-card-body">
+                Generates grounded psychoeducational advice via external AI, scores risk severity, and stores immutable interaction telemetry in <span class="badge-pill">D7 AI Logs</span>.
+              </div>
+            </div>
+
+            <div class="focus-card">
+              <div class="focus-card-header">
+                <div class="focus-card-title"><span class="badge-pill">6.0</span> Anonymous Community &amp; Rep.</div>
+              </div>
+              <div class="focus-card-body">
+                Supports peer support threads with pseudonymous posting, community moderation, and badge reputation in <span class="badge-pill">D8 Forum Posts</span>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="slide-footer-left"><span>01.09.2026</span> • <span>Section A2</span></div>
+        <div class="slide-footer-right"><span>Group 06 – HAVEN</span> <span>Slide 08</span></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SLIDE 9: LEVEL 1 DFD FOCUS SLIDE C (Admin Oversight & Articles)
+         ====================================================================== -->
+    <section class="slide" data-slide="9">
+      <div class="slide-header">
+        <div class="slide-title-area">
+          <div class="slide-category"><i class="fa-solid fa-magnifying-glass-chart"></i> Subsystems 7.0 – 8.0</div>
+          <h2 class="slide-title">Level 1 DFD: Admin Oversight &amp; Articles</h2>
+        </div>
+        <div class="slide-badge"><div class="dot"></div> Focus Slide C</div>
+      </div>
+
+      <div class="slide-content">
+        <div class="split-layout">
+          <!-- Left: Dedicated Diagram Image Container -->
+          <div class="diagram-placeholder" id="placeholder-level1-c" onclick="triggerUpload(this)">
+            <input type="file" accept="image/*" onchange="previewImage(this)" />
+            <img class="diagram-image-preview" alt="Focus C Diagram Preview" />
+            <button class="remove-image-btn" onclick="removeImage(event, this)"><i class="fa-solid fa-trash"></i> Remove</button>
+            
+            <div class="ph-icon-box">
+              <i class="fa-regular fa-image"></i>
+            </div>
+            <div class="ph-title">📌 INSERT LEVEL 1 FOCUS C DIAGRAM HERE</div>
+            <p class="ph-desc" style="font-size: 11px;">
+              Highlighted subsystem focus showing <strong>Processes 7.0 and 8.0</strong> with Data Stores <strong>D1, D2, D4, D5, D6, D8, and D9 Articles</strong>.
+            </p>
+            <div class="ph-action-hint">Click / Drop Image</div>
+          </div>
+
+          <!-- Right: Process Feature Bullets -->
+          <div class="focus-list">
+            <div class="focus-card">
+              <div class="focus-card-header">
+                <div class="focus-card-title"><span class="badge-pill">7.0</span> Admin &amp; System Oversight</div>
+              </div>
+              <div class="focus-card-body">
+                Governs clinician license verification, content moderation queues, user suspension, and overall system audits across stores <span class="badge-pill">D1</span>, <span class="badge-pill">D2</span>, <span class="badge-pill">D4</span>, <span class="badge-pill">D5</span>, <span class="badge-pill">D6</span>, <span class="badge-pill">D8</span>.
+              </div>
+            </div>
+
+            <div class="focus-card">
+              <div class="focus-card-header">
+                <div class="focus-card-title"><span class="badge-pill">8.0</span> Article &amp; Knowledge System</div>
+              </div>
+              <div class="focus-card-body">
+                Powers authoring, categorization, publishing, and public discovery of psychoeducational articles and safety guides held in <span class="badge-pill">D9 Articles</span>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="slide-footer-left"><span>01.09.2026</span> • <span>Section A2</span></div>
+        <div class="slide-footer-right"><span>Group 06 – HAVEN</span> <span>Slide 09</span></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SLIDE 10: DESCRIPTION OF PROCESSES (PART 1: 1.0 – 4.0)
+         ====================================================================== -->
+    <section class="slide" data-slide="10">
+      <div class="slide-header">
+        <div class="slide-title-area">
+          <div class="slide-category"><i class="fa-solid fa-list-check"></i> Subsystem Specifications</div>
+          <h2 class="slide-title">Description of Processes (Part 1: 1.0 – 4.0)</h2>
+        </div>
+        <div class="slide-badge"><div class="dot"></div> Functional Matrix</div>
+      </div>
+
+      <div class="slide-content" style="justify-content: center;">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>PID</th>
+              <th>Subsystem Name</th>
+              <th>Data Stores</th>
+              <th>Function Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1.0</td>
+              <td>User &amp; Access Management</td>
+              <td><span class="badge-pill">D1 Users</span> <span class="badge-pill">D4 Catalog</span></td>
+              <td>Handles registration, authentication, role assignment (Citizen, Clinician, Admin), and access validation for safety courses.</td>
+            </tr>
+            <tr>
+              <td>2.0</td>
+              <td>Educational Learning Engine</td>
+              <td><span class="badge-pill">D3 Progress</span> <span class="badge-pill">D4 Catalog</span></td>
+              <td>Manages course enrollment, per-module progress tracking, quiz assessments, and completion certificate issuance.</td>
+            </tr>
+            <tr>
+              <td>3.0</td>
+              <td>Crisis Triage &amp; Emergency</td>
+              <td><span class="badge-pill">D5 Emergency</span></td>
+              <td>Manages crisis hotline requests, emergency resource lookup, instant geolocation routing, and emergency hotline dispatch.</td>
+            </tr>
+            <tr>
+              <td>4.0</td>
+              <td>Professional Care &amp; Booking</td>
+              <td><span class="badge-pill">D2 Profiles</span> <span class="badge-pill">D6 Appointments</span></td>
+              <td>Enables searching verified therapists, scheduling confidential appointments, and managing clinician consultation slots.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="slide-footer">
+        <div class="slide-footer-left"><span>01.09.2026</span> • <span>Section A2</span></div>
+        <div class="slide-footer-right"><span>Group 06 – HAVEN</span> <span>Slide 10</span></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SLIDE 11: DESCRIPTION OF PROCESSES (PART 2: 5.0 – 8.0)
+         ====================================================================== -->
+    <section class="slide" data-slide="11">
+      <div class="slide-header">
+        <div class="slide-title-area">
+          <div class="slide-category"><i class="fa-solid fa-list-check"></i> Subsystem Specifications</div>
+          <h2 class="slide-title">Description of Processes (Part 2: 5.0 – 8.0)</h2>
+        </div>
+        <div class="slide-badge"><div class="dot"></div> Functional Matrix</div>
+      </div>
+
+      <div class="slide-content" style="justify-content: center;">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>PID</th>
+              <th>Subsystem Name</th>
+              <th>Data Stores</th>
+              <th>Function Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>5.0</td>
+              <td>AI Safety Assistant</td>
+              <td><span class="badge-pill">D7 AI Logs</span></td>
+              <td>Processes natural language queries, performs PII sanitization, executes grounded safety prompt generation, and logs audit telemetry.</td>
+            </tr>
+            <tr>
+              <td>6.0</td>
+              <td>Anonymous Community &amp; Rep.</td>
+              <td><span class="badge-pill">D8 Forum Posts</span></td>
+              <td>Manages pseudonymous user discussions, peer support threads, reputation badges, and automated community moderation.</td>
+            </tr>
+            <tr>
+              <td>7.0</td>
+              <td>Admin &amp; System Oversight</td>
+              <td><span class="badge-pill">D1, D2, D4</span> <span class="badge-pill">D5, D6, D8</span></td>
+              <td>Manages clinician credential approvals, platform health metrics, resource/course management, and audit inspection without exposing PII.</td>
+            </tr>
+            <tr>
+              <td>8.0</td>
+              <td>Article System</td>
+              <td><span class="badge-pill">D9 Articles</span></td>
+              <td>Handles authoring, categorized tagging, publishing, and searching of psychoeducational articles and safety guides.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="slide-footer">
+        <div class="slide-footer-left"><span>01.09.2026</span> • <span>Section A2</span></div>
+        <div class="slide-footer-right"><span>Group 06 – HAVEN</span> <span>Slide 11</span></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SLIDE 12: LEVEL 2 DFD (DECOMPOSITION OF PROCESS 5.0)
+         ====================================================================== -->
+    <section class="slide" data-slide="12">
+      <div class="slide-header">
+        <div class="slide-title-area">
+          <div class="slide-category"><i class="fa-solid fa-microchip"></i> Deep-Dive Decomposition</div>
+          <h2 class="slide-title">Level 2 DFD — Decomposition of Process 5.0</h2>
+        </div>
+        <div class="slide-badge"><div class="dot" style="background-color: var(--accent-rose); box-shadow: 0 0 8px var(--accent-rose);"></div> AI Safety Assistant &amp; Crisis Triage</div>
+      </div>
+
+      <div class="slide-content">
+        <!-- DEDICATED PROMINENT DIAGRAM IMAGE CONTAINER FOR LEVEL 2 -->
+        <div class="diagram-placeholder" id="placeholder-level2" onclick="triggerUpload(this)">
+          <input type="file" accept="image/*" onchange="previewImage(this)" />
+          <img class="diagram-image-preview" alt="Level 2 DFD Diagram Preview" />
+          <button class="remove-image-btn" onclick="removeImage(event, this)"><i class="fa-solid fa-trash"></i> Remove</button>
+          
+          <div class="ph-icon-box">
+            <i class="fa-regular fa-image"></i>
+          </div>
+          <div class="ph-title">📌 INSERT LEVEL 2 DFD DIAGRAM HERE</div>
+          <p class="ph-desc">
+            Prominently insert the <strong>Level 2 DFD Diagram</strong> showing decomposition of Process 5.0 into Sub-processes: <strong>5.1 Sanitize &amp; Mask Query, 5.2 Retrieve Safety Context, 5.3 Execute AI Guidance Engine, 5.4 Perform Risk Triage &amp; Fallback, and 5.5 Audit &amp; Log Interaction</strong>.
+          </p>
+          <div class="ph-action-hint">
+            <i class="fa-solid fa-arrow-up-from-bracket"></i> Click or Drag &amp; Drop Image to Embed Live
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="slide-footer-left"><span>01.09.2026</span> • <span>Section A2</span></div>
+        <div class="slide-footer-right"><span>Group 06 – HAVEN</span> <span>Slide 12</span></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SLIDE 13: DESCRIPTION OF SUB-PROCESSES (5.1 TO 5.5)
+         ====================================================================== -->
+    <section class="slide" data-slide="13">
+      <div class="slide-header">
+        <div class="slide-title-area">
+          <div class="slide-category"><i class="fa-solid fa-gears"></i> Process 5.0 Pipeline</div>
+          <h2 class="slide-title">Description of Sub-Processes</h2>
+        </div>
+        <div class="slide-badge"><div class="dot"></div> 5 Architectural Steps</div>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-3col" style="grid-template-rows: auto auto; gap: 14px;">
+          <!-- 5.1 -->
+          <div class="glass-card" style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div class="step-badge">5.1</div>
+              <h4 style="font-family: var(--font-heading); font-size: 13.5px; color: #fff;">Clean / Masked Text</h4>
+            </div>
+            <p style="font-size: 11.5px; color: var(--text-gray-300); line-height: 1.45;">
+              Reads user/guest query (Bangla/English), strips identifiable personal data (PII), and forwards masked sanitized text to Process 5.2.
+            </p>
+          </div>
+
+          <!-- 5.2 -->
+          <div class="glass-card" style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div class="step-badge">5.2</div>
+              <h4 style="font-family: var(--font-heading); font-size: 13.5px; color: #fff;">Retrieve Safety Context</h4>
+            </div>
+            <p style="font-size: 11.5px; color: var(--text-gray-300); line-height: 1.45;">
+              Extracts validated domain rules from <span class="badge-pill">D4 Catalog</span> and hotline metadata from <span class="badge-pill">D5 Emergency</span> to assemble an augmented prompt.
+            </p>
+          </div>
+
+          <!-- 5.3 -->
+          <div class="glass-card" style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div class="step-badge">5.3</div>
+              <h4 style="font-family: var(--font-heading); font-size: 13.5px; color: #fff;">Execute AI Guidance</h4>
+            </div>
+            <p style="font-size: 11.5px; color: var(--text-gray-300); line-height: 1.45;">
+              Dispatches augmented prompt to <strong>External AI Provider (Gemini API)</strong>; receives structured safety guidance and numerical risk classification scores.
+            </p>
+          </div>
+
+          <!-- 5.4 -->
+          <div class="glass-card" style="display: flex; flex-direction: column; gap: 8px; grid-column: span 1;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div class="step-badge" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">5.4</div>
+              <h4 style="font-family: var(--font-heading); font-size: 13.5px; color: #fff;">Perform Risk Triage</h4>
+            </div>
+            <p style="font-size: 11.5px; color: var(--text-gray-300); line-height: 1.45;">
+              Evaluates risk score. If acute crisis is detected, dispatches emergency triggers to Emergency Hotline / NGO Gateway; otherwise routes safe guidance to 5.5.
+            </p>
+          </div>
+
+          <!-- 5.5 -->
+          <div class="glass-card" style="display: flex; flex-direction: column; gap: 8px; grid-column: span 2;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div class="step-badge">5.5</div>
+              <h4 style="font-family: var(--font-heading); font-size: 13.5px; color: #fff;">Audit &amp; Log Interaction</h4>
+            </div>
+            <p style="font-size: 11.5px; color: var(--text-gray-300); line-height: 1.45;">
+              Writes prompt, response, tokens, and risk telemetry to <span class="badge-pill">D7 AI Logs</span> while delivering final, compassionate safety guidance with relevant emergency hotlines to the User / Guest.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="slide-footer-left"><span>01.09.2026</span> • <span>Section A2</span></div>
+        <div class="slide-footer-right"><span>Group 06 – HAVEN</span> <span>Slide 13</span></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SLIDE 14: SUMMARY & KEY TAKEAWAYS
+         ====================================================================== -->
+    <section class="slide" data-slide="14">
+      <div class="slide-header">
+        <div class="slide-title-area">
+          <div class="slide-category"><i class="fa-solid fa-flag-checkered"></i> Synthesis</div>
+          <h2 class="slide-title">Summary &amp; Key Takeaways</h2>
+        </div>
+        <div class="slide-badge"><div class="dot"></div> Architectural Completeness</div>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2col">
+          <!-- Level 0 Summary -->
+          <div class="glass-card" style="border-top: 3px solid var(--accent-teal);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <span style="font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--accent-teal);">LEVEL 0</span>
+              <i class="fa-solid fa-globe" style="color: var(--accent-teal);"></i>
+            </div>
+            <h4 style="font-family: var(--font-heading); font-size: 15px; color: #fff; margin-bottom: 6px;">Single Central Process</h4>
+            <p style="font-size: 12px; color: var(--text-gray-300); line-height: 1.55;">
+              A single platform boundary exchanging vital crisis, consultation, learning, and governance data across five external actors (Guest, User, Clinician, Admin, and External AI).
+            </p>
+          </div>
+
+          <!-- Level 1 Summary -->
+          <div class="glass-card" style="border-top: 3px solid var(--accent-cyan);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <span style="font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--accent-cyan);">LEVEL 1</span>
+              <i class="fa-solid fa-cubes" style="color: var(--accent-cyan);"></i>
+            </div>
+            <h4 style="font-family: var(--font-heading); font-size: 15px; color: #fff; margin-bottom: 6px;">Eight Distinct Subsystems</h4>
+            <p style="font-size: 12px; color: var(--text-gray-300); line-height: 1.55;">
+              Eight modular subsystems and nine primary data stores map directly to Haven’s 13-entity database, bridging static structure to real-time execution.
+            </p>
+          </div>
+
+          <!-- Level 2 Summary -->
+          <div class="glass-card" style="border-top: 3px solid var(--accent-rose);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <span style="font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--accent-rose);">LEVEL 2</span>
+              <i class="fa-solid fa-shield-virus" style="color: var(--accent-rose);"></i>
+            </div>
+            <h4 style="font-family: var(--font-heading); font-size: 15px; color: #fff; margin-bottom: 6px;">Safety-Critical Decomposition</h4>
+            <p style="font-size: 12px; color: var(--text-gray-300); line-height: 1.55;">
+              Process 5.0 safely handles AI guidance with automated PII masking, grounded domain rule retrieval, automated risk triage escalation, and tamper-proof telemetry.
+            </p>
+          </div>
+
+          <!-- Together Summary -->
+          <div class="glass-card" style="border-top: 3px solid var(--accent-indigo);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <span style="font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--accent-indigo);">TOGETHER</span>
+              <i class="fa-solid fa-circle-nodes" style="color: var(--accent-indigo);"></i>
+            </div>
+            <h4 style="font-family: var(--font-heading); font-size: 15px; color: #fff; margin-bottom: 6px;">Complementary DFD Hierarchy</h4>
+            <p style="font-size: 12px; color: var(--text-gray-300); line-height: 1.55;">
+              Level 0 through Level 2 DFDs thoroughly demonstrate how Haven protects sensitive user identities while delivering instantaneous, reliable crisis intervention.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="slide-footer-left"><span>01.09.2026</span> • <span>Section A2</span></div>
+        <div class="slide-footer-right"><span>Group 06 – HAVEN</span> <span>Slide 14</span></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SLIDE 15: THANK YOU & Q&A
+         ====================================================================== -->
+    <section class="slide" data-slide="15">
+      <div class="slide-content">
+        <div class="slide-title-hero">
+          <div class="hero-logo-box" style="background: linear-gradient(135deg, #0d9488, #2563eb);">
+            <i class="fa-solid fa-comments"></i>
+          </div>
+          <h1 class="hero-main-title" style="font-size: 42px;"><span>Thank You</span></h1>
+          <p class="hero-subtitle" style="font-size: 17px; margin-bottom: 18px;">
+            Questions &amp; Discussion — HAVEN (হেভেন)
+          </p>
+
+          <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+            <span class="hero-course-tag" style="margin-bottom: 0;">
+              <i class="fa-solid fa-shield-heart"></i> Digital Safety &amp; Crisis Support
+            </span>
+            <span class="hero-course-tag" style="margin-bottom: 0; border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
+              <i class="fa-solid fa-users"></i> Group 06 · Section A2
+            </span>
+          </div>
+
+          <div class="hero-meta-card" style="max-width: 600px; text-align: center; padding: 14px 24px;">
+            <p style="font-size: 12.5px; color: var(--text-gray-300); line-height: 1.6;">
+              Department of Computer Science and Engineering<br/>
+              <strong>Ahsanullah University of Science and Technology (AUST)</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="slide-footer-left"><span>01.09.2026</span> • <span>Section A2</span></div>
+        <div class="slide-footer-right"><span>Group 06 – HAVEN</span> <span>Slide 15</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       FLOATING DECK CONTROLS
+       ======================================================================== -->
+  <div class="deck-controller">
+    <button class="nav-btn" id="btnFirst" title="First Slide (Home)"><i class="fa-solid fa-backward-step"></i></button>
+    <button class="nav-btn" id="btnPrev" title="Previous Slide (Left Arrow)"><i class="fa-solid fa-chevron-left"></i></button>
+    
+    <div class="slide-counter">
+      <span class="current" id="currentSlideNum">01</span> / <span id="totalSlideNum">15</span>
+    </div>
+
+    <button class="nav-btn" id="btnNext" title="Next Slide (Right Arrow / Space)"><i class="fa-solid fa-chevron-right"></i></button>
+    <button class="nav-btn" id="btnLast" title="Last Slide (End)"><i class="fa-solid fa-forward-step"></i></button>
+    
+    <div style="width: 1px; height: 18px; background: rgba(255,255,255,0.15); margin: 0 4px;"></div>
+    
+    <button class="nav-btn" id="btnGrid" title="All Slides Grid (G)"><i class="fa-solid fa-table-cells-large"></i></button>
+    <button class="nav-btn" id="btnFullscreen" title="Toggle Fullscreen (F)"><i class="fa-solid fa-expand"></i></button>
+  </div>
+
+  <!-- ========================================================================
+       ALL SLIDES GRID / DRAWER OVERLAY
+       ======================================================================== -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer(event)">
+    <div class="drawer-content" onclick="event.stopPropagation()">
+      <div class="drawer-header">
+        <h3 style="font-family: var(--font-heading); font-size: 18px; color: var(--text-white);">
+          <i class="fa-solid fa-table-cells-large" style="color: var(--accent-teal); margin-right: 8px;"></i>
+          Slide Navigation Deck (15 Slides)
+        </h3>
+        <button class="nav-btn" onclick="toggleDrawer()" style="color: #fff;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="drawer-grid" id="drawerGrid">
+        <!-- Thumbnails generated dynamically by script -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       PRESENTATION DECK JAVASCRIPT ENGINE
+       ======================================================================== -->
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+
+    const currentSlideNumEl = document.getElementById('currentSlideNum');
+    const totalSlideNumEl = document.getElementById('totalSlideNum');
+    const progressBar = document.getElementById('progressBar');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const drawerGrid = document.getElementById('drawerGrid');
+
+    totalSlideNumEl.textContent = totalSlides.toString().padStart(2, '0');
+
+    // Slide Titles dictionary for drawer previews
+    const slideTitles = [
+      "Title: HAVEN System Design",
+      "Introduction to DFDs",
+      "Notation Used",
+      "Level 0 DFD (Context)",
+      "Description: External Entities",
+      "Level 1 DFD: Subsystems Overview",
+      "Level 1 Focus A: Onboarding & Crisis",
+      "Level 1 Focus B: Professional & AI",
+      "Level 1 Focus C: Admin & Articles",
+      "Description of Processes (1.0 - 4.0)",
+      "Description of Processes (5.0 - 8.0)",
+      "Level 2 DFD: Process 5.0 Deep-Dive",
+      "Description of Sub-Processes (5.1-5.5)",
+      "Summary & Key Takeaways",
+      "Thank You & Q&A"
+    ];
+
+    // Initialize Drawer Thumbnails
+    slideTitles.forEach((title, index) => {
+      const num = (index + 1).toString().padStart(2, '0');
+      const thumb = document.createElement('div');
+      thumb.className = `drawer-thumb ${index === 0 ? 'active' : ''}`;
+      thumb.dataset.slideIndex = index + 1;
+      thumb.innerHTML = `
+        <span class="drawer-thumb-num">Slide ${num}</span>
+        <span class="drawer-thumb-title">${title}</span>
+      `;
+      thumb.addEventListener('click', () => {
+        goToSlide(index + 1);
+        toggleDrawer();
+      });
+      drawerGrid.appendChild(thumb);
+    });
+
+    function updateSlideUI() {
+      slides.forEach((s, idx) => {
+        if (idx + 1 === currentSlide) {
+          s.classList.add('active');
+        } else {
+          s.classList.remove('active');
+        }
+      });
+
+      // Update counter
+      currentSlideNumEl.textContent = currentSlide.toString().padStart(2, '0');
+
+      // Update progress bar
+      const progressPercent = (currentSlide / totalSlides) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+
+      // Update drawer active highlight
+      document.querySelectorAll('.drawer-thumb').forEach((thumb, idx) => {
+        if (idx + 1 === currentSlide) {
+          thumb.classList.add('active');
+        } else {
+          thumb.classList.remove('active');
+        }
+      });
+    }
+
+    function goToSlide(n) {
+      if (n >= 1 && n <= totalSlides) {
+        currentSlide = n;
+        updateSlideUI();
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlideUI();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlideUI();
+      }
+    }
+
+    function toggleDrawer() {
+      drawerOverlay.classList.toggle('open');
+    }
+
+    function closeDrawer(e) {
+      if (e.target === drawerOverlay) {
+        drawerOverlay.classList.remove('open');
+      }
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn(`Error attempting to enable fullscreen: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // Event Listeners for Nav Buttons
+    document.getElementById('btnPrev').addEventListener('click', prevSlide);
+    document.getElementById('btnNext').addEventListener('click', nextSlide);
+    document.getElementById('btnFirst').addEventListener('click', () => goToSlide(1));
+    document.getElementById('btnLast').addEventListener('click', () => goToSlide(totalSlides));
+    document.getElementById('btnGrid').addEventListener('click', toggleDrawer);
+    document.getElementById('btnFullscreen').addEventListener('click', toggleFullscreen);
+
+    // Keyboard Navigation Listener
+    document.addEventListener('keydown', (e) => {
+      // Don't intercept if inside an open modal or input
+      if (e.target.tagName === 'INPUT') return;
+
+      switch(e.key) {
+        case 'ArrowRight':
+        case 'Space':
+        case 'PageDown':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'ArrowLeft':
+        case 'PageUp':
+        case 'Backspace':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'Home':
+          e.preventDefault();
+          goToSlide(1);
+          break;
+        case 'End':
+          e.preventDefault();
+          goToSlide(totalSlides);
+          break;
+        case 'f':
+        case 'F':
+          e.preventDefault();
+          toggleFullscreen();
+          break;
+        case 'g':
+        case 'G':
+          e.preventDefault();
+          toggleDrawer();
+          break;
+        case 'Escape':
+          if (drawerOverlay.classList.contains('open')) {
+            drawerOverlay.classList.remove('open');
+          }
+          break;
+      }
+    });
+
+    // ========================================================================
+    // INTERACTIVE DIAGRAM IMAGE UPLOADER / DRAG-AND-DROP HANDLERS
+    // ========================================================================
+    function triggerUpload(container) {
+      const input = container.querySelector('input[type="file"]');
+      if (input) input.click();
+    }
+
+    function previewImage(input) {
+      const file = input.files[0];
+      if (file) {
+        const container = input.closest('.diagram-placeholder');
+        const img = container.querySelector('.diagram-image-preview');
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          img.src = e.target.result;
+          img.classList.add('has-image');
+          container.classList.add('has-image');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function removeImage(event, btn) {
+      event.stopPropagation();
+      const container = btn.closest('.diagram-placeholder');
+      const img = container.querySelector('.diagram-image-preview');
+      const input = container.querySelector('input[type="file"]');
+      
+      img.src = '';
+      img.classList.remove('has-image');
+      container.classList.remove('has-image');
+      if (input) input.value = '';
+    }
+
+    // Support Drag and Drop directly on placeholder boxes
+    document.querySelectorAll('.diagram-placeholder').forEach(box => {
+      box.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        box.style.borderColor = '#38bdf8';
+        box.style.background = 'rgba(56, 189, 248, 0.15)';
+      });
+
+      box.addEventListener('dragleave', () => {
+        box.style.borderColor = '';
+        box.style.background = '';
+      });
+
+      box.addEventListener('drop', (e) => {
+        e.preventDefault();
+        box.style.borderColor = '';
+        box.style.background = '';
+        
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+          const file = e.dataTransfer.files[0];
+          if (file.type.startsWith('image/')) {
+            const img = box.querySelector('.diagram-image-preview');
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+              img.src = evt.target.result;
+              img.classList.add('has-image');
+              box.classList.add('has-image');
+            };
+            reader.readAsDataURL(file);
+          }
+        }
+      });
+    });
+
+    // Auto-scale viewport for perfect fit on any screen size
+    function autoScaleViewport() {
+      const viewport = document.getElementById('deckViewport');
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      
+      const targetWidth = 1280;
+      const targetHeight = 720;
+      
+      const scaleX = (windowWidth * 0.96) / targetWidth;
+      const scaleY = (windowHeight * 0.88) / targetHeight;
+      const scale = Math.min(scaleX, scaleY, 1.25);
+      
+      viewport.style.transform = `scale(${scale})`;
+      viewport.style.transformOrigin = 'center center';
+    }
+
+    window.addEventListener('resize', autoScaleViewport);
+    window.addEventListener('DOMContentLoaded', autoScaleViewport);
+    autoScaleViewport();
+  </script>
+</body>
+</html>
