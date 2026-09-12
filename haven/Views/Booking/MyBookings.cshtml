@@ -1,0 +1,178 @@
+@model Haven.Models.PatientBookingsViewModel
+@{
+    ViewData["Title"] = "আমার থেরাপি বুকিং সমূহ | My Bookings";
+}
+
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    
+    <!-- Page Header & Metrics -->
+    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-800 border border-teal-200 text-xs font-bold uppercase tracking-wider mb-2">
+                <span>🛡️ গোপনীয় রোগীর ড্যাশবোর্ড</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black text-slate-900">আমার অ্যাপয়েন্টমেন্ট ও বুকিং সমূহ</h1>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                আপনার অনুরোধকৃত সকল থেরাপি সেশন ও বিশেষজ্ঞের অনুমোদন স্থিতি এখানে সংরক্ষিত আছে।
+            </p>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <a asp-controller="Therapist" asp-action="Directory" class="px-4 py-2.5 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl transition shadow-md flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                <span>নতুন সেশন বুক করুন</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Metric Status Counters -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-2xs">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">মোট বুকিং</span>
+            <span class="text-2xl font-black text-slate-900 mt-1 block">@Model.TotalBookings</span>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-amber-200/80 bg-amber-50/30 shadow-2xs">
+            <span class="text-xs font-bold text-amber-700 uppercase tracking-wider block">অপেক্ষমান (Pending)</span>
+            <span class="text-2xl font-black text-amber-600 mt-1 block">@Model.PendingCount</span>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-emerald-200/80 bg-emerald-50/30 shadow-2xs">
+            <span class="text-xs font-bold text-emerald-700 uppercase tracking-wider block">অনুমোদিত (Approved)</span>
+            <span class="text-2xl font-black text-emerald-600 mt-1 block">@Model.ApprovedCount</span>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-rose-200/80 bg-rose-50/30 shadow-2xs">
+            <span class="text-xs font-bold text-rose-700 uppercase tracking-wider block">প্রত্যাখ্যাত (Rejected)</span>
+            <span class="text-2xl font-black text-rose-600 mt-1 block">@Model.RejectedCount</span>
+        </div>
+    </div>
+
+    <!-- Bookings List -->
+    @if (Model.Bookings == null || !Model.Bookings.Any())
+    {
+        <div class="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-sm space-y-4">
+            <div class="w-16 h-16 rounded-3xl bg-teal-50 text-teal-700 flex items-center justify-center mx-auto text-3xl">
+                📅
+            </div>
+            <h3 class="text-lg font-bold text-slate-800">আপনার কোনো অ্যাপয়েন্টমেন্ট বুকিং পাওয়া যায়নি</h3>
+            <p class="text-xs text-slate-500 max-w-md mx-auto">
+                মানসিক স্বাস্থ্য সংক্রান্ত যেকোনো প্রয়োজনে আমাদের ভেরিফায়েড থেরাপিস্টদের সাথে সরাসরি যোগাযোগ ও সেশন বুক করতে পারেন।
+            </p>
+            <a asp-controller="Therapist" asp-action="Directory" class="inline-flex px-5 py-2.5 bg-teal-700 text-white rounded-xl text-xs font-bold hover:bg-teal-800 transition shadow-md">
+                থেরাপিস্ট ডিরেক্টরি দেখুন ➔
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="space-y-4">
+            @foreach (var booking in Model.Bookings)
+            {
+                var therapistName = booking.Therapist?.User?.FullName ?? "Dr. Specialist";
+                var specialty = booking.Therapist?.Specialty ?? "Psychologist";
+                var status = booking.Status;
+
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-xs hover:shadow-md transition p-6">
+                    <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                        
+                        <!-- Left Info -->
+                        <div class="flex items-start gap-4">
+                            <div class="w-14 h-14 rounded-2xl bg-teal-700 text-white flex items-center justify-center font-black text-lg flex-shrink-0">
+                                @(therapistName.Length > 0 ? therapistName.Substring(0, 1) : "T")
+                            </div>
+
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-mono text-xs font-bold text-teal-800 bg-teal-50 px-2.5 py-0.5 rounded-md border border-teal-200">
+                                        @booking.BookingReference
+                                    </span>
+                                    <span class="text-[11px] text-slate-400">
+                                        অনুরোধের তারিখ: @booking.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")
+                                    </span>
+                                </div>
+
+                                <h3 class="text-base font-bold text-slate-900">
+                                    @therapistName
+                                </h3>
+                                <p class="text-xs text-slate-600">
+                                    🎯 @specialty • @booking.CommunicationMode
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Center: Date & Slot -->
+                        <div class="bg-slate-50 px-4 py-3 rounded-2xl border border-slate-200 text-xs space-y-1 min-w-[220px]">
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-400 font-semibold">সেশনের তারিখ:</span>
+                                <span class="font-bold text-slate-800">@booking.BookingDate.ToString("dd MMMM, yyyy")</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-400 font-semibold">সময় স্লট:</span>
+                                <span class="font-bold text-teal-800">@booking.TimeSlot</span>
+                            </div>
+                        </div>
+
+                        <!-- Right: Status Badge & Actions -->
+                        <div class="flex items-center gap-3 w-full lg:w-auto justify-between lg:justify-end">
+                            
+                            <!-- Status Pill -->
+                            @if (status == Haven.Models.BookingStatus.Pending)
+                            {
+                                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                                    <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                                    <span>অপেক্ষমান (Pending)</span>
+                                </span>
+                            }
+                            else if (status == Haven.Models.BookingStatus.Approved)
+                            {
+                                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-900 border border-emerald-300">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                                    <span>অনুমোদিত (Approved)</span>
+                                </span>
+                            }
+                            else if (status == Haven.Models.BookingStatus.Rejected)
+                            {
+                                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-rose-100 text-rose-900 border border-rose-300">
+                                    <span class="w-2 h-2 rounded-full bg-rose-600"></span>
+                                    <span>প্রত্যাখ্যাত (Rejected)</span>
+                                </span>
+                            }
+                            else if (status == Haven.Models.BookingStatus.Cancelled)
+                            {
+                                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 border border-slate-300">
+                                    <span>বাতিল (Cancelled)</span>
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-blue-100 text-blue-900 border border-blue-300">
+                                    <span>সম্পন্ন (Completed)</span>
+                                </span>
+                            }
+
+                            <!-- Cancel button for pending bookings -->
+                            @if (status == Haven.Models.BookingStatus.Pending)
+                            {
+                                <form asp-action="Cancel" asp-route-id="@booking.Id" method="post" onsubmit="return confirm('আপনি কি নিশ্চিত যে এই অ্যাপয়েন্টমেন্ট অনুরোধটি বাতিল করতে চান?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="px-3 py-1.5 text-xs font-bold text-rose-700 hover:text-rose-900 hover:bg-rose-50 rounded-xl transition border border-rose-200">
+                                        বাতিল করুন
+                                    </button>
+                                </form>
+                            }
+
+                        </div>
+
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(booking.Notes))
+                    {
+                        <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600">
+                            <span class="font-bold text-slate-700">রোগীর নোট:</span> @booking.Notes
+                        </div>
+                    }
+
+                </div>
+            }
+        </div>
+    }
+
+</div>

@@ -16,6 +16,7 @@ public class HavenDbContext : DbContext
     public DbSet<CourseModule> CourseModules => Set<CourseModule>();
     public DbSet<Enrollment> Enrollments => Set<Enrollment>();
     public DbSet<Appointment> Appointments => Set<Appointment>();
+    public DbSet<Booking> Bookings => Set<Booking>();
     public DbSet<SupportSession> SupportSessions => Set<SupportSession>();
     public DbSet<EmergencyResource> EmergencyResources => Set<EmergencyResource>();
     public DbSet<Article> Articles => Set<Article>();
@@ -119,6 +120,23 @@ public class HavenDbContext : DbContext
                   .WithMany()
                   .HasForeignKey(a => a.ProfessionalId)
                   .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Booking>(entity =>
+        {
+            entity.HasKey(b => b.Id);
+            entity.HasOne(b => b.User)
+                  .WithMany(u => u.Bookings)
+                  .HasForeignKey(b => b.UserId)
+                  .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(b => b.Therapist)
+                  .WithMany(p => p.Bookings)
+                  .HasForeignKey(b => b.TherapistId)
+                  .OnDelete(DeleteBehavior.Restrict);
+            entity.Property(b => b.Status).HasConversion<int>();
+            entity.HasIndex(b => b.UserId);
+            entity.HasIndex(b => b.TherapistId);
+            entity.HasIndex(b => b.Status);
         });
 
         modelBuilder.Entity<Article>(entity =>
