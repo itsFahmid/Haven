@@ -42,6 +42,14 @@ public class ProfessionalProfile
 
     public bool IsBmdcVerified { get; set; } = false;
 
+    public int YearsOfExperience { get; set; } = 0;
+
+    [MaxLength(200)]
+    public string? ConsultationTime { get; set; } = "Sat - Thu: 04:00 PM - 08:00 PM";
+
+    [MaxLength(1000)]
+    public string? Bio { get; set; } = string.Empty;
+
     public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime? VerifiedAt { get; set; }

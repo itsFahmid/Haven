@@ -126,22 +126,30 @@
                 @foreach (var therapist in Model.PendingTherapists)
                 {
                     <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                        <div>
-                            <h4 class="text-xs font-bold text-slate-900">@(therapist.User?.FullName ?? "Unknown")</h4>
-                            <p class="text-xs text-slate-600">BMDC: @therapist.LicenseNo • @therapist.Specialty</p>
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <h4 class="text-xs font-black text-slate-900">@(therapist.User?.FullName ?? "Unknown")</h4>
+                                <span class="px-2 py-0.5 bg-teal-100 text-teal-800 text-[10px] font-bold rounded-md">Reg: @therapist.LicenseNo</span>
+                            </div>
+                            <p class="text-xs text-slate-700 font-medium">@therapist.TitleEn • @therapist.Specialty • @therapist.YearsOfExperience Years Exp • ৳ @therapist.HourlyRateBDT / hr</p>
+                            <p class="text-[11px] text-slate-500 font-mono">🕒 Availability: @(therapist.ConsultationTime ?? "N/A")</p>
+                            @if (!string.IsNullOrWhiteSpace(therapist.Bio))
+                            {
+                                <p class="text-[11px] text-slate-600 italic">"@therapist.Bio"</p>
+                            }
                         </div>
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 flex-shrink-0">
                             <form asp-action="ApproveTherapist" method="post">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@therapist.Id" />
-                                <button type="submit" class="px-3.5 py-1.5 bg-emerald-700 text-white font-bold text-xs rounded-xl hover:bg-emerald-800 transition">
-                                    Approve
+                                <button type="submit" class="px-4 py-2 bg-emerald-700 text-white font-extrabold text-xs rounded-xl hover:bg-emerald-800 transition shadow-xs">
+                                    Approve & Upgrade Role
                                 </button>
                             </form>
                             <form asp-action="RejectTherapist" method="post">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@therapist.Id" />
-                                <button type="submit" class="px-3.5 py-1.5 bg-rose-100 text-rose-800 font-bold text-xs rounded-xl hover:bg-rose-200 transition">
+                                <button type="submit" class="px-3.5 py-2 bg-rose-100 text-rose-800 font-bold text-xs rounded-xl hover:bg-rose-200 transition">
                                     Reject
                                 </button>
                             </form>

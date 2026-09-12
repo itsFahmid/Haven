@@ -112,6 +112,9 @@ using (var scope = app.Services.CreateScope())
             else
             {
                 db.Database.EnsureCreated();
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN YearsOfExperience INTEGER NOT NULL DEFAULT 0;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ConsultationTime TEXT NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Bio TEXT NULL;"); } catch { }
             }
         }
         catch (Exception migEx)
@@ -119,6 +122,9 @@ using (var scope = app.Services.CreateScope())
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
             logger.LogWarning(migEx, "Database migration fallback triggered.");
             try { db.Database.EnsureCreated(); } catch { }
+            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN YearsOfExperience INTEGER NOT NULL DEFAULT 0;"); } catch { }
+            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ConsultationTime TEXT NULL;"); } catch { }
+            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Bio TEXT NULL;"); } catch { }
         }
 
         var hasher = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.IPasswordHasher<User>>();
@@ -157,7 +163,7 @@ using (var scope = app.Services.CreateScope())
         {
             therapist = new User
             {
-                FullName = "Dr. Anika Rahman (Child & Clinical Psychologist)",
+                FullName = "Dr. Anika Rahman",
                 Email = "therapist@haven.org",
                 Role = "Professional",
                 UserType = "Individual",
@@ -167,6 +173,7 @@ using (var scope = app.Services.CreateScope())
             };
             therapist.PasswordHash = hasher.HashPassword(therapist, "Therapist123!");
             db.Users.Add(therapist);
+            db.SaveChanges();
         }
         else
         {
@@ -176,8 +183,31 @@ using (var scope = app.Services.CreateScope())
             {
                 therapist.PasswordHash = hasher.HashPassword(therapist, "Therapist123!");
             }
+            db.SaveChanges();
         }
-        db.SaveChanges();
+
+        var therapistProfile = db.ProfessionalProfiles.FirstOrDefault(p => p.UserId == therapist.Id);
+        if (therapistProfile == null)
+        {
+            therapistProfile = new ProfessionalProfile
+            {
+                UserId = therapist.Id,
+                TitleEn = "Dr. Anika Rahman, MS, MPhil (Clinical Psychology)",
+                TitleBn = "ডাঃ আনিকা রহমান, এমএস, এমফিল (ক্লিনিক্যাল সাইকোলজি)",
+                Specialty = "Clinical Depression",
+                LicenseNo = "BMDC Reg: A-84920",
+                HourlyRateBDT = 600,
+                YearsOfExperience = 7,
+                ConsultationTime = "Sat - Thu: 04:00 PM - 08:00 PM",
+                Bio = "Specializes in adolescent depression, trauma stabilization, and cyber harassment recovery.",
+                ApprovalStatus = "Approved",
+                IsBmdcVerified = true,
+                SubmittedAt = DateTime.UtcNow,
+                VerifiedAt = DateTime.UtcNow
+            };
+            db.ProfessionalProfiles.Add(therapistProfile);
+            db.SaveChanges();
+        }
 
         // 3. Seed / Ensure Default User
         var defaultUser = db.Users.FirstOrDefault(u => u.Email == "user@haven.org");

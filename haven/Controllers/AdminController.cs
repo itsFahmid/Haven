@@ -129,12 +129,20 @@ public class AdminController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ApproveTherapist(int id)
     {
-        var prof = await _db.ProfessionalProfiles.FindAsync(id);
+        var prof = await _db.ProfessionalProfiles
+            .Include(p => p.User)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
         if (prof != null)
         {
             prof.ApprovalStatus = "Approved";
             prof.IsBmdcVerified = true;
             prof.VerifiedAt = DateTime.UtcNow;
+
+            if (prof.User != null)
+            {
+                prof.User.Role = "Professional";
+            }
 
             int adminId = GetCurrentUserId();
             _db.AdminAuditLogs.Add(new AdminAuditLog
@@ -142,12 +150,12 @@ public class AdminController : Controller
                 AdminUserId = adminId,
                 ActionType = "ApproveTherapist",
                 TargetResource = $"ProfessionalProfile:{id}",
-                ActionDetails = $"Approved BMDC license #{prof.LicenseNo}",
+                ActionDetails = $"Approved BMDC license #{prof.LicenseNo} and upgraded user #{prof.UserId} to Professional role.",
                 ExecutedAt = DateTime.UtcNow
             });
 
             await _db.SaveChangesAsync();
-            TempData["SuccessMessage"] = $"Therapist #{id} license approved!";
+            TempData["SuccessMessage"] = $"Therapist application #{id} approved! User account elevated to Professional role.";
         }
         return RedirectToAction(nameof(Index));
     }
