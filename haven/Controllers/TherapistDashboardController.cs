@@ -19,8 +19,15 @@ public class TherapistDashboardController : Controller
         _logger = logger;
     }
 
-    // 3. ManageRequests (GET):
-    // Displays all incoming booking requests targeted to the logged-in therapist (Therapist.UserId == currentLoggedInUserId).
+    // Index alias redirects to ManageRequests
+    [HttpGet]
+    public IActionResult Index(string? statusFilter = "All")
+    {
+        return RedirectToAction(nameof(ManageRequests), new { statusFilter });
+    }
+
+    // 3. ManageRequests / Dashboard (GET):
+    // Displays all incoming booking requests targeted to the logged-in therapist.
     [HttpGet]
     public async Task<IActionResult> ManageRequests(string? statusFilter = "All")
     {
@@ -51,12 +58,16 @@ public class TherapistDashboardController : Controller
             }
         }
 
-        int therapistId = therapistProfile!.Id;
+        int currentTherapistProfileId = therapistProfile!.Id;
 
-        // Base query for all requests targeted to this therapist
+        // Base query for all requests targeted to this therapist, including Patient/User info
         var baseQuery = _db.Bookings
             .Include(b => b.User)
-            .Where(b => b.TherapistId == therapistId);
+            .Include(b => b.Therapist)
+                .ThenInclude(t => t!.User)
+            .Where(b => b.TherapistId == currentTherapistProfileId 
+                     || b.TherapistId == therapistProfile.UserId 
+                     || (b.Therapist != null && b.Therapist.UserId == userId));
 
         int totalCount = await baseQuery.CountAsync();
         int pendingCount = await baseQuery.CountAsync(b => b.Status == BookingStatus.Pending);
@@ -110,7 +121,7 @@ public class TherapistDashboardController : Controller
         }
 
         // Ensure this booking belongs to the current therapist (or Admin)
-        if (booking.Therapist?.UserId != userId && !User.IsInRole("Admin"))
+        if (booking.Therapist?.UserId != userId && booking.TherapistId != userId && !User.IsInRole("Admin"))
         {
             TempData["ErrorMessage"] = "You do not have permission to manage this booking request.";
             return RedirectToAction(nameof(ManageRequests));
@@ -146,7 +157,7 @@ public class TherapistDashboardController : Controller
         }
 
         // Ensure this booking belongs to the current therapist (or Admin)
-        if (booking.Therapist?.UserId != userId && !User.IsInRole("Admin"))
+        if (booking.Therapist?.UserId != userId && booking.TherapistId != userId && !User.IsInRole("Admin"))
         {
             TempData["ErrorMessage"] = "You do not have permission to manage this booking request.";
             return RedirectToAction(nameof(ManageRequests));
