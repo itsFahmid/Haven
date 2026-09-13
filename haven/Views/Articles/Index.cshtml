@@ -1,3 +1,4 @@
+@using Haven.Services
 @model IEnumerable<Haven.Models.Article>
 @{
     ViewData["Title"] = "মনোবিজ্ঞান ও সুরক্ষা নিবন্ধ হাব | Safety Articles";
@@ -89,7 +90,7 @@
                         </h3>
                         <p class="text-xs text-slate-500 font-semibold">@article.TitleEn</p>
                         <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed pt-1">
-                            @article.ContentMarkdown
+                            @MarkdownHelper.ToPlainText(article.ContentMarkdown)
                         </p>
                     </a>
                 </div>
