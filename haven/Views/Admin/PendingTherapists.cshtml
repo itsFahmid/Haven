@@ -1,0 +1,314 @@
+@model List<Haven.Models.ProfessionalProfile>
+@{
+    ViewData["Title"] = "পেন্ডিং থেরাপিস্ট লাইসেন্স অনুমোদন | Pending Therapist Approvals";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    
+    <!-- Header Navigation / Breadcrumb -->
+    <div class="flex flex-wrap items-center justify-between gap-4 pb-2 border-b border-slate-200">
+        <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
+            <a asp-controller="Admin" asp-action="Index" class="hover:text-teal-700 transition">
+                অ্যাডমিন ড্যাশবোর্ড (Admin Dashboard)
+            </a>
+            <span>/</span>
+            <span class="text-slate-900 font-bold">পেন্ডিং থেরাপিস্ট অনুমোদন (Pending Verification)</span>
+        </div>
+        <div class="flex items-center gap-3">
+            <a asp-controller="Admin" asp-action="Index" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span>ড্যাশবোর্ডে ফিরুন</span>
+            </a>
+            <a asp-controller="Therapist" asp-action="Directory" target="_blank" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold text-xs rounded-xl border border-teal-200 transition">
+                <span>পাবলিক ডিরেক্টরি প্রিভিউ ↗</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Hero Banner -->
+    <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-teal-950 text-white rounded-3xl p-8 border border-slate-800 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="space-y-2">
+            <div class="flex items-center gap-2">
+                <span class="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-full text-xs font-bold uppercase tracking-wider">
+                    🛡️ BMDC & Clinical Credential Review
+                </span>
+                <span class="px-2.5 py-0.5 bg-sky-500/20 text-sky-300 rounded-full text-xs font-semibold">
+                    Admin Approval Queue
+                </span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black tracking-tight" data-bn="থেরাপিস্ট লাইসেন্স ও আবেদন অনুমোদন" data-en="Therapist Verification & License Approval">
+                থেরাপিস্ট লাইসেন্স ও আবেদন অনুমোদন
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-300 max-w-2xl">
+                আবেদনকারী চিকিৎসকদের বিএমডিসি / বিসিপিএস রেজিস্ট্রেশন, স্পেশালিটি ও ক্লিনিক্যাল যোগ্যতা যাচাই করে অনুমোদন বা বাতিল করুন। অনুমোদিত হলে তারা সরাসরি ডিরেক্টরিতে প্রদর্শিত হবেন।
+            </p>
+        </div>
+
+        <div class="flex items-center gap-3 shrink-0">
+            <div class="bg-slate-800/90 border border-slate-700 px-5 py-3 rounded-2xl text-center shadow-inner">
+                <div class="text-2xl font-black text-amber-400">@(ViewBag.PendingCount ?? Model.Count)</div>
+                <div class="text-[11px] text-slate-400 font-medium">অপেক্ষমাণ আবেদন (Pending)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic Status Quick Metric Badges -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 shadow-xs flex items-center justify-between">
+            <div>
+                <div class="text-[11px] font-bold text-amber-800">অপেক্ষমাণ (Pending)</div>
+                <div class="text-xl font-black text-amber-600">@(ViewBag.PendingCount ?? Model.Count)</div>
+            </div>
+            <span class="text-xl">⏳</span>
+        </div>
+        <a asp-controller="Therapist" asp-action="Directory" target="_blank" class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 hover:border-emerald-400 transition shadow-xs flex items-center justify-between group">
+            <div>
+                <div class="text-[11px] font-bold text-emerald-800">অনুমোদিত (Approved)</div>
+                <div class="text-xl font-black text-emerald-700">@(ViewBag.ApprovedCount ?? 0)</div>
+            </div>
+            <span class="text-xl group-hover:scale-110 transition-transform">✓</span>
+        </a>
+        <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 shadow-xs flex items-center justify-between">
+            <div>
+                <div class="text-[11px] font-bold text-rose-800">বাতিলকৃত (Rejected)</div>
+                <div class="text-xl font-black text-rose-600">@(ViewBag.RejectedCount ?? 0)</div>
+            </div>
+            <span class="text-xl">✕</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-sky-50 border border-sky-200 shadow-xs flex items-center justify-between">
+            <div>
+                <div class="text-[11px] font-bold text-sky-800">মোট আবেদন (Total)</div>
+                <div class="text-xl font-black text-sky-700">@(ViewBag.TotalCount ?? 0)</div>
+            </div>
+            <span class="text-xl">📋</span>
+        </div>
+    </div>
+
+    <!-- Flash Alerts -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 flex items-center justify-between gap-3 shadow-xs">
+            <div class="flex items-center gap-2.5 text-xs font-bold">
+                <span class="p-1 bg-emerald-200 text-emerald-800 rounded-lg">✓</span>
+                <span>@TempData["SuccessMessage"]</span>
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-emerald-700 hover:text-emerald-900 font-bold text-xs">✕</button>
+        </div>
+    }
+    @if (TempData["InfoMessage"] != null)
+    {
+        <div class="p-4 rounded-2xl bg-sky-50 border border-sky-200 text-sky-900 flex items-center justify-between gap-3 shadow-xs">
+            <div class="flex items-center gap-2.5 text-xs font-bold">
+                <span class="p-1 bg-sky-200 text-sky-800 rounded-lg">ℹ</span>
+                <span>@TempData["InfoMessage"]</span>
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-sky-700 hover:text-sky-900 font-bold text-xs">✕</button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-900 flex items-center justify-between gap-3 shadow-xs">
+            <div class="flex items-center gap-2.5 text-xs font-bold">
+                <span class="p-1 bg-rose-200 text-rose-800 rounded-lg">⚠</span>
+                <span>@TempData["ErrorMessage"]</span>
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-rose-700 hover:text-rose-900 font-bold text-xs">✕</button>
+        </div>
+    }
+
+    <!-- Applications List -->
+    @if (!Model.Any())
+    {
+        <div class="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-sm space-y-4">
+            <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-2xl border border-emerald-100">
+                ✓
+            </div>
+            <h3 class="text-lg font-bold text-slate-900" data-bn="বর্তমানে কোনো পেন্ডিং আবেদন নেই" data-en="No Pending Applications">
+                বর্তমানে কোনো পেন্ডিং আবেদন নেই
+            </h3>
+            <p class="text-xs text-slate-500 max-w-md mx-auto">
+                সকল থেরাপিস্ট ও চিকিৎসকের রেজিস্ট্রেশন এবং লাইসেন্স যাচাইকরণ সফলভাবে সম্পন্ন হয়েছে। নতুন কোনো আবেদন জমা পড়লে তা এই তালিকায় প্রদর্শিত হবে।
+            </p>
+            <div class="pt-2">
+                <a asp-controller="Admin" asp-action="Index" class="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-sm transition">
+                    অ্যাডমিন ড্যাশবোর্ডে ফিরুন
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="space-y-6">
+            <div class="flex items-center justify-between text-xs font-bold text-slate-600 px-1">
+                <span>মোট @Model.Count টি নতুন আবেদন অপেক্ষমাণ</span>
+                <span class="text-slate-400">জমার ক্রমানুসারে সাজানো (Latest First)</span>
+            </div>
+
+            @foreach (var therapist in Model)
+            {
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm hover:border-teal-300 transition space-y-6">
+                    <!-- Top Row: Doctor Info & Quick Status -->
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+                        <div class="flex items-center gap-4">
+                            <!-- Avatar / Photo -->
+                            @if (!string.IsNullOrEmpty(therapist.User?.ProfilePictureUrl))
+                            {
+                                <img src="@therapist.User.ProfilePictureUrl" alt="@therapist.User.FullName" class="w-16 h-16 rounded-2xl object-cover border-2 border-teal-100 shadow-xs" />
+                            }
+                            else
+                            {
+                                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-700 text-white flex items-center justify-center font-black text-xl shadow-xs">
+                                    @(therapist.User?.FullName?.FirstOrDefault().ToString().ToUpper() ?? "Dr")
+                                </div>
+                            }
+
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h3 class="text-lg font-black text-slate-900">
+                                        @(therapist.User?.FullName ?? "Unknown Doctor")
+                                    </h3>
+                                    <span class="px-2.5 py-0.5 bg-amber-100 text-amber-900 font-extrabold text-[10px] rounded-full uppercase tracking-wider">
+                                        Pending Verification
+                                    </span>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-0.5 flex flex-wrap items-center gap-2">
+                                    <span>✉️ @(therapist.User?.Email ?? "No email provided")</span>
+                                    <span>•</span>
+                                    <span>ইউজার আইডি: #@therapist.UserId</span>
+                                    <span>•</span>
+                                    <span>আবেদনের তারিখ: @therapist.SubmittedAt.ToString("MMM dd, yyyy - hh:mm tt")</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex items-center gap-3 self-end md:self-center shrink-0">
+                            <!-- Reject Form -->
+                            <form asp-action="RejectTherapist" method="post" onsubmit="return confirm('আপনি কি নিশ্চিত যে এই থেরাপিস্ট আবেদনটি বাতিল (Reject) করতে চান?');">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@therapist.Id" />
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 hover:text-rose-900 font-bold text-xs rounded-xl border border-rose-200 transition">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    <span>বাতিল (Reject)</span>
+                                </button>
+                            </form>
+
+                            <!-- Approve Form -->
+                            <form asp-action="ApproveTherapist" method="post" onsubmit="return confirm('আপনি কি নিশ্চিত যে @(therapist.User?.FullName ?? therapist.TitleEn)-এর লাইসেন্স অনুমোদন (Approve) ও ভেরিফাই করতে চান?');">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@therapist.Id" />
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                <button type="submit" class="inline-flex items-center gap-1.5 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-extrabold text-xs rounded-xl shadow-md hover:shadow-lg transition">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <span>অনুমোদন করুন (Approve) ✓</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Details Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        
+                        <!-- Col 1: Professional Credential -->
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5">
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                                পেশাগত পদবি ও পরিচিতি
+                            </div>
+                            <div>
+                                <div class="text-xs text-slate-500 font-semibold">Title (English):</div>
+                                <div class="text-xs font-bold text-slate-800">@therapist.TitleEn</div>
+                            </div>
+                            @if (!string.IsNullOrEmpty(therapist.TitleBn))
+                            {
+                                <div>
+                                    <div class="text-xs text-slate-500 font-semibold">Title (বাংলা):</div>
+                                    <div class="text-xs font-bold text-slate-800">@therapist.TitleBn</div>
+                                </div>
+                            }
+                            <div>
+                                <div class="text-xs text-slate-500 font-semibold">স্পেশালিটি (Specialty):</div>
+                                <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800 border border-teal-200">
+                                    🧠 @therapist.Specialty
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Col 2: Licensing & Verification Details -->
+                        <div class="p-4 rounded-2xl bg-amber-50/50 border border-amber-100 space-y-2.5">
+                            <div class="text-[11px] font-bold text-amber-800 uppercase tracking-wider flex items-center justify-between">
+                                <span>লাইসেন্স ও রেগুলেশন</span>
+                                <span class="text-amber-600">🛡️ BMDC</span>
+                            </div>
+                            <div>
+                                <div class="text-xs text-slate-500 font-semibold">রেজিস্ট্রেশন নম্বর (License No):</div>
+                                <div class="text-sm font-black font-mono text-slate-900 bg-white px-2.5 py-1 rounded-lg border border-amber-200 mt-1 inline-block">
+                                    @therapist.LicenseNo
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-xs text-slate-500 font-semibold">অভিজ্ঞতা (Experience):</div>
+                                <div class="text-xs font-bold text-slate-800">@therapist.ExperienceYears বছর (Years)</div>
+                            </div>
+                            <div>
+                                <div class="text-xs text-slate-500 font-semibold">সেশন ফি (Hourly Rate):</div>
+                                <div class="text-xs font-bold text-teal-800">৳ @therapist.HourlyRateBDT BDT / ঘণ্টা</div>
+                            </div>
+                        </div>
+
+                        <!-- Col 3: Affiliation & Qualifications -->
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5">
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                                প্রাতিষ্ঠানিক সংযুক্তি ও যোগ্যতা
+                            </div>
+                            <div>
+                                <div class="text-xs text-slate-500 font-semibold">হাসপাতাল / প্রতিষ্ঠান:</div>
+                                <div class="text-xs font-semibold text-slate-800">
+                                    @(string.IsNullOrEmpty(therapist.HospitalAffiliation) ? "উন্মুক্ত প্র্যাকটিস (Independent Practice)" : therapist.HospitalAffiliation)
+                                </div>
+                            </div>
+                            @if (!string.IsNullOrEmpty(therapist.Qualifications))
+                            {
+                                <div>
+                                    <div class="text-xs text-slate-500 font-semibold">অতিরিক্ত ডিগ্রি / ফেলোশিপ:</div>
+                                    <div class="text-xs text-slate-700">@therapist.Qualifications</div>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(therapist.LicenseDocumentUrl))
+                            {
+                                <div>
+                                    <div class="text-xs text-slate-500 font-semibold">লাইসেন্স ডকুমেন্টস:</div>
+                                    <a href="@therapist.LicenseDocumentUrl" target="_blank" class="inline-flex items-center gap-1 text-xs font-bold text-teal-700 hover:underline mt-1">
+                                        📄 প্রমাণপত্র দেখুন ↗
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-[11px] text-slate-400 italic">কোনো অনলাইন ডকুমেন্ট ফাইল সংযুক্ত করা হয়নি।</div>
+                            }
+                        </div>
+
+                    </div>
+
+                    <!-- Bio row if available -->
+                    @if (!string.IsNullOrEmpty(therapist.Bio))
+                    {
+                        <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-100 text-xs text-slate-600">
+                            <span class="font-bold text-slate-700">চিকিৎসক পরিচিতি (Bio): </span>
+                            @therapist.Bio
+                        </div>
+                    }
+
+                </div>
+            }
+        </div>
+    }
+
+</div>

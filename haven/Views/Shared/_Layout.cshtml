@@ -112,7 +112,7 @@
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse group-hover:scale-125 transition-transform" aria-hidden="true"></span>
                         <span data-bn="এআই সুরক্ষা হটলাইন" data-en="AI Safety Assistant">এআই সুরক্ষা হটলাইন</span>
                     </a>
-                    <a asp-controller="Therapy" asp-action="Index" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-900 hover:bg-teal-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 transition-all duration-150" data-bn="ভেরিফায়েড থেরাপিস্ট" data-en="Therapy Directory">
+                    <a asp-controller="Therapist" asp-action="Directory" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-900 hover:bg-teal-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 transition-all duration-150" data-bn="ভেরিফায়েড থেরাপিস্ট" data-en="Therapy Directory">
                         ভেরিফায়েড থেরাপিস্ট
                     </a>
                     <a asp-controller="Articles" asp-action="Index" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-teal-900 hover:bg-teal-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 transition-all duration-150" data-bn="নিবন্ধ" data-en="Articles">
@@ -157,6 +157,23 @@
                                         <span data-bn="প্রোফাইল ও সেটিংস" data-en="Profile & Settings">প্রোফাইল ও সেটিংস</span>
                                     </a>
 
+                                    <a asp-controller="Booking" asp-action="MyBookings" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-teal-800 transition">
+                                        <svg class="w-4 h-4 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <span data-bn="আমার বুকিং সমূহ" data-en="My Bookings">আমার বুকিং সমূহ</span>
+                                    </a>
+
+                                    @if (User.IsInRole("Professional") || User.IsInRole("Admin"))
+                                    {
+                                        <a asp-controller="TherapistDashboard" asp-action="ManageRequests" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-teal-900 bg-teal-50 hover:bg-teal-100 transition">
+                                            <svg class="w-4 h-4 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                                            </svg>
+                                            <span data-bn="থেরাপিস্ট ড্যাশবোর্ড" data-en="Therapist Dashboard">থেরাপিস্ট ড্যাশবোর্ড</span>
+                                        </a>
+                                    }
+
                                     <a asp-controller="Courses" asp-action="MyCourses" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-teal-800 transition">
                                         <svg class="w-4 h-4 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -197,6 +214,12 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                             </svg>
                                             <span data-bn="অ্যাডমিন কন্ট্রোল" data-en="Admin Portal">অ্যাডমিন কন্ট্রোল</span>
+                                        </a>
+                                        <a asp-controller="Admin" asp-action="PendingTherapists" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-teal-900 hover:bg-teal-50 transition">
+                                            <svg class="w-4 h-4 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span data-bn="পেন্ডিং থেরাপিস্ট ভেরিফিকেশন" data-en="Pending Therapists">পেন্ডিং থেরাপিস্ট ভেরিফিকেশন</span>
                                         </a>
                                     }
                                 </div>
@@ -264,7 +287,7 @@
                 </svg>
                 <span data-bn="এআই" data-en="AI">এআই</span>
             </a>
-            <a asp-controller="Therapy" asp-action="Index" class="hover:text-teal-700 min-h-[44px] flex items-center px-2.5 rounded-lg transition-colors" data-bn="থেরাপিস্ট" data-en="Therapy">থেরাপিস্ট</a>
+            <a asp-controller="Therapist" asp-action="Directory" class="hover:text-teal-700 min-h-[44px] flex items-center px-2.5 rounded-lg transition-colors" data-bn="থেরাপিস্ট" data-en="Therapy">থেরাপিস্ট</a>
             @if (User.Identity?.IsAuthenticated == true)
             {
                 <a asp-controller="Account" asp-action="Profile" class="text-teal-700 font-bold min-h-[44px] flex items-center gap-1 px-2.5 rounded-lg transition-colors" aria-label="প্রোফাইল দেখুন">

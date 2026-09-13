@@ -39,4 +39,8 @@ public class User
     public DateTime? LastLoginAt { get; set; }
 
     public bool IsActive { get; set; } = true;
+
+    // Navigation collections
+    public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 }
+
