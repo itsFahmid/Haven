@@ -279,7 +279,7 @@ public class TherapyController : Controller
             .Where(a => a.AuthorId == userId)
             .ToListAsync();
 
-        var model = new TherapistDashboardViewModel
+        var model = new TherapyDashboardViewModel
         {
             Profile = profile,
             Appointments = appointments,
@@ -324,7 +324,7 @@ public class TherapyController : Controller
     }
 }
 
-public class TherapistDashboardViewModel
+public class TherapyDashboardViewModel
 {
     public ProfessionalProfile Profile { get; set; } = null!;
     public List<Appointment> Appointments { get; set; } = new();

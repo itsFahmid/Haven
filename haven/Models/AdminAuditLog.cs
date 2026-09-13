@@ -10,7 +10,7 @@ public class AdminAuditLog
     public int Id { get; set; }
 
     public int AdminUserId { get; set; }
-qq
+
     [ForeignKey(nameof(AdminUserId))]
     public User? AdminUser { get; set; }
 
