@@ -25,7 +25,6 @@ public class AdminController : Controller
         var pendingTherapists = await _db.ProfessionalProfiles
             .Include(p => p.User)
             .Where(p => p.ApprovalStatus == "Pending")
-            .OrderByDescending(p => p.SubmittedAt)
             .ToListAsync();
 
         var pendingCourses = await _db.Courses
@@ -50,19 +49,6 @@ public class AdminController : Controller
             .Take(10)
             .ToListAsync();
 
-        // Dynamic Therapist Counts directly from EF Core DbContext
-        var pendingTherapistsCount = await _db.ProfessionalProfiles.CountAsync(p => p.ApprovalStatus == "Pending");
-        var approvedTherapistsCount = await _db.ProfessionalProfiles.CountAsync(p => p.ApprovalStatus == "Approved" || p.IsBmdcVerified);
-        var rejectedTherapistsCount = await _db.ProfessionalProfiles.CountAsync(p => p.ApprovalStatus == "Rejected");
-        var totalTherapistsCount = await _db.ProfessionalProfiles.CountAsync();
-
-        var totalUsersCount = await _db.Users.CountAsync();
-        var totalCoursesCount = await _db.Courses.CountAsync();
-        var pendingCoursesCount = await _db.Courses.CountAsync(c => c.ApprovalStatus == "Pending");
-        var totalAppointmentsCount = await _db.Appointments.CountAsync();
-        var reportedPostsCount = await _db.CommunityPosts.CountAsync(p => p.IsReported || p.ReportCount > 0);
-        var crisisAlertsCount = await _db.CrisisAlerts.CountAsync();
-
         var model = new AdminDashboardViewModel
         {
             PendingTherapists = pendingTherapists,
@@ -70,19 +56,9 @@ public class AdminController : Controller
             ReportedPosts = reportedPosts,
             RecentCrisisAlerts = recentAlerts,
             AuditLogs = auditLogs,
-
-            PendingTherapistsCount = pendingTherapistsCount,
-            ApprovedTherapistsCount = approvedTherapistsCount,
-            RejectedTherapistsCount = rejectedTherapistsCount,
-            TotalTherapistsCount = totalTherapistsCount,
-
-            TotalUsersCount = totalUsersCount,
-            TotalCoursesCount = totalCoursesCount,
-            PendingCoursesCount = pendingCoursesCount,
-            TotalAppointmentsCount = totalAppointmentsCount,
-            ReportedPostsCount = reportedPostsCount,
-            CrisisAlertsCount = crisisAlertsCount,
-
+            TotalUsersCount = await _db.Users.CountAsync(),
+            TotalCoursesCount = await _db.Courses.CountAsync(),
+            TotalAppointmentsCount = await _db.Appointments.CountAsync(),
             DatabaseProvider = _db.Database.ProviderName ?? "Unknown"
         };
 
@@ -148,28 +124,10 @@ public class AdminController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    // FR-10 / UC-24: Dedicated Pending Therapist Applications & Credential Verification Portal
-    [HttpGet]
-    public async Task<IActionResult> PendingTherapists()
-    {
-        var pendingTherapists = await _db.ProfessionalProfiles
-            .Include(p => p.User)
-            .Where(p => p.ApprovalStatus == "Pending")
-            .OrderByDescending(p => p.SubmittedAt)
-            .ToListAsync();
-
-        ViewBag.PendingCount = await _db.ProfessionalProfiles.CountAsync(p => p.ApprovalStatus == "Pending");
-        ViewBag.ApprovedCount = await _db.ProfessionalProfiles.CountAsync(p => p.ApprovalStatus == "Approved" || p.IsBmdcVerified);
-        ViewBag.RejectedCount = await _db.ProfessionalProfiles.CountAsync(p => p.ApprovalStatus == "Rejected");
-        ViewBag.TotalCount = await _db.ProfessionalProfiles.CountAsync();
-
-        return View(pendingTherapists);
-    }
-
     // FR-10 / UC-24: Approve Therapist Credential Verification
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ApproveTherapist(int id, string? returnUrl = null)
+    public async Task<IActionResult> ApproveTherapist(int id)
     {
         var prof = await _db.ProfessionalProfiles
             .Include(p => p.User)
@@ -181,7 +139,7 @@ public class AdminController : Controller
             prof.IsBmdcVerified = true;
             prof.VerifiedAt = DateTime.UtcNow;
 
-            if (prof.User != null && prof.User.Role != "Admin")
+            if (prof.User != null)
             {
                 prof.User.Role = "Professional";
             }
@@ -192,39 +150,22 @@ public class AdminController : Controller
                 AdminUserId = adminId,
                 ActionType = "ApproveTherapist",
                 TargetResource = $"ProfessionalProfile:{id}",
-                ActionDetails = $"Approved BMDC license #{prof.LicenseNo} for {prof.User?.FullName ?? prof.TitleEn}",
+                ActionDetails = $"Approved BMDC license #{prof.LicenseNo} and upgraded user #{prof.UserId} to Professional role.",
                 ExecutedAt = DateTime.UtcNow
             });
 
             await _db.SaveChangesAsync();
-
-            _logger.LogInformation("Admin {AdminId} approved therapist application #{ProfileId} ({FullName}) with license {LicenseNo}",
-                adminId, prof.Id, prof.User?.FullName, prof.LicenseNo);
-
-            TempData["SuccessMessage"] = $"থেরাপিস্ট '{prof.User?.FullName ?? prof.TitleEn}' এর লাইসেন্স (#{prof.LicenseNo}) সফলভাবে অনুমোদন ও ভেরিফাই করা হয়েছে! / Therapist license approved & verified successfully!";
+            TempData["SuccessMessage"] = $"Therapist application #{id} approved! User account elevated to Professional role.";
         }
-        else
-        {
-            TempData["ErrorMessage"] = "থেরাপিস্ট প্রোফাইলটি খুঁজে পাওয়া যায়নি। / Therapist profile not found.";
-        }
-
-        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-        {
-            return Redirect(returnUrl);
-        }
-
-        return RedirectToAction(nameof(PendingTherapists));
+        return RedirectToAction(nameof(Index));
     }
 
     // FR-10 / UC-24: Reject Therapist Credential
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> RejectTherapist(int id, string? returnUrl = null)
+    public async Task<IActionResult> RejectTherapist(int id)
     {
-        var prof = await _db.ProfessionalProfiles
-            .Include(p => p.User)
-            .FirstOrDefaultAsync(p => p.Id == id);
-
+        var prof = await _db.ProfessionalProfiles.FindAsync(id);
         if (prof != null)
         {
             prof.ApprovalStatus = "Rejected";
@@ -236,28 +177,14 @@ public class AdminController : Controller
                 AdminUserId = adminId,
                 ActionType = "RejectTherapist",
                 TargetResource = $"ProfessionalProfile:{id}",
-                ActionDetails = $"Rejected verification for Profile #{id} ({prof.User?.FullName ?? prof.TitleEn})",
+                ActionDetails = $"Rejected verification for Profile #{id}",
                 ExecutedAt = DateTime.UtcNow
             });
 
             await _db.SaveChangesAsync();
-
-            _logger.LogInformation("Admin {AdminId} rejected therapist application #{ProfileId} ({FullName})",
-                adminId, prof.Id, prof.User?.FullName);
-
-            TempData["InfoMessage"] = $"থেরাপিস্ট '{prof.User?.FullName ?? prof.TitleEn}' এর আবেদনটি বাতিল করা হয়েছে। / Therapist application rejected.";
+            TempData["InfoMessage"] = $"Therapist #{id} application rejected.";
         }
-        else
-        {
-            TempData["ErrorMessage"] = "থেরাপিস্ট প্রোফাইলটি খুঁজে পাওয়া যায়নি। / Therapist profile not found.";
-        }
-
-        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-        {
-            return Redirect(returnUrl);
-        }
-
-        return RedirectToAction(nameof(PendingTherapists));
+        return RedirectToAction(nameof(Index));
     }
 
     // UC-22 / FR-9: Approve Therapist Submitted Course
@@ -326,20 +253,8 @@ public class AdminDashboardViewModel
     public List<CommunityPost> ReportedPosts { get; set; } = new();
     public List<CrisisAlert> RecentCrisisAlerts { get; set; } = new();
     public List<AdminAuditLog> AuditLogs { get; set; } = new();
-
-    // Dynamic Therapist Counts
-    public int PendingTherapistsCount { get; set; }
-    public int ApprovedTherapistsCount { get; set; }
-    public int RejectedTherapistsCount { get; set; }
-    public int TotalTherapistsCount { get; set; }
-
-    // Dynamic Platform Counts
     public int TotalUsersCount { get; set; }
     public int TotalCoursesCount { get; set; }
-    public int PendingCoursesCount { get; set; }
     public int TotalAppointmentsCount { get; set; }
-    public int ReportedPostsCount { get; set; }
-    public int CrisisAlertsCount { get; set; }
-
     public string DatabaseProvider { get; set; } = string.Empty;
 }

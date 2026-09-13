@@ -27,14 +27,23 @@
                 </div>
 
                 <div class="space-y-1">
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-wrap items-center gap-2">
                         <h1 class="text-2xl sm:text-3xl font-black text-white">@Model.FullName</h1>
-                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
-                            <span>@Model.Role Member (@Model.UserType Mode)</span>
-                        </span>
+                        @if (Model.Role == "Professional")
+                        {
+                            <span class="inline-flex items-center gap-1 px-3 py-1 text-xs font-black bg-teal-500/30 text-teal-200 border border-teal-400/40 rounded-full shadow-xs">
+                                🛡️ Verified Professional Practitioner
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                <span>@Model.Role Member (@Model.UserType Mode)</span>
+                            </span>
+                        }
                     </div>
                     <p class="text-sm text-slate-300">@Model.Email</p>
                     <p class="text-xs text-slate-400">
@@ -45,6 +54,19 @@
 
             <!-- Header Action Buttons -->
             <div class="flex flex-wrap items-center gap-3">
+                @if (Model.Role == "Professional" || Model.Role == "Admin")
+                {
+                    <a asp-controller="Therapy" asp-action="Dashboard" class="px-4 py-2.5 bg-teal-600 hover:bg-teal-500 text-white font-extrabold text-xs rounded-xl shadow-md transition flex items-center gap-1.5 active:scale-97">
+                        <span>📊 থেরাপিস্ট ড্যাশবোর্ড</span>
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Therapy" asp-action="Apply" class="px-4 py-2.5 bg-teal-800 hover:bg-teal-700 text-white font-extrabold text-xs rounded-xl border border-teal-700 shadow-xs transition flex items-center gap-1.5 active:scale-97">
+                        <span>🛡️ Apply as Professional</span>
+                    </a>
+                }
+
                 <button type="button" onclick="openProfileModal('editProfileModal')" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl border border-slate-700 transition flex items-center gap-1.5">
                     <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                     <span data-bn="প্রোফাইল এডিট" data-en="Edit Profile">প্রোফাইল এডিট</span>

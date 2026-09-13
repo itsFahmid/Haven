@@ -16,9 +16,75 @@ public class TherapyController : Controller
         _db = db;
     }
 
-    public IActionResult Index(string specialty = "All", string mode = "All")
+    public async Task<IActionResult> Index(string specialty = "All", string mode = "All")
     {
         var therapists = HavenDataStore.GetTherapists();
+
+        // Include database approved Professional profiles dynamically
+        var dbApproved = await _db.ProfessionalProfiles
+            .Include(p => p.User)
+            .Where(p => p.ApprovalStatus == "Approved")
+            .ToListAsync();
+
+        foreach (var dbProf in dbApproved)
+        {
+            var vm = new TherapistViewModel
+            {
+                Id = dbProf.Id,
+                NameEn = dbProf.User?.FullName ?? dbProf.TitleEn,
+                NameBn = dbProf.User?.FullName ?? dbProf.TitleBn,
+                TitleEn = dbProf.TitleEn,
+                TitleBn = dbProf.TitleBn,
+                RegistrationNo = $"BMDC / Reg: {dbProf.LicenseNo}",
+                IsBMDCVerified = dbProf.IsBmdcVerified,
+                DegreeEn = dbProf.TitleEn,
+                DegreeBn = dbProf.TitleBn,
+                InstitutionEn = "HAVEN Verified Professional Sanctuary",
+                InstitutionBn = "হেভেন ভেরিফায়েড প্রফেশনাল স্যাঙ্কচুয়ারি",
+                ExperienceYears = dbProf.YearsOfExperience > 0 ? dbProf.YearsOfExperience : 5,
+                Rating = 4.98,
+                ReviewCount = 18,
+                BaseFeeBDT = Convert.ToInt32(dbProf.HourlyRateBDT > 0 ? dbProf.HourlyRateBDT : 600),
+                OffersSubsidizedOrFree = true,
+                AvatarSeed = string.IsNullOrEmpty(dbProf.User?.ProfilePictureUrl) ? "dr_samira" : dbProf.User.ProfilePictureUrl,
+                BioEn = string.IsNullOrWhiteSpace(dbProf.Bio) ? $"{dbProf.TitleEn} - Specializing in {dbProf.Specialty}" : dbProf.Bio,
+                BioBn = string.IsNullOrWhiteSpace(dbProf.Bio) ? $"{dbProf.TitleBn} - বিশেষজ্ঞ: {dbProf.Specialty}" : dbProf.Bio,
+                SpecializationsEn = new List<string> { dbProf.Specialty },
+                SpecializationsBn = new List<string> { dbProf.Specialty },
+                LanguagesEn = new List<string> { "Bangla (Native)", "English" },
+                LanguagesBn = new List<string> { "বাংলা (মাতৃভাষা)", "ইংরেজি" },
+                AvailableModesEn = new List<string> { "Encrypted Video Call", "Confidential Voice Call" },
+                AvailableModesBn = new List<string> { "এনক্রিপ্টেড ভিডিও কল", "গোপনীয় অডিও কল" },
+                AvailableSlots = new List<TherapySlot>
+                {
+                    new()
+                    {
+                        Id = dbProf.Id * 1000 + 1,
+                        DayEn = "Today",
+                        DayBn = "আজ",
+                        TimeEn = string.IsNullOrWhiteSpace(dbProf.ConsultationTime) ? "04:30 PM - 05:30 PM" : dbProf.ConsultationTime,
+                        TimeBn = string.IsNullOrWhiteSpace(dbProf.ConsultationTime) ? "বিকাল ৪:৩০ - ৫:৩০" : dbProf.ConsultationTime,
+                        DateFormatted = DateTime.UtcNow.ToString("yyyy-MM-dd"),
+                        IsAvailable = true
+                    },
+                    new()
+                    {
+                        Id = dbProf.Id * 1000 + 2,
+                        DayEn = "Tomorrow",
+                        DayBn = "আগামীকাল",
+                        TimeEn = "06:00 PM - 07:00 PM",
+                        TimeBn = "সন্ধ্যা ৬:০০ - ৭:০০",
+                        DateFormatted = DateTime.UtcNow.AddDays(1).ToString("yyyy-MM-dd"),
+                        IsAvailable = true
+                    }
+                }
+            };
+
+            if (!therapists.Any(t => t.Id == vm.Id))
+            {
+                therapists.Add(vm);
+            }
+        }
 
         if (!string.IsNullOrEmpty(specialty) && specialty != "All")
         {
@@ -124,7 +190,7 @@ public class TherapyController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Apply(string titleEn, string titleBn, string specialty, string licenseNo, decimal hourlyRateBDT)
+    public async Task<IActionResult> Apply(string titleEn, string titleBn, string specialty, string licenseNo, decimal hourlyRateBDT, int yearsOfExperience = 0, string? consultationTime = null, string? bio = null)
     {
         if (User.Identity?.IsAuthenticated != true)
         {
@@ -150,6 +216,9 @@ public class TherapyController : Controller
                 Specialty = specialty.Trim(),
                 LicenseNo = licenseNo.Trim(),
                 HourlyRateBDT = hourlyRateBDT > 0 ? hourlyRateBDT : 500,
+                YearsOfExperience = yearsOfExperience > 0 ? yearsOfExperience : 1,
+                ConsultationTime = string.IsNullOrWhiteSpace(consultationTime) ? "Sat - Thu: 04:00 PM - 08:00 PM" : consultationTime.Trim(),
+                Bio = bio?.Trim() ?? string.Empty,
                 ApprovalStatus = "Pending",
                 IsBmdcVerified = false,
                 SubmittedAt = DateTime.UtcNow
@@ -163,14 +232,89 @@ public class TherapyController : Controller
             profile.Specialty = specialty.Trim();
             profile.LicenseNo = licenseNo.Trim();
             profile.HourlyRateBDT = hourlyRateBDT > 0 ? hourlyRateBDT : 500;
+            profile.YearsOfExperience = yearsOfExperience > 0 ? yearsOfExperience : profile.YearsOfExperience;
+            profile.ConsultationTime = string.IsNullOrWhiteSpace(consultationTime) ? profile.ConsultationTime : consultationTime.Trim();
+            profile.Bio = bio?.Trim() ?? profile.Bio;
             profile.ApprovalStatus = "Pending";
             profile.SubmittedAt = DateTime.UtcNow;
         }
 
         await _db.SaveChangesAsync();
 
-        TempData["SuccessMessage"] = "আপনার থেরাপিস্ট ভেরিফিকেশন আবেদনটি সফলভাবে অ্যাডমিন প্যানেলে জমা দেওয়া হয়েছে! যাচাইকরণ শেষে আপনার অ্যাকাউন্ট অনুমোদন করা হবে। / Your verification application has been submitted for admin approval!";
+        TempData["SuccessMessage"] = "আপনার থেরাপিস্ট ভেরিফিকেশন আবেদনটি সফলভাবে অ্যাডমিন প্যানেলে জমা দেওয়া হয়েছে! এডমিন যাচাইকরণ শেষে আপনার অ্যাকাউন্ট Professional হিসেবে আপডেট হবে। / Your application has been submitted! Upon admin approval, your account role will become Professional.";
         return RedirectToAction(nameof(Apply));
+    }
+
+    // Therapist / Professional Portal Dashboard
+    [HttpGet]
+    public async Task<IActionResult> Dashboard()
+    {
+        if (User.Identity?.IsAuthenticated != true)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        int userId = GetUserId();
+        var profile = await _db.ProfessionalProfiles
+            .Include(p => p.User)
+            .FirstOrDefaultAsync(p => p.UserId == userId);
+
+        if (profile == null)
+        {
+            TempData["InfoMessage"] = "আপনার প্রফেশনাল প্রোফাইল পাওয়া যায়নি। অনুগ্রহ করে প্রফেশনাল ভেরিফিকেশন আবেদন ফি কমপ্লিট করুন। / Professional profile not found. Please apply first.";
+            return RedirectToAction(nameof(Apply));
+        }
+
+        var appointments = await _db.Appointments
+            .Include(a => a.User)
+            .Where(a => a.ProfessionalId == profile.Id || (a.Professional != null && a.Professional.UserId == userId))
+            .OrderByDescending(a => a.CreatedAt)
+            .ToListAsync();
+
+        var courses = await _db.Courses
+            .Where(c => c.AuthorId == userId)
+            .ToListAsync();
+
+        var articles = await _db.Articles
+            .Where(a => a.AuthorId == userId)
+            .ToListAsync();
+
+        var model = new TherapistDashboardViewModel
+        {
+            Profile = profile,
+            Appointments = appointments,
+            SubmittedCoursesCount = courses.Count,
+            PublishedArticlesCount = articles.Count,
+            TotalBookingsCount = appointments.Count,
+            PendingBookingsCount = appointments.Count(a => a.Status == "Scheduled")
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateProfileDetails(decimal hourlyRateBDT, string consultationTime, string specialty, string bio)
+    {
+        if (User.Identity?.IsAuthenticated != true)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        int userId = GetUserId();
+        var profile = await _db.ProfessionalProfiles.FirstOrDefaultAsync(p => p.UserId == userId);
+        if (profile != null)
+        {
+            if (hourlyRateBDT > 0) profile.HourlyRateBDT = hourlyRateBDT;
+            if (!string.IsNullOrWhiteSpace(consultationTime)) profile.ConsultationTime = consultationTime.Trim();
+            if (!string.IsNullOrWhiteSpace(specialty)) profile.Specialty = specialty.Trim();
+            if (bio != null) profile.Bio = bio.Trim();
+
+            await _db.SaveChangesAsync();
+            TempData["SuccessMessage"] = "আপনার প্রফেশনাল প্রোফাইল তথ্য আপডেট করা হয়েছে। / Professional profile updated.";
+        }
+
+        return RedirectToAction(nameof(Dashboard));
     }
 
     private int GetUserId()
@@ -178,6 +322,16 @@ public class TherapyController : Controller
         var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return int.TryParse(idClaim, out int uid) ? uid : 0;
     }
+}
+
+public class TherapistDashboardViewModel
+{
+    public ProfessionalProfile Profile { get; set; } = null!;
+    public List<Appointment> Appointments { get; set; } = new();
+    public int SubmittedCoursesCount { get; set; }
+    public int PublishedArticlesCount { get; set; }
+    public int TotalBookingsCount { get; set; }
+    public int PendingBookingsCount { get; set; }
 }
 
 public class BookingRequest

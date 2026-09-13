@@ -6,189 +6,36 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
     
     <!-- Admin Hero Header -->
-    <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-teal-950 text-white rounded-3xl p-8 border border-slate-800 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-        <div class="space-y-2 max-w-2xl">
+    <div class="bg-slate-900 text-white rounded-3xl p-8 border border-slate-800 shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div>
             <span class="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-full text-xs font-bold uppercase tracking-wider">
-                🛡️ System Administration & Governance
+                System Administration & Governance
             </span>
-            <h1 class="text-2xl sm:text-3xl font-black tracking-tight" data-bn="হেভেন অ্যাডমিন ও সিকিউরিটি কন্ট্রোল" data-en="HAVEN Admin & Governance Portal">
+            <h1 class="text-2xl sm:text-3xl font-black mt-2 tracking-tight">
                 হেভেন অ্যাডমিন ও সিকিউরিটি কন্ট্রোল
             </h1>
-            <p class="text-xs sm:text-sm text-slate-300">
-                লাইসেন্স ভেরিফিকেশন, থেরাপিস্ট কোর্স অনুমোদন এবং প্ল্যাটফর্ম নিরাপত্তা তদারকি। ডাটাবেস প্রোভাইডার: <span class="font-mono text-teal-300">@Model.DatabaseProvider</span>
+            <p class="text-xs text-slate-300 mt-1">
+                লাইসেন্স ভেরিফিকেশন, থেরাপিস্ট কোর্স অনুমোদন এবং ইউজার সেফটি অডিট ট্রেইল
             </p>
         </div>
 
-        <div class="flex items-center gap-3">
-            <a asp-action="PendingTherapists" class="inline-flex items-center gap-2 px-5 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-2xl shadow-lg transition">
-                <span>🛡️ ভেরিফিকেশন কিউ (@Model.PendingTherapistsCount)</span>
-            </a>
-            <a asp-controller="Therapist" asp-action="Directory" target="_blank" class="inline-flex items-center gap-2 px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-2xl border border-slate-700 transition">
-                <span>পাবলিক ডিরেক্টরি ↗</span>
-            </a>
+        <div class="flex items-center gap-4 text-center">
+            <div class="bg-slate-800 px-4 py-2.5 rounded-2xl border border-slate-700">
+                <div class="text-lg font-black text-teal-400">@Model.TotalUsersCount</div>
+                <div class="text-[10px] text-slate-400">মোট ইউজার</div>
+            </div>
+            <div class="bg-slate-800 px-4 py-2.5 rounded-2xl border border-slate-700">
+                <div class="text-lg font-black text-amber-400">@Model.PendingCourses.Count</div>
+                <div class="text-[10px] text-slate-400">পেন্ডিং কোর্স</div>
+            </div>
+            <div class="bg-slate-800 px-4 py-2.5 rounded-2xl border border-slate-700">
+                <div class="text-lg font-black text-sky-400">@Model.PendingTherapists.Count</div>
+                <div class="text-[10px] text-slate-400">পেন্ডিং লাইসেন্স</div>
+            </div>
         </div>
     </div>
 
-    <!-- Dynamic Metric Summary Cards Grid -->
-    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        
-        <!-- Pending Therapists Card -->
-        <a asp-action="PendingTherapists" class="p-5 rounded-3xl bg-amber-500/10 border border-amber-500/25 hover:border-amber-500 hover:bg-amber-500/15 transition group shadow-sm">
-            <div class="flex items-center justify-between text-xs font-bold text-amber-800">
-                <span data-bn="অপেক্ষমাণ থেরাপিস্ট" data-en="Pending Approval">অপেক্ষমাণ থেরাপিস্ট</span>
-                <span class="p-1.5 bg-amber-100 text-amber-900 rounded-xl group-hover:scale-110 transition-transform">⏳</span>
-            </div>
-            <div class="text-3xl font-black text-amber-600 mt-2">@Model.PendingTherapistsCount</div>
-            <div class="text-[11px] text-amber-700/80 mt-1 font-semibold flex items-center justify-between">
-                <span>লাইসেন্স ভেরিফিকেশন কিউ</span>
-                <span class="group-hover:translate-x-1 transition-transform">➔</span>
-            </div>
-        </a>
-
-        <!-- Approved Therapists Card -->
-        <a asp-controller="Therapist" asp-action="Directory" target="_blank" class="p-5 rounded-3xl bg-emerald-50 border border-emerald-200 hover:border-emerald-400 hover:bg-emerald-100/60 transition group shadow-sm">
-            <div class="flex items-center justify-between text-xs font-bold text-emerald-800">
-                <span data-bn="অনুমোদিত থেরাপিস্ট" data-en="Approved Therapists">অনুমোদিত থেরাপিস্ট</span>
-                <span class="p-1.5 bg-emerald-100 text-emerald-900 rounded-xl group-hover:scale-110 transition-transform">✓</span>
-            </div>
-            <div class="text-3xl font-black text-emerald-700 mt-2">@Model.ApprovedTherapistsCount</div>
-            <div class="text-[11px] text-emerald-700/80 mt-1 font-semibold flex items-center justify-between">
-                <span>সক্রিয় ক্লিনিক্যাল প্যানেল</span>
-                <span class="group-hover:translate-x-1 transition-transform">↗</span>
-            </div>
-        </a>
-
-        <!-- Rejected Applications Card -->
-        <div class="p-5 rounded-3xl bg-rose-50 border border-rose-200 shadow-sm">
-            <div class="flex items-center justify-between text-xs font-bold text-rose-800">
-                <span data-bn="বাতিলকৃত আবেদন" data-en="Rejected Applications">বাতিলকৃত আবেদন</span>
-                <span class="p-1.5 bg-rose-100 text-rose-900 rounded-xl">✕</span>
-            </div>
-            <div class="text-3xl font-black text-rose-700 mt-2">@Model.RejectedTherapistsCount</div>
-            <div class="text-[11px] text-rose-700/80 mt-1 font-semibold">
-                লাইসেন্স অযোগ্য / প্রত্যাখ্যাত
-            </div>
-        </div>
-
-        <!-- Total Registered Users Card -->
-        <div class="p-5 rounded-3xl bg-sky-50 border border-sky-200 shadow-sm">
-            <div class="flex items-center justify-between text-xs font-bold text-sky-800">
-                <span data-bn="মোট নিবন্ধিত ইউজার" data-en="Total Registered Users">মোট নিবন্ধিত ইউজার</span>
-                <span class="p-1.5 bg-sky-100 text-sky-900 rounded-xl">👥</span>
-            </div>
-            <div class="text-3xl font-black text-sky-700 mt-2">@Model.TotalUsersCount</div>
-            <div class="text-[11px] text-sky-700/80 mt-1 font-semibold">
-                মোট ইউজার ও অভিভাবক
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Additional Secondary Metrics Row -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-                <div class="text-[11px] font-bold text-slate-500">পেন্ডিং কোর্স</div>
-                <div class="text-xl font-black text-amber-600">@Model.PendingCoursesCount</div>
-            </div>
-            <span class="text-xl">📚</span>
-        </div>
-        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-                <div class="text-[11px] font-bold text-slate-500">মোট কোর্স সংখ্যা</div>
-                <div class="text-xl font-black text-teal-700">@Model.TotalCoursesCount</div>
-            </div>
-            <span class="text-xl">🎓</span>
-        </div>
-        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-                <div class="text-[11px] font-bold text-slate-500">রিপোর্টকৃত পোস্ট</div>
-                <div class="text-xl font-black text-rose-600">@Model.ReportedPostsCount</div>
-            </div>
-            <span class="text-xl">🚨</span>
-        </div>
-        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-                <div class="text-[11px] font-bold text-slate-500">পরামর্শ সেশন</div>
-                <div class="text-xl font-black text-indigo-700">@Model.TotalAppointmentsCount</div>
-            </div>
-            <span class="text-xl">🗓️</span>
-        </div>
-    </div>
-
-    <!-- Section 1: Pending Therapist License Review -->
-    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-4">
-            <div>
-                <h3 class="text-base font-bold text-slate-900" data-bn="লাইসেন্স ভেরিফিকেশন আবেদন (Pending Verification)" data-en="Pending License Verification Requests">
-                    লাইসেন্স ভেরিফিকেশন আবেদন (Pending Verification)
-                </h3>
-                <p class="text-xs text-slate-500">বিএমডিসি লাইসেন্স ও আইডি রিভিউ করে ভেরিফায়েড স্ট্যাটাস প্রদান করুন</p>
-            </div>
-            <div class="flex items-center gap-2.5">
-                <a asp-action="PendingTherapists" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-xs rounded-xl shadow-xs transition">
-                    সম্পূর্ণ ভেরিফিকেশন কিউ (@Model.PendingTherapistsCount) ➔
-                </a>
-                <span class="px-3 py-1.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900">
-                    @Model.PendingTherapistsCount Pending
-                </span>
-            </div>
-        </div>
-
-        @if (!Model.PendingTherapists.Any())
-        {
-            <div class="text-center py-8 text-xs text-slate-500 bg-slate-50 rounded-2xl border border-slate-100">
-                কোনো পেন্ডিং থেরাপিস্ট লাইসেন্স আবেদন নেই। সকল থেরাপিস্ট ভেরিফিকেশন আপ-টু-ডেট।
-            </div>
-        }
-        else
-        {
-            <div class="space-y-3">
-                @foreach (var therapist in Model.PendingTherapists)
-                {
-                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                        <div class="space-y-1">
-                            <div class="flex items-center gap-2">
-                                <h4 class="text-sm font-black text-slate-900">@(therapist.User?.FullName ?? "Unknown")</h4>
-                                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-900">
-                                    @therapist.Specialty
-                                </span>
-                            </div>
-                            <p class="text-xs text-slate-600">
-                                <strong class="text-slate-800">BMDC: @therapist.LicenseNo</strong> • সেশন ফি: ৳@therapist.HourlyRateBDT / hr • অভিজ্ঞতা: @therapist.ExperienceYears বছর
-                            </p>
-                            <p class="text-[11px] text-slate-400">
-                                আবেদন তারিখ: @therapist.SubmittedAt.ToString("MMM dd, yyyy - hh:mm tt")
-                            </p>
-                        </div>
-                        <div class="flex items-center gap-2 shrink-0">
-                            <a asp-action="PendingTherapists" class="px-3.5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs rounded-xl transition">
-                                বিস্তারিত ↗
-                            </a>
-                            <form asp-action="ApproveTherapist" method="post" onsubmit="return confirm('অনুমোদন নিশ্চিত করতে চান?');">
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="id" value="@therapist.Id" />
-                                <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-                                <button type="submit" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-xs transition">
-                                    অনুমোদন (Approve) ✓
-                                </button>
-                            </form>
-                            <form asp-action="RejectTherapist" method="post" onsubmit="return confirm('বাতিল করতে চান?');">
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="id" value="@therapist.Id" />
-                                <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-                                <button type="submit" class="px-3.5 py-2 bg-rose-100 hover:bg-rose-200 text-rose-800 font-bold text-xs rounded-xl transition">
-                                    বাতিল (Reject) ✕
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                }
-            </div>
-        }
-    </div>
-
-    <!-- Section 2: Pending Course Review & Approval -->
+    <!-- Section 1: Pending Course Review & Approval -->
     <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
         <div class="flex items-center justify-between pb-4 border-b border-slate-100">
             <div>
@@ -198,7 +45,7 @@
                 <p class="text-xs text-slate-500">থেরাপিস্টদের প্রস্তুতকৃত কোর্সসমূহ পর্যালোচনা করে পাবলিক ক্যাটালগে অনুমোদনের ব্যবস্থা করুন</p>
             </div>
             <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900">
-                @Model.PendingCoursesCount Pending Courses
+                @Model.PendingCourses.Count Pending Courses
             </span>
         </div>
 
@@ -234,7 +81,7 @@
                             <form asp-action="ApproveCourse" method="post">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@course.Id" />
-                                <button type="submit" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-xs transition">
+                                <button type="submit" class="px-4 py-2 bg-emerald-700 text-white font-bold text-xs rounded-xl hover:bg-emerald-800 transition">
                                     অনুমোদন (Approve) ✓
                                 </button>
                             </form>
@@ -242,8 +89,68 @@
                             <form asp-action="RejectCourse" method="post">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@course.Id" />
-                                <button type="submit" class="px-4 py-2 bg-rose-100 hover:bg-rose-200 text-rose-800 font-bold text-xs rounded-xl transition">
+                                <button type="submit" class="px-4 py-2 bg-rose-100 text-rose-800 font-bold text-xs rounded-xl hover:bg-rose-200 transition">
                                     বাতিল (Reject) ✕
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <!-- Section 2: Pending Therapist License Review -->
+    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+                <h3 class="text-base font-bold text-slate-900" data-bn="লাইসেন্স ভেরিফিকেশন আবেদন" data-en="Pending License Verification Requests">
+                    লাইসেন্স ভেরিফিকেশন আবেদন
+                </h3>
+                <p class="text-xs text-slate-500">বিএমডিসি লাইসেন্স ও আইডি রিভিউ করে ভেরিফায়েড স্ট্যাটাস প্রদান করুন</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900">
+                @Model.PendingTherapists.Count Pending
+            </span>
+        </div>
+
+        @if (!Model.PendingTherapists.Any())
+        {
+            <div class="text-center py-8 text-xs text-slate-500 bg-slate-50 rounded-2xl border border-slate-100">
+                কোনো পেন্ডিং থেরাপিস্ট লাইসেন্স আবেদন নেই।
+            </div>
+        }
+        else
+        {
+            <div class="space-y-3">
+                @foreach (var therapist in Model.PendingTherapists)
+                {
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <h4 class="text-xs font-black text-slate-900">@(therapist.User?.FullName ?? "Unknown")</h4>
+                                <span class="px-2 py-0.5 bg-teal-100 text-teal-800 text-[10px] font-bold rounded-md">Reg: @therapist.LicenseNo</span>
+                            </div>
+                            <p class="text-xs text-slate-700 font-medium">@therapist.TitleEn • @therapist.Specialty • @therapist.YearsOfExperience Years Exp • ৳ @therapist.HourlyRateBDT / hr</p>
+                            <p class="text-[11px] text-slate-500 font-mono">🕒 Availability: @(therapist.ConsultationTime ?? "N/A")</p>
+                            @if (!string.IsNullOrWhiteSpace(therapist.Bio))
+                            {
+                                <p class="text-[11px] text-slate-600 italic">"@therapist.Bio"</p>
+                            }
+                        </div>
+                        <div class="flex items-center gap-2 flex-shrink-0">
+                            <form asp-action="ApproveTherapist" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@therapist.Id" />
+                                <button type="submit" class="px-4 py-2 bg-emerald-700 text-white font-extrabold text-xs rounded-xl hover:bg-emerald-800 transition shadow-xs">
+                                    Approve & Upgrade Role
+                                </button>
+                            </form>
+                            <form asp-action="RejectTherapist" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@therapist.Id" />
+                                <button type="submit" class="px-3.5 py-2 bg-rose-100 text-rose-800 font-bold text-xs rounded-xl hover:bg-rose-200 transition">
+                                    Reject
                                 </button>
                             </form>
                         </div>
@@ -263,7 +170,7 @@
                 <p class="text-xs text-slate-500">কমিউনিটি ইউজারদের জমা দেওয়া পোস্ট রিপোর্ট পর্যালোচনা করে মডারেশন অ্যাকশন নিন</p>
             </div>
             <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-900">
-                @Model.ReportedPostsCount Reported Posts
+                @Model.ReportedPosts.Count Reported Posts
             </span>
         </div>
 
