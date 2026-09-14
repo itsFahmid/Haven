@@ -42,15 +42,33 @@ public class ProfessionalProfile
 
     public bool IsBmdcVerified { get; set; } = false;
 
+    public int ExperienceYears { get; set; } = 5;
+
     public int YearsOfExperience { get; set; } = 0;
 
     [MaxLength(200)]
     public string? ConsultationTime { get; set; } = "Sat - Thu: 04:00 PM - 08:00 PM";
 
-    [MaxLength(1000)]
+    [MaxLength(2000)]
     public string? Bio { get; set; } = string.Empty;
+
+    [MaxLength(500)]
+    public string? Qualifications { get; set; }
+
+    [MaxLength(500)]
+    public string? HospitalAffiliation { get; set; }
+
+    public double Rating { get; set; } = 4.95;
+
+    public int ReviewCount { get; set; } = 120;
+
+    [NotMapped]
+    public bool IsVerified => ApprovalStatus == "Approved" || IsBmdcVerified;
 
     public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime? VerifiedAt { get; set; }
+
+    // Navigation collection for bookings
+    public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 }

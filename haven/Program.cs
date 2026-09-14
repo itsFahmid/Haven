@@ -112,9 +112,15 @@ using (var scope = app.Services.CreateScope())
             else
             {
                 db.Database.EnsureCreated();
+                try { db.Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS ""Bookings"" (""Id"" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, ""UserId"" INTEGER NOT NULL, ""TherapistId"" INTEGER NOT NULL, ""BookingDate"" TEXT NOT NULL, ""TimeSlot"" TEXT NOT NULL, ""CommunicationMode"" TEXT NOT NULL, ""Notes"" TEXT NULL, ""Status"" INTEGER NOT NULL DEFAULT 0, ""BookingReference"" TEXT NOT NULL DEFAULT '', ""FeeBDT"" TEXT NOT NULL DEFAULT '0', ""CreatedAt"" TEXT NOT NULL, ""UpdatedAt"" TEXT NULL);"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ExperienceYears INTEGER NOT NULL DEFAULT 5;"); } catch { }
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN YearsOfExperience INTEGER NOT NULL DEFAULT 0;"); } catch { }
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ConsultationTime TEXT NULL;"); } catch { }
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Bio TEXT NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Qualifications TEXT NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN HospitalAffiliation TEXT NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Rating REAL NOT NULL DEFAULT 4.95;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ReviewCount INTEGER NOT NULL DEFAULT 120;"); } catch { }
             }
         }
         catch (Exception migEx)
@@ -122,9 +128,15 @@ using (var scope = app.Services.CreateScope())
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
             logger.LogWarning(migEx, "Database migration fallback triggered.");
             try { db.Database.EnsureCreated(); } catch { }
+            try { db.Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS ""Bookings"" (""Id"" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, ""UserId"" INTEGER NOT NULL, ""TherapistId"" INTEGER NOT NULL, ""BookingDate"" TEXT NOT NULL, ""TimeSlot"" TEXT NOT NULL, ""CommunicationMode"" TEXT NOT NULL, ""Notes"" TEXT NULL, ""Status"" INTEGER NOT NULL DEFAULT 0, ""BookingReference"" TEXT NOT NULL DEFAULT '', ""FeeBDT"" TEXT NOT NULL DEFAULT '0', ""CreatedAt"" TEXT NOT NULL, ""UpdatedAt"" TEXT NULL);"); } catch { }
+            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ExperienceYears INTEGER NOT NULL DEFAULT 5;"); } catch { }
             try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN YearsOfExperience INTEGER NOT NULL DEFAULT 0;"); } catch { }
             try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ConsultationTime TEXT NULL;"); } catch { }
             try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Bio TEXT NULL;"); } catch { }
+            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Qualifications TEXT NULL;"); } catch { }
+            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN HospitalAffiliation TEXT NULL;"); } catch { }
+            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Rating REAL NOT NULL DEFAULT 4.95;"); } catch { }
+            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ReviewCount INTEGER NOT NULL DEFAULT 120;"); } catch { }
         }
 
         var hasher = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.IPasswordHasher<User>>();
@@ -194,12 +206,17 @@ using (var scope = app.Services.CreateScope())
                 UserId = therapist.Id,
                 TitleEn = "Dr. Anika Rahman, MS, MPhil (Clinical Psychology)",
                 TitleBn = "ডাঃ আনিকা রহমান, এমএস, এমফিল (ক্লিনিক্যাল সাইকোলজি)",
-                Specialty = "Clinical Depression",
+                Specialty = "Child & Adolescent Trauma, CBT",
                 LicenseNo = "BMDC Reg: A-84920",
                 HourlyRateBDT = 600,
-                YearsOfExperience = 7,
+                YearsOfExperience = 8,
+                ExperienceYears = 8,
                 ConsultationTime = "Sat - Thu: 04:00 PM - 08:00 PM",
-                Bio = "Specializes in adolescent depression, trauma stabilization, and cyber harassment recovery.",
+                Bio = "কিশোর-কিশোরী ও তরুণদের মানসিক স্বাস্থ্য, ট্রমা ও পরীক্ষার চাপ নিরসনে আন্তর্জাতিক স্ট্যান্ডার্ড সিবিটি ও সায়েন্টিফিক কাউন্সেলিং সেবা প্রদান করেন।",
+                Qualifications = "MBBS (DMC), MPhil Clinical Psychology (BSMMU)",
+                HospitalAffiliation = "National Institute of Mental Health (NIMH), Dhaka",
+                Rating = 4.98,
+                ReviewCount = 145,
                 ApprovalStatus = "Approved",
                 IsBmdcVerified = true,
                 SubmittedAt = DateTime.UtcNow,
@@ -209,7 +226,90 @@ using (var scope = app.Services.CreateScope())
             db.SaveChanges();
         }
 
-        // 3. Seed / Ensure Default User
+        // 3. Seed / Ensure Additional Verified Specialist (Dr. Samira Tasneem)
+        var samira = db.Users.FirstOrDefault(u => u.Email == "dr.samira@haven.org");
+        if (samira == null)
+        {
+            samira = new User
+            {
+                FullName = "Dr. Samira Tasneem",
+                Email = "dr.samira@haven.org",
+                Role = "Professional",
+                UserType = "Individual",
+                Age = 36,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
+            };
+            samira.PasswordHash = hasher.HashPassword(samira, "Therapist123!");
+            db.Users.Add(samira);
+            db.SaveChanges();
+
+            var samiraProfile = new ProfessionalProfile
+            {
+                UserId = samira.Id,
+                TitleEn = "Senior Psychiatrist & Cyber Harassment Specialist",
+                TitleBn = "সিনিয়র সাইকিয়াট্রিস্ট ও সাইবার ট্রমা বিশেষজ্ঞ",
+                Specialty = "Cyber Harassment Recovery, Depression & Panic",
+                LicenseNo = "BMDC Reg: A-74291",
+                ApprovalStatus = "Approved",
+                IsBmdcVerified = true,
+                HourlyRateBDT = 700,
+                ExperienceYears = 9,
+                YearsOfExperience = 9,
+                Rating = 4.96,
+                ReviewCount = 186,
+                Bio = "সাইবার বুলিং, অনলাইন ব্ল্যাকমেইলিং ও সোশ্যাল মিডিয়া বিষণ্ণতায় আক্রান্ত তরুণদের তাৎক্ষণিক মানসিক প্রাথমিক চিকিৎসা ও দীর্ঘমেয়াদী থেরাপি স্পেশালিস্ট।",
+                Qualifications = "MBBS (CMC), MD Psychiatry (BSMMU)",
+                HospitalAffiliation = "Dhaka Medical College Hospital",
+                SubmittedAt = DateTime.UtcNow,
+                VerifiedAt = DateTime.UtcNow
+            };
+            db.ProfessionalProfiles.Add(samiraProfile);
+            db.SaveChanges();
+        }
+
+        // 4. Seed / Ensure Unverified/Pending Therapist
+        var pendingDoc = db.Users.FirstOrDefault(u => u.Email == "pending.doc@haven.org");
+        if (pendingDoc == null)
+        {
+            pendingDoc = new User
+            {
+                FullName = "Dr. Rafiqul Islam (Pending Verification)",
+                Email = "pending.doc@haven.org",
+                Role = "Professional",
+                UserType = "Individual",
+                Age = 40,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
+            };
+            pendingDoc.PasswordHash = hasher.HashPassword(pendingDoc, "Therapist123!");
+            db.Users.Add(pendingDoc);
+            db.SaveChanges();
+
+            var pendingProfile = new ProfessionalProfile
+            {
+                UserId = pendingDoc.Id,
+                TitleEn = "General Mental Health Counselor (Pending Review)",
+                TitleBn = "জেনারেল কাউন্সেলর (যাচাইকরণাধীন)",
+                Specialty = "General Counseling",
+                LicenseNo = "BMDC Reg: A-99999",
+                ApprovalStatus = "Pending",
+                IsBmdcVerified = false,
+                HourlyRateBDT = 400,
+                ExperienceYears = 2,
+                YearsOfExperience = 2,
+                Rating = 4.5,
+                ReviewCount = 0,
+                Bio = "Pending admin verification profile.",
+                Qualifications = "MBBS",
+                HospitalAffiliation = "Private Practice",
+                SubmittedAt = DateTime.UtcNow
+            };
+            db.ProfessionalProfiles.Add(pendingProfile);
+            db.SaveChanges();
+        }
+
+        // 5. Seed / Ensure Default User
         var defaultUser = db.Users.FirstOrDefault(u => u.Email == "user@haven.org");
         if (defaultUser == null)
         {
@@ -234,6 +334,41 @@ using (var scope = app.Services.CreateScope())
             }
         }
         db.SaveChanges();
+
+        // 6. Seed Sample Bookings
+        if (!db.Bookings.Any() && therapistProfile != null && defaultUser != null)
+        {
+            db.Bookings.AddRange(
+                new Booking
+                {
+                    UserId = defaultUser.Id,
+                    TherapistId = therapistProfile.Id,
+                    BookingDate = DateTime.UtcNow.AddDays(2).Date,
+                    TimeSlot = "04:30 PM - 05:30 PM",
+                    CommunicationMode = "Online Video",
+                    Notes = "কিশোর বয়সের তীব্র পরীক্ষার মানসিক চাপ ও উদ্বেগ নিরসনে আলোচনা করতে চাই।",
+                    Status = BookingStatus.Pending,
+                    BookingReference = "HVN-BK-10492",
+                    FeeBDT = 600,
+                    CreatedAt = DateTime.UtcNow.AddHours(-3)
+                },
+                new Booking
+                {
+                    UserId = defaultUser.Id,
+                    TherapistId = therapistProfile.Id,
+                    BookingDate = DateTime.UtcNow.AddDays(-1).Date,
+                    TimeSlot = "07:00 PM - 08:00 PM",
+                    CommunicationMode = "Confidential Audio",
+                    Notes = "প্যানিক অ্যাটাক নিয়ন্ত্রণ ও ৫-৪-৩-২-১ গ্রাউন্ডিং টেকনিক সেশন।",
+                    Status = BookingStatus.Approved,
+                    BookingReference = "HVN-BK-10381",
+                    FeeBDT = 600,
+                    CreatedAt = DateTime.UtcNow.AddDays(-2),
+                    UpdatedAt = DateTime.UtcNow.AddDays(-1)
+                }
+            );
+            db.SaveChanges();
+        }
     }
     catch (Exception ex)
     {
