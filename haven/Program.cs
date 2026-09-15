@@ -6,6 +6,9 @@ using Haven.Models;
 using Haven.Services;
 using Haven.Hubs;
 
+// Enable legacy timestamp behavior for PostgreSQL/Npgsql to handle unzoned DateTime gracefully
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Disable file watchers for Linux container environment stability (prevents inotify limit 128 crash)
@@ -112,6 +115,27 @@ using (var scope = app.Services.CreateScope())
             else
             {
                 db.Database.EnsureCreated();
+                if (db.Database.IsSqlite())
+                {
+                    try { db.Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS ""Bookings"" (""Id"" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, ""UserId"" INTEGER NOT NULL, ""TherapistId"" INTEGER NOT NULL, ""BookingDate"" TEXT NOT NULL, ""TimeSlot"" TEXT NOT NULL, ""CommunicationMode"" TEXT NOT NULL, ""Notes"" TEXT NULL, ""Status"" INTEGER NOT NULL DEFAULT 0, ""BookingReference"" TEXT NOT NULL DEFAULT '', ""FeeBDT"" TEXT NOT NULL DEFAULT '0', ""CreatedAt"" TEXT NOT NULL, ""UpdatedAt"" TEXT NULL);"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ExperienceYears INTEGER NOT NULL DEFAULT 5;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN YearsOfExperience INTEGER NOT NULL DEFAULT 0;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ConsultationTime TEXT NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Bio TEXT NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Qualifications TEXT NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN HospitalAffiliation TEXT NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Rating REAL NOT NULL DEFAULT 4.95;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ReviewCount INTEGER NOT NULL DEFAULT 120;"); } catch { }
+                }
+            }
+        }
+        catch (Exception migEx)
+        {
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+            logger.LogWarning(migEx, "Database migration fallback triggered.");
+            try { db.Database.EnsureCreated(); } catch { }
+            if (db.Database.IsSqlite())
+            {
                 try { db.Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS ""Bookings"" (""Id"" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, ""UserId"" INTEGER NOT NULL, ""TherapistId"" INTEGER NOT NULL, ""BookingDate"" TEXT NOT NULL, ""TimeSlot"" TEXT NOT NULL, ""CommunicationMode"" TEXT NOT NULL, ""Notes"" TEXT NULL, ""Status"" INTEGER NOT NULL DEFAULT 0, ""BookingReference"" TEXT NOT NULL DEFAULT '', ""FeeBDT"" TEXT NOT NULL DEFAULT '0', ""CreatedAt"" TEXT NOT NULL, ""UpdatedAt"" TEXT NULL);"); } catch { }
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ExperienceYears INTEGER NOT NULL DEFAULT 5;"); } catch { }
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN YearsOfExperience INTEGER NOT NULL DEFAULT 0;"); } catch { }
@@ -122,21 +146,6 @@ using (var scope = app.Services.CreateScope())
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Rating REAL NOT NULL DEFAULT 4.95;"); } catch { }
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ReviewCount INTEGER NOT NULL DEFAULT 120;"); } catch { }
             }
-        }
-        catch (Exception migEx)
-        {
-            var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-            logger.LogWarning(migEx, "Database migration fallback triggered.");
-            try { db.Database.EnsureCreated(); } catch { }
-            try { db.Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS ""Bookings"" (""Id"" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, ""UserId"" INTEGER NOT NULL, ""TherapistId"" INTEGER NOT NULL, ""BookingDate"" TEXT NOT NULL, ""TimeSlot"" TEXT NOT NULL, ""CommunicationMode"" TEXT NOT NULL, ""Notes"" TEXT NULL, ""Status"" INTEGER NOT NULL DEFAULT 0, ""BookingReference"" TEXT NOT NULL DEFAULT '', ""FeeBDT"" TEXT NOT NULL DEFAULT '0', ""CreatedAt"" TEXT NOT NULL, ""UpdatedAt"" TEXT NULL);"); } catch { }
-            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ExperienceYears INTEGER NOT NULL DEFAULT 5;"); } catch { }
-            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN YearsOfExperience INTEGER NOT NULL DEFAULT 0;"); } catch { }
-            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ConsultationTime TEXT NULL;"); } catch { }
-            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Bio TEXT NULL;"); } catch { }
-            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Qualifications TEXT NULL;"); } catch { }
-            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN HospitalAffiliation TEXT NULL;"); } catch { }
-            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Rating REAL NOT NULL DEFAULT 4.95;"); } catch { }
-            try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ReviewCount INTEGER NOT NULL DEFAULT 120;"); } catch { }
         }
 
         var hasher = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.IPasswordHasher<User>>();
@@ -425,8 +434,9 @@ static string ConvertPostgresUrlToConnectionString(string url)
             var host = uri.Host;
             var port = uri.Port > 0 ? uri.Port : 5432;
             var database = uri.AbsolutePath.TrimStart('/');
+            if (string.IsNullOrWhiteSpace(database)) database = "neondb";
 
-            return $"Host={host};Port={port};Database={database};Username={user};Password={password};SSL Mode=Prefer;Trust Server Certificate=true";
+            return $"Host={host};Port={port};Database={database};Username={user};Password={password};SSL Mode=Require;Trust Server Certificate=true";
         }
         catch
         {

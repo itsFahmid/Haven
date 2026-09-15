@@ -12,3 +12,7 @@
 *.db
 *.db-shm
 *.db-wal
+
+# Local configurations & secrets
+appsettings.Development.json
+appsettings.*.local.json
