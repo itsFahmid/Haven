@@ -112,6 +112,11 @@
     // Listen for ESC key emergency escape
     window.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
+            const target = e.target;
+            if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT' || target.isContentEditable)) {
+                return;
+            }
+
             const activeModal = document.querySelector('.haven-modal:not(.hidden)');
             if (activeModal && !activeModal.classList.contains('urgent-crisis-modal')) {
                 // If standard modal open, ESC closes modal first

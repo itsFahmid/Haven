@@ -31,4 +31,7 @@ public class Article
     public string ApprovalStatus { get; set; } = "Approved"; // Pending, Approved, Rejected
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    [NotMapped]
+    public bool IsBookmarked { get; set; } = false;
 }

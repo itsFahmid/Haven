@@ -117,43 +117,96 @@ public class TherapyController : Controller
             return BadRequest(new { success = false, message = "Invalid booking details." });
         }
 
-        int userId = 0;
-        var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (int.TryParse(idClaim, out int claimId))
+        int userId = GetUserId();
+        if (userId <= 0)
         {
-            userId = claimId;
+            // Anonymous booking: link with designated anonymous user account to preserve FK integrity
+            var anonUser = await _db.Users.FirstOrDefaultAsync(u => u.Email == "anonymous@haven.org");
+            if (anonUser == null)
+            {
+                anonUser = new User
+                {
+                    FullName = string.IsNullOrWhiteSpace(request.Name) ? "Anonymous Patient" : request.Name.Trim(),
+                    Email = "anonymous@haven.org",
+                    PasswordHash = "ANONYMOUS_PATIENT_RESERVED",
+                    Role = "User",
+                    UserType = "Individual",
+                    IsAnonymous = true,
+                    CreatedAt = DateTime.UtcNow,
+                    IsActive = true
+                };
+                _db.Users.Add(anonUser);
+                await _db.SaveChangesAsync();
+            }
+            userId = anonUser.Id;
         }
 
-        // Database record insertion for appointment (FR-5, UC-16)
-        if (userId > 0)
+        // Validate or resolve therapist profile
+        var therapist = await _db.ProfessionalProfiles
+            .Include(p => p.User)
+            .FirstOrDefaultAsync(p => p.Id == request.TherapistId || p.UserId == request.TherapistId);
+
+        if (therapist == null)
+        {
+            therapist = await _db.ProfessionalProfiles
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.ApprovalStatus == "Approved" || p.IsBmdcVerified);
+        }
+
+        int targetTherapistId = therapist?.Id ?? request.TherapistId;
+        decimal fee = (therapist != null && !request.RequestFeeSubsidy) ? therapist.HourlyRateBDT : 0;
+        var bookingCode = $"HVN-BK-{Random.Shared.Next(10000, 99999)}";
+        DateTime bookingDate = DateTime.TryParse(request.Date, out DateTime parsedDate) 
+            ? parsedDate.Date 
+            : DateTime.UtcNow.AddDays(1).Date;
+
+        var booking = new Booking
+        {
+            UserId = userId,
+            TherapistId = targetTherapistId,
+            BookingDate = bookingDate,
+            TimeSlot = string.IsNullOrWhiteSpace(request.Time) ? "04:30 PM - 05:30 PM" : request.Time.Trim(),
+            Notes = $"Contact: {request.ContactMethod} ({request.ContactValue}). Anonymous: {request.IsAnonymous}. Fee Subsidy: {request.RequestFeeSubsidy}",
+            CommunicationMode = string.IsNullOrWhiteSpace(request.ContactMethod) ? "Online Video" : request.ContactMethod.Trim(),
+            Status = BookingStatus.Pending,
+            BookingReference = bookingCode,
+            FeeBDT = fee,
+            IsFeeSubsidized = request.RequestFeeSubsidy,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _db.Bookings.Add(booking);
+
+        // Also add legacy Appointment record if user is authenticated
+        if (GetUserId() > 0)
         {
             var appointment = new Appointment
             {
                 UserId = userId,
-                ProfessionalId = request.TherapistId,
-                ScheduledDate = DateTime.TryParse(request.Date, out DateTime dt) ? dt : DateTime.UtcNow.AddDays(1),
-                TimeSlot = string.IsNullOrWhiteSpace(request.Time) ? "04:30 PM" : request.Time,
+                ProfessionalId = targetTherapistId,
+                ScheduledDate = bookingDate,
+                TimeSlot = booking.TimeSlot,
                 Status = "Scheduled",
-                CommunicationChannel = request.ContactMethod ?? "Encrypted Session",
-                Notes = $"Anonymous: {request.IsAnonymous}, Fee Subsidy: {request.RequestFeeSubsidy}",
+                CommunicationChannel = booking.CommunicationMode,
+                Notes = booking.Notes,
                 CreatedAt = DateTime.UtcNow
             };
-
             _db.Appointments.Add(appointment);
-            await _db.SaveChangesAsync();
         }
 
-        var bookingCode = "HVN-SLOT-" + Random.Shared.Next(10000, 99999);
+        await _db.SaveChangesAsync();
+
         return Json(new
         {
             success = true,
-            bookingCode,
-            therapistId = request.TherapistId,
-            date = request.Date,
-            time = request.Time,
+            bookingCode = booking.BookingReference,
+            bookingId = booking.Id,
+            therapistId = booking.TherapistId,
+            date = booking.BookingDate.ToString("yyyy-MM-dd"),
+            time = booking.TimeSlot,
             isAnonymous = request.IsAnonymous,
-            messageEn = $"Your confidential session is booked! Reference code: {bookingCode}. Encrypted session link sent.",
-            messageBn = $"আপনার গোপনীয় সেশনটি নিশ্চিত হয়েছে! রেফারেন্স কোড: {bookingCode}। এনক্রিপ্ট করা সেশন লিংক পাঠানো হয়েছে।"
+            messageEn = $"Your confidential session is booked! Reference code: {booking.BookingReference}. Encrypted session link sent.",
+            messageBn = $"আপনার গোপনীয় সেশনটি নিশ্চিত হয়েছে! রেফারেন্স কোড: {booking.BookingReference}। এনক্রিপ্ট করা সেশন লিংক পাঠানো হয়েছে।"
         });
     }
 

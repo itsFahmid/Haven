@@ -55,11 +55,13 @@ public class ArticlesController : Controller
         }
 
         bool isBookmarked = false;
-        if (User.Identity?.IsAuthenticated == true && int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out int userId))
+        int userId = GetUserId();
+        if (userId > 0)
         {
             isBookmarked = await _db.ArticleBookmarks.AnyAsync(b => b.UserId == userId && b.ArticleId == id);
         }
 
+        article.IsBookmarked = isBookmarked;
         ViewBag.IsBookmarked = isBookmarked;
         return View(article);
     }
@@ -77,12 +79,10 @@ public class ArticlesController : Controller
         var existingBookmark = await _db.ArticleBookmarks
             .FirstOrDefaultAsync(b => b.UserId == userId && b.ArticleId == articleId);
 
-        bool isBookmarked;
         if (existingBookmark != null)
         {
             _db.ArticleBookmarks.Remove(existingBookmark);
             await _db.SaveChangesAsync();
-            isBookmarked = false;
             TempData["InfoMessage"] = "নিবন্ধটি বুকমার্ক তালিকা থেকে সরানো হয়েছে। / Article removed from bookmarks.";
         }
         else
@@ -94,7 +94,6 @@ public class ArticlesController : Controller
                 BookmarkedAt = DateTime.UtcNow
             });
             await _db.SaveChangesAsync();
-            isBookmarked = true;
             TempData["SuccessMessage"] = "নিবন্ধটি আপনার বুকমার্ক তালিকায় যুক্ত করা হয়েছে! / Article saved to your bookmarks!";
         }
 
