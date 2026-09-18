@@ -1,19 +1,19 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Haven.Data;
-using Haven.Models;
-using Haven.Services;
+using Obhoy.Data;
+using Obhoy.Models;
+using Obhoy.Services;
 using System.Security.Claims;
 
-namespace Haven.Controllers;
+namespace Obhoy.Controllers;
 
 public class CoursesController : Controller
 {
-    private readonly HavenDbContext _db;
+    private readonly ObhoyDbContext _db;
     private readonly ILogger<CoursesController> _logger;
 
-    public CoursesController(HavenDbContext db, ILogger<CoursesController> logger)
+    public CoursesController(ObhoyDbContext db, ILogger<CoursesController> logger)
     {
         _db = db;
         _logger = logger;
@@ -264,7 +264,7 @@ public class CoursesController : Controller
         var course = await _db.Courses.FindAsync(id);
         if (course == null)
         {
-            var fallback = HavenDataStore.GetCourses().FirstOrDefault(c => c.Id == id);
+            var fallback = ObhoyDataStore.GetCourses().FirstOrDefault(c => c.Id == id);
             if (fallback != null)
             {
                 course = new Course
@@ -327,7 +327,7 @@ public class CoursesController : Controller
 
         if (course == null)
         {
-            var fallback = HavenDataStore.GetCourses().FirstOrDefault(c => c.Id == id);
+            var fallback = ObhoyDataStore.GetCourses().FirstOrDefault(c => c.Id == id);
             if (fallback == null) return NotFound();
 
             var vmFallback = new CourseViewModel
@@ -359,7 +359,7 @@ public class CoursesController : Controller
                     DurationBn = m.DurationBn,
                     TypeEn = m.Type,
                     TypeBn = m.TypeBn,
-                    OptionalMaterials = "https://haven.org/resources/guide.pdf"
+                    OptionalMaterials = "https://obhoy.org/resources/guide.pdf"
                 }).ToList()
             };
             return View(vmFallback);
@@ -392,7 +392,7 @@ public class CoursesController : Controller
         {
             Id = course.Id,
             AuthorId = course.AuthorId,
-            AuthorName = course.Author?.FullName ?? "HAVEN Clinical Team",
+            AuthorName = course.Author?.FullName ?? "Obhoy Clinical Team",
             TitleEn = course.TitleEn,
             TitleBn = course.TitleBn,
             DescriptionEn = course.DescriptionEn,
@@ -650,7 +650,7 @@ public class CoursesController : Controller
     {
         if (!await _db.Courses.AnyAsync())
         {
-            var defaults = HavenDataStore.GetCourses();
+            var defaults = ObhoyDataStore.GetCourses();
             foreach (var d in defaults)
             {
                 var c = new Course
@@ -691,7 +691,7 @@ public class CoursesController : Controller
                         DurationEn = m.Duration,
                         DurationBn = m.DurationBn,
                         ContentMarkdown = "### Interactive Module Lesson\n\nPreserve digital evidence safely.",
-                        OptionalMaterials = "https://haven.org/resources/digital-safety.pdf"
+                        OptionalMaterials = "https://obhoy.org/resources/digital-safety.pdf"
                     });
                 }
                 await _db.SaveChangesAsync();

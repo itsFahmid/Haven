@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Haven.Data;
-using Haven.Models;
-using Haven.Services;
-using Haven.Hubs;
+using Obhoy.Data;
+using Obhoy.Models;
+using Obhoy.Services;
+using Obhoy.Hubs;
 
 // Enable legacy timestamp behavior for PostgreSQL/Npgsql to handle unzoned DateTime gracefully
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -38,7 +38,7 @@ var rawConnection = Environment.GetEnvironmentVariable("DATABASE_URL")
                     ?? builder.Configuration.GetConnectionString("DefaultConnection") 
                     ?? builder.Configuration["DefaultConnection"];
 
-builder.Services.AddDbContext<HavenDbContext>(options =>
+builder.Services.AddDbContext<ObhoyDbContext>(options =>
 {
     if (!string.IsNullOrWhiteSpace(rawConnection) &&
         (rawConnection.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) ||
@@ -52,7 +52,7 @@ builder.Services.AddDbContext<HavenDbContext>(options =>
     }
     else if (!string.IsNullOrWhiteSpace(rawConnection) &&
              !rawConnection.Contains("SQLEXPRESS") &&
-             !rawConnection.Contains("haven.db") &&
+             !rawConnection.Contains("obhoy.db") &&
              rawConnection.Contains("Server="))
     {
         options.UseSqlServer(rawConnection);
@@ -61,7 +61,7 @@ builder.Services.AddDbContext<HavenDbContext>(options =>
     {
         string dataDir = Environment.GetEnvironmentVariable("DATA_DIR") ?? builder.Environment.ContentRootPath;
         if (!Directory.Exists(dataDir)) Directory.CreateDirectory(dataDir);
-        string dbPath = Path.Combine(dataDir, "haven.db");
+        string dbPath = Path.Combine(dataDir, "obhoy.db");
         options.UseSqlite($"Data Source={dbPath}");
     }
 });
@@ -77,7 +77,7 @@ builder.Services.AddHttpClient<ICrisisAiService, GeminiAiService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.Cookie.Name = "Haven.AuthCookie";
+        options.Cookie.Name = "Obhoy.AuthCookie";
         options.Cookie.HttpOnly = true;
         options.Cookie.SameSite = SameSiteMode.Lax;
         options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
@@ -105,7 +105,7 @@ using (var scope = app.Services.CreateScope())
 {
     try
     {
-        var db = scope.ServiceProvider.GetRequiredService<HavenDbContext>();
+        var db = scope.ServiceProvider.GetRequiredService<ObhoyDbContext>();
         try
         {
             if (db.Database.IsSqlServer())
@@ -151,13 +151,13 @@ using (var scope = app.Services.CreateScope())
         var hasher = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.IPasswordHasher<User>>();
 
         // 1. Seed / Ensure Admin
-        var admin = db.Users.FirstOrDefault(u => u.Email == "admin@haven.org");
+        var admin = db.Users.FirstOrDefault(u => u.Email == "admin@obhoy.org");
         if (admin == null)
         {
             admin = new User
             {
-                FullName = "HAVEN Chief Admin",
-                Email = "admin@haven.org",
+                FullName = "Obhoy Chief Admin",
+                Email = "admin@obhoy.org",
                 Role = "Admin",
                 UserType = "Individual",
                 Age = 30,
@@ -179,13 +179,13 @@ using (var scope = app.Services.CreateScope())
         db.SaveChanges();
 
         // 2. Seed / Ensure Therapist
-        var therapist = db.Users.FirstOrDefault(u => u.Email == "therapist@haven.org");
+        var therapist = db.Users.FirstOrDefault(u => u.Email == "therapist@obhoy.org");
         if (therapist == null)
         {
             therapist = new User
             {
                 FullName = "Dr. Anika Rahman",
-                Email = "therapist@haven.org",
+                Email = "therapist@obhoy.org",
                 Role = "Professional",
                 UserType = "Individual",
                 Age = 34,
@@ -236,13 +236,13 @@ using (var scope = app.Services.CreateScope())
         }
 
         // 3. Seed / Ensure Additional Verified Specialist (Dr. Samira Tasneem)
-        var samira = db.Users.FirstOrDefault(u => u.Email == "dr.samira@haven.org");
+        var samira = db.Users.FirstOrDefault(u => u.Email == "dr.samira@obhoy.org");
         if (samira == null)
         {
             samira = new User
             {
                 FullName = "Dr. Samira Tasneem",
-                Email = "dr.samira@haven.org",
+                Email = "dr.samira@obhoy.org",
                 Role = "Professional",
                 UserType = "Individual",
                 Age = 36,
@@ -278,13 +278,13 @@ using (var scope = app.Services.CreateScope())
         }
 
         // 4. Seed / Ensure Unverified/Pending Therapist
-        var pendingDoc = db.Users.FirstOrDefault(u => u.Email == "pending.doc@haven.org");
+        var pendingDoc = db.Users.FirstOrDefault(u => u.Email == "pending.doc@obhoy.org");
         if (pendingDoc == null)
         {
             pendingDoc = new User
             {
                 FullName = "Dr. Rafiqul Islam (Pending Verification)",
-                Email = "pending.doc@haven.org",
+                Email = "pending.doc@obhoy.org",
                 Role = "Professional",
                 UserType = "Individual",
                 Age = 40,
@@ -319,13 +319,13 @@ using (var scope = app.Services.CreateScope())
         }
 
         // 5. Seed / Ensure Default User
-        var defaultUser = db.Users.FirstOrDefault(u => u.Email == "user@haven.org");
+        var defaultUser = db.Users.FirstOrDefault(u => u.Email == "user@obhoy.org");
         if (defaultUser == null)
         {
             defaultUser = new User
             {
                 FullName = "Tanvir Ahmed",
-                Email = "user@haven.org",
+                Email = "user@obhoy.org",
                 Role = "User",
                 UserType = "Individual",
                 Age = 19,
@@ -357,7 +357,7 @@ using (var scope = app.Services.CreateScope())
                     CommunicationMode = "Online Video",
                     Notes = "কিশোর বয়সের তীব্র পরীক্ষার মানসিক চাপ ও উদ্বেগ নিরসনে আলোচনা করতে চাই।",
                     Status = BookingStatus.Pending,
-                    BookingReference = "HVN-BK-10492",
+                    BookingReference = "OBH-BK-10492",
                     FeeBDT = 600,
                     CreatedAt = DateTime.UtcNow.AddHours(-3)
                 },
@@ -370,7 +370,7 @@ using (var scope = app.Services.CreateScope())
                     CommunicationMode = "Confidential Audio",
                     Notes = "প্যানিক অ্যাটাক নিয়ন্ত্রণ ও ৫-৪-৩-২-১ গ্রাউন্ডিং টেকনিক সেশন।",
                     Status = BookingStatus.Approved,
-                    BookingReference = "HVN-BK-10381",
+                    BookingReference = "OBH-BK-10381",
                     FeeBDT = 600,
                     CreatedAt = DateTime.UtcNow.AddDays(-2),
                     UpdatedAt = DateTime.UtcNow.AddDays(-1)

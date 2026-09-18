@@ -1,8 +1,8 @@
-using Haven.Models;
+using Obhoy.Models;
 
-namespace Haven.Services;
+namespace Obhoy.Services;
 
-public static class HavenDataStore
+public static class ObhoyDataStore
 {
     public static List<EmergencyContact> GetEmergencyHotlines()
     {
@@ -150,7 +150,7 @@ public static class HavenDataStore
                 {
                     "The Swimsuit Rule & Bodily Sovereignty",
                     "Deconstructing fear when pressured by authority figures",
-                    "Finding your 3 'Trusted Haven Adults' to talk to"
+                    "Finding your 3 'Trusted Obhoy Adults' to talk to"
                 },
                 KeyLearningsBn = new()
                 {
@@ -305,8 +305,8 @@ public static class HavenDataStore
                 IsBMDCVerified = true,
                 DegreeEn = "B.Sc & M.S in Clinical Psychology (University of Dhaka)",
                 DegreeBn = "বিএসসি ও এমএস (ক্লিনিক্যাল সাইকোলজি, ঢাকা বিশ্ববিদ্যালয়)",
-                InstitutionEn = "University of Dhaka & Haven Crisis Center",
-                InstitutionBn = "ঢাকা বিশ্ববিদ্যালয় ও হেভেন ক্রাইসিস সেন্টার",
+                InstitutionEn = "University of Dhaka & Obhoy Crisis Center",
+                InstitutionBn = "ঢাকা বিশ্ববিদ্যালয় ও অভয় ক্রাইসিস সেন্টার",
                 ExperienceYears = 7,
                 Rating = 4.96,
                 ReviewCount = 142,
@@ -370,7 +370,7 @@ public static class HavenDataStore
         {
             new() { Name = "Anonymous Champion", AmountBDT = 5000, BadgeEn = "Guardian Angel", BadgeBn = "অভিভাবক দূত", TimeAgoEn = "1 hour ago", TimeAgoBn = "১ ঘণ্টা আগে", City = "Gulshan, Dhaka" },
             new() { Name = "Tahmidul Islam", AmountBDT = 1000, BadgeEn = "Youth Protector", BadgeBn = "তরুণদের রক্ষক", TimeAgoEn = "3 hours ago", TimeAgoBn = "৩ ঘণ্টা আগে", City = "Chittagong" },
-            new() { Name = "Nusrat & Friends", AmountBDT = 2500, BadgeEn = "Haven Sustainer", BadgeBn = "হেভেন সহযোগী", TimeAgoEn = "5 hours ago", TimeAgoBn = "৫ ঘণ্টা আগে", City = "Sylhet" },
+            new() { Name = "Nusrat & Friends", AmountBDT = 2500, BadgeEn = "Obhoy Sustainer", BadgeBn = "অভয় সহযোগী", TimeAgoEn = "5 hours ago", TimeAgoBn = "৫ ঘণ্টা আগে", City = "Sylhet" },
             new() { Name = "Anonymous Student", AmountBDT = 100, BadgeEn = "Micro Hero", BadgeBn = "মাইক্রো হিরো", TimeAgoEn = "8 hours ago", TimeAgoBn = "৮ ঘণ্টা আগে", City = "Rajshahi" },
             new() { Name = "Dr. Kabir Chowdhury", AmountBDT = 10000, BadgeEn = "Crisis Benefactor", BadgeBn = "ক্রাইসিস দাতা", TimeAgoEn = "Yesterday", TimeAgoBn = "গতকাল", City = "Dhaka" }
         };

@@ -1,4 +1,4 @@
-@model Haven.Models.LoginViewModel
+﻿@model Obhoy.Models.LoginViewModel
 @{
     ViewData["Title"] = "লগইন | Log In";
 }
@@ -15,8 +15,8 @@
                 </svg>
             </div>
 
-            <h1 class="text-3xl font-black text-slate-900 tracking-tight" data-bn="হেভেনে স্বাগতম" data-en="Welcome Back to Haven">
-                হেভেনে স্বাগতম
+            <h1 class="text-3xl font-black text-slate-900 tracking-tight" data-bn="অভয়ে স্বাগতম" data-en="Welcome Back to Obhoy">
+                অভয়ে স্বাগতম
             </h1>
             
             <p class="text-sm text-slate-500 max-w-sm mx-auto" data-bn="আপনার সংরক্ষিত কোর্স ও মানসিক স্বাস্থ্য সহায়তায় অ্যাক্সেস করতে লগইন করুন।" data-en="Log in to access your saved progress, course certificates, and therapy appointments.">
@@ -46,7 +46,7 @@
                             </svg>
                         </div>
                         <input asp-for="Email" type="email" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
-                               placeholder="example@haven.org" required />
+                               placeholder="example@obhoy.org" required />
                     </div>
                     <span asp-validation-for="Email" class="text-xs font-medium text-amber-800 mt-1.5 block"></span>
                 </div>

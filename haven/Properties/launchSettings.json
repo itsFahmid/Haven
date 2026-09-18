@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "haven": {
+    "obhoy": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Haven.Migrations
+namespace Obhoy.Migrations
 {
     /// <inheritdoc />
     public partial class InitialSQLiteClean : Migration

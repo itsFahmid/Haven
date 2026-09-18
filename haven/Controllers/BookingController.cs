@@ -1,19 +1,19 @@
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Haven.Data;
-using Haven.Models;
+using Obhoy.Data;
+using Obhoy.Models;
 
-namespace Haven.Controllers;
+namespace Obhoy.Controllers;
 
 [Authorize]
 public class BookingController : Controller
 {
-    private readonly HavenDbContext _db;
+    private readonly ObhoyDbContext _db;
     private readonly ILogger<BookingController> _logger;
 
-    public BookingController(HavenDbContext db, ILogger<BookingController> logger)
+    public BookingController(ObhoyDbContext db, ILogger<BookingController> logger)
     {
         _db = db;
         _logger = logger;
@@ -67,7 +67,7 @@ public class BookingController : Controller
             return RedirectToAction("Profile", "Therapist", new { id = model.TherapistId });
         }
 
-        var bookingCode = $"HVN-BK-{Random.Shared.Next(10000, 99999)}";
+        var bookingCode = $"OBH-BK-{Random.Shared.Next(10000, 99999)}";
 
         var booking = new Booking
         {

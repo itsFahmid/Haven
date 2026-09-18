@@ -1,22 +1,22 @@
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Haven.Data;
-using Haven.Models;
-using Haven.Services;
+using Obhoy.Data;
+using Obhoy.Models;
+using Obhoy.Services;
 
-namespace Haven.Controllers;
+namespace Obhoy.Controllers;
 
 public class AccountController : Controller
 {
     private readonly IAuthService _authService;
-    private readonly HavenDbContext _db;
+    private readonly ObhoyDbContext _db;
     private readonly ILogger<AccountController> _logger;
 
-    public AccountController(IAuthService authService, HavenDbContext db, ILogger<AccountController> logger)
+    public AccountController(IAuthService authService, ObhoyDbContext db, ILogger<AccountController> logger)
     {
         _authService = authService;
         _db = db;
@@ -56,7 +56,7 @@ public class AccountController : Controller
         // Automatically sign in the newly registered user
         await SignInUserAsync(user, isPersistent: true);
 
-        TempData["SuccessMessage"] = "Welcome to Haven! Your account has been securely created. / হেভেনে স্বাগতম! আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।";
+        TempData["SuccessMessage"] = "Welcome to Obhoy! Your account has been securely created. / অভয়ে স্বাগতম! আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।";
 
         return RedirectToLocal(returnUrl);
     }

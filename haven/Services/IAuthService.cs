@@ -1,6 +1,6 @@
-using Haven.Models;
+﻿using Obhoy.Models;
 
-namespace Haven.Services;
+namespace Obhoy.Services;
 
 public interface IAuthService
 {

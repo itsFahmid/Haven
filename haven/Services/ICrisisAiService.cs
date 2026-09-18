@@ -1,6 +1,6 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace Haven.Services;
+namespace Obhoy.Services;
 
 public class AiCrisisResponse
 {

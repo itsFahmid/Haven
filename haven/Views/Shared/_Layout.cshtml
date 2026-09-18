@@ -1,27 +1,35 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - HAVEN | Bangladesh Youth Safety & Mental Health Sanctuary</title>
-    <meta name="description" content="HAVEN is an anonymous, trauma-informed child & adult safety education, mental health, and emergency recovery platform for Bangladesh." />
+    <title>@ViewData["Title"] - OBHOY | Bangladesh Youth Safety & Mental Health Sanctuary</title>
+    <meta name="description" content="OBHOY is an anonymous, trauma-informed child & adult safety education, mental health, and emergency recovery platform for Bangladesh." />
+    <link rel="icon" type="image/png" href="~/images/obhoy-logo.png" />
     
     <!-- Google Fonts: Hind Siliguri & Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS CDN
-         NOTE (Performance P1): The JIT CDN script compiles CSS at runtime.
-         For production, run `npx tailwindcss -o wwwroot/css/tailwind.css --minify`
-         and replace this with: <link rel="stylesheet" href="~/css/tailwind.css" />
-    -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
+                        obhoy: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                            alert: '#e11d48',
+                            slate: '#1e293b'
+                        },
                         haven: {
                             50: '#f0fdfa',
                             100: '#ccfbf1',
@@ -82,16 +90,14 @@
                 
                 <!-- Brand Logo -->
                 <div class="flex items-center">
-                    <a asp-controller="Home" asp-action="Index" class="flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 rounded-2xl p-1 -ml-1 transition" aria-label="HAVEN - হোম পাতায় যান">
-                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-teal-700 via-teal-600 to-teal-500 text-white flex items-center justify-center shadow-md shadow-teal-900/15 group-hover:scale-105 group-hover:shadow-teal-900/25 transition-all duration-250" aria-hidden="true">
-                            <svg class="w-6 h-6 transform group-hover:rotate-3 transition-transform duration-250" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
+                    <a asp-controller="Home" asp-action="Index" class="flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 rounded-2xl p-1 -ml-1 transition" aria-label="OBHOY - হোম পাতায় যান">
+                        <div class="w-12 h-12 rounded-2xl bg-white p-1 border border-teal-100/90 flex items-center justify-center shadow-md shadow-teal-900/10 group-hover:scale-105 group-hover:shadow-teal-900/20 transition-all duration-250" aria-hidden="true">
+                            <img src="~/images/obhoy-logo.png" alt="Obhoy Logo" class="w-full h-full object-contain" />
                         </div>
                         <div>
                             <div class="flex items-center gap-1.5">
-                                <span class="text-2xl font-black tracking-tight text-slate-900 font-sans group-hover:text-teal-800 transition-colors">HAVEN</span>
-                                <span class="px-2 py-0.5 text-[10px] font-extrabold bg-teal-100/80 text-teal-800 rounded-md tracking-wider border border-teal-200/60">হেভেন</span>
+                                <span class="text-2xl font-black tracking-tight text-slate-900 font-sans group-hover:text-teal-800 transition-colors">OBHOY</span>
+                                <span class="px-2 py-0.5 text-[10px] font-extrabold bg-teal-100/80 text-teal-800 rounded-md tracking-wider border border-teal-200/60">অভয়</span>
                             </div>
                             <p class="text-[11px] text-slate-500 font-medium tracking-tight group-hover:text-slate-600 transition-colors" data-bn="তারুণ্যের সুরক্ষা ও মানসিক স্বাস্থ্য আশ্রয়" data-en="Youth Safety & Mental Health Sanctuary">
                                 তারুণ্যের সুরক্ষা ও মানসিক স্বাস্থ্য আশ্রয়
@@ -246,16 +252,16 @@
                     
                     <!-- Bilingual Language Switcher -->
                     <div class="bg-slate-100/90 p-1 rounded-xl flex items-center border border-slate-200/80 shadow-2xs" role="group" aria-label="ভাষা পছন্দ করুন">
-                        <button type="button" onclick="HavenLang.set('bn')" data-set-lang="bn" class="lang-toggle-btn px-3 py-1 rounded-lg text-xs font-bold transition-all duration-150 bg-teal-700 text-white shadow-xs min-h-[36px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600" aria-label="বাংলায় পরিবর্তন করুন" aria-pressed="true">
+                        <button type="button" onclick="ObhoyLang.set('bn')" data-set-lang="bn" class="lang-toggle-btn px-3 py-1 rounded-lg text-xs font-bold transition-all duration-150 bg-teal-700 text-white shadow-xs min-h-[36px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600" aria-label="বাংলায় পরিবর্তন করুন" aria-pressed="true">
                             বাংলা
                         </button>
-                        <button type="button" onclick="HavenLang.set('en')" data-set-lang="en" class="lang-toggle-btn px-3 py-1 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition-all duration-150 min-h-[36px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600" aria-label="Switch to English" aria-pressed="false">
+                        <button type="button" onclick="ObhoyLang.set('en')" data-set-lang="en" class="lang-toggle-btn px-3 py-1 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition-all duration-150 min-h-[36px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600" aria-label="Switch to English" aria-pressed="false">
                             EN
                         </button>
                     </div>
 
                     <!-- Universal Quick Exit Button -->
-                    <button type="button" id="quickExitBtn" onclick="window.havenQuickExit()" title="Press ESC to quickly exit this page immediately" aria-label="জরুরি প্রস্থান — এই পাতা তাৎক্ষণিকভাবে বন্ধ করুন (ESC)" class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 bg-slate-900 hover:bg-black text-white font-bold text-xs sm:text-sm rounded-xl shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2 transition-all min-h-[44px]">
+                    <button type="button" id="quickExitBtn" onclick="window.obhoyQuickExit()" title="Press ESC to quickly exit this page immediately" aria-label="জরুরি প্রস্থান — এই পাতা তাৎক্ষণিকভাবে বন্ধ করুন (ESC)" class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 bg-slate-900 hover:bg-black text-white font-bold text-xs sm:text-sm rounded-xl shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2 transition-all min-h-[44px]">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                         </svg>
@@ -408,16 +414,14 @@
                 
                 <!-- Brand Summary -->
                 <div class="space-y-3 md:col-span-2">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center font-bold text-sm">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-xs">
+                            <img src="~/images/obhoy-logo.png" alt="Obhoy Logo" class="w-full h-full object-contain" />
                         </div>
-                        <span class="text-xl font-bold text-white tracking-tight">HAVEN BANGLADESH</span>
+                        <span class="text-xl font-bold text-white tracking-tight">OBHOY BANGLADESH</span>
                     </div>
-                    <p class="text-slate-400 text-xs leading-relaxed max-w-md" data-bn="হেভেন হলো বাংলাদেশের জেন জি, জেন আলফা এবং জেন বেটা প্রজন্মের জন্য নিবেদিত একটি সম্পূর্ণ নিরাপদ, এনক্রিপ্টেড ও সহমর্মী সুরক্ষা প্ল্যাটফর্ম। এখানে মানসিক স্বাস্থ্য, সাইবার নিরাপত্তা ও জীবন রক্ষার প্রাথমিক পাঠ সম্পূর্ণ বিনামূল্যে উন্মুক্ত।" data-en="HAVEN is an anonymous, trauma-informed child & youth safety education, mental health, and emergency recovery sanctuary designed for Gen Z, Gen Alpha, and Gen Beta in Bangladesh.">
-                        হেভেন হলো বাংলাদেশের জen জি, জেন আলফা এবং জেন বেটা প্রজন্মের জন্য নিবেদিত একটি সম্পূর্ণ নিরাপদ, এনক্রিপ্টেড ও সহমর্মী সুরক্ষা প্ল্যাটফর্ম।
+                    <p class="text-slate-400 text-xs leading-relaxed max-w-md" data-bn="অভয় হলো বাংলাদেশের জেন জি, জেন আলফা এবং জেন বেটা প্রজন্মের জন্য নিবেদিত একটি সম্পূর্ণ নিরাপদ, এনক্রিপ্টেড ও সহমর্মী সুরক্ষা প্ল্যাটফর্ম। এখানে মানসিক স্বাস্থ্য, সাইবার নিরাপত্তা ও জীবন রক্ষার প্রাথমিক পাঠ সম্পূর্ণ বিনামূল্যে উন্মুক্ত।" data-en="OBHOY is an anonymous, trauma-informed child & youth safety education, mental health, and emergency recovery sanctuary designed for Gen Z, Gen Alpha, and Gen Beta in Bangladesh.">
+                        অভয় হলো বাংলাদেশের জেন জি, জেন আলফা এবং জেন বেটা প্রজন্মের জন্য নিবেদিত একটি সম্পূর্ণ নিরাপদ, এনক্রিপ্টেড ও সহমর্মী সুরক্ষা প্ল্যাটফর্ম।
                     </p>
                     <div class="flex items-center gap-3 pt-2">
                         <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-teal-400">
@@ -448,11 +452,11 @@
                     <h4 class="font-bold text-white text-sm uppercase tracking-wider mb-3" data-bn="আইনি ও সুরক্ষা নীতি" data-en="Safety & Privacy Pledge">
                         আইনি ও সুরক্ষা নীতি
                     </h4>
-                    <p class="text-[11px] text-slate-500 leading-normal" data-bn="হেভেন কোনো মেডিকেল প্রেসক্রিপশন প্রদান করে না। এটি একটি মানসিক প্রাথমিক চিকিৎসা, সাইবার নিরাপত্তা শিক্ষা ও সংকট প্রশমন হাব। তীব্র শারীরিক বিপদে তাৎক্ষণিক ৯৯৯ বা ১০৯৮ নম্বরে কল করুন।" data-en="HAVEN does not substitute clinical psychiatric diagnosis. It provides psychological first-aid, educational frameworks, and confidential triaging. For immediate life danger, call 999 or 1098.">
-                        হেভেন কোনো মেডিকেল প্রেসক্রিপশন প্রদান করে না। এটি একটি মানসিক প্রাথমিক চিকিৎসা, সাইবার নিরাপত্তা শিক্ষা ও সংকট প্রশমন হাব।
+                    <p class="text-[11px] text-slate-500 leading-normal" data-bn="অভয় কোনো মেডিকেল প্রেসক্রিপশন প্রদান করে না। এটি একটি মানসিক প্রাথমিক চিকিৎসা, সাইবার নিরাপত্তা শিক্ষা ও সংকট প্রশমন হাব। তীব্র শারীরিক বিপদে তাৎক্ষণিক ৯৯৯ বা ১০৯৮ নম্বরে কল করুন।" data-en="OBHOY does not substitute clinical psychiatric diagnosis. It provides psychological first-aid, educational frameworks, and confidential triaging. For immediate life danger, call 999 or 1098.">
+                        অভয় কোনো মেডিকেল প্রেসক্রিপশন প্রদান করে না। এটি একটি মানসিক প্রাথমিক চিকিৎসা, সাইবার নিরাপত্তা শিক্ষা ও সংকট প্রশমন হাব।
                     </p>
                     <div class="mt-4 pt-3 border-t border-slate-900 flex items-center gap-2">
-                        <button onclick="window.havenQuickExit()" class="text-slate-400 hover:text-white text-xs font-semibold flex items-center gap-1">
+                        <button onclick="window.obhoyQuickExit()" class="text-slate-400 hover:text-white text-xs font-semibold flex items-center gap-1">
                             Quick Exit (YouTube Jump)
                         </button>
                     </div>
@@ -461,7 +465,7 @@
             </div>
 
             <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
-                <p>&copy; @DateTime.UtcNow.Year HAVEN Foundation Bangladesh. Built for Gen Z, Gen Alpha & Gen Beta Safe Space.</p>
+                <p>&copy; @DateTime.UtcNow.Year Obhoy Foundation Bangladesh. Built for Gen Z, Gen Alpha & Gen Beta Safe Space.</p>
                 <div class="flex items-center gap-4">
                     <span class="text-slate-400">Made with empathy for Bangladesh</span>
                 </div>

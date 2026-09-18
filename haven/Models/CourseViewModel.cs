@@ -1,10 +1,10 @@
-namespace Haven.Models;
+namespace Obhoy.Models;
 
 public class CourseViewModel
 {
     public int Id { get; set; }
     public int? AuthorId { get; set; }
-    public string AuthorName { get; set; } = "HAVEN Clinical Team";
+    public string AuthorName { get; set; } = "Obhoy Clinical Team";
     public string TitleEn { get; set; } = string.Empty;
     public string TitleBn { get; set; } = string.Empty;
     public string DescriptionEn { get; set; } = string.Empty;
@@ -14,20 +14,20 @@ public class CourseViewModel
     
     // Mandatory Age Range Tag
     public string TargetGen { get; set; } = "Gen Z & Alpha (10-24y)";
-    public string TargetGenBn { get; set; } = "জেন জি ও আলফা (১০-২৪ বছর)";
+    public string TargetGenBn { get; set; } = "à¦œà§‡à¦¨ à¦œà¦¿ à¦“ à¦†à¦²à¦«à¦¾ (à§§à§¦-à§¨à§ª à¦¬à¦›à¦°)";
 
     // Mandatory Course Language Tag
     public string Language { get; set; } = "Bangla"; // Bangla, English, Bilingual
     public string LanguageBn => Language switch
     {
-        "Bangla" => "বাংলা",
+        "Bangla" => "à¦¬à¦¾à¦‚à¦²à¦¾",
         "English" => "English",
-        "Bilingual" => "দ্বিভাষিক (বাংলা ও English)",
-        _ => "বাংলা"
+        "Bilingual" => "à¦¦à§à¦¬à¦¿à¦­à¦¾à¦·à¦¿à¦• (à¦¬à¦¾à¦‚à¦²à¦¾ à¦“ English)",
+        _ => "à¦¬à¦¾à¦‚à¦²à¦¾"
     };
 
     public string Duration { get; set; } = "45 mins";
-    public string DurationBn { get; set; } = "৪৫ মিনিট";
+    public string DurationBn { get; set; } = "à§ªà§« à¦®à¦¿à¦¨à¦¿à¦Ÿ";
     public int ModuleCount { get; set; } = 4;
     public int CompletedModules { get; set; } = 0;
     public int ProgressPercentage => ModuleCount > 0 ? (int)((double)CompletedModules / ModuleCount * 100) : 0;
@@ -40,7 +40,7 @@ public class CourseViewModel
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public string BadgeEn { get; set; } = "Essential";
-    public string BadgeBn { get; set; } = "অপরিহার্য";
+    public string BadgeBn { get; set; } = "à¦…à¦ªà¦°à¦¿à¦¹à¦¾à¦°à§à¦¯";
     public string ImageSvgKey { get; set; } = "shield";
     public string AccentColor { get; set; } = "teal";
 
@@ -64,11 +64,11 @@ public class CourseModuleItem
     public string ShortDescriptionBn { get; set; } = string.Empty;
     public string ShortDescriptionEn { get; set; } = string.Empty;
     public string Duration { get; set; } = "10m";
-    public string DurationBn { get; set; } = "১০ মিনিট";
+    public string DurationBn { get; set; } = "à§§à§¦ à¦®à¦¿à¦¨à¦¿à¦Ÿ";
     public bool IsCompleted { get; set; }
     public string Type { get; set; } = "Interactive Lesson";
     public string TypeEn { get; set; } = "Interactive Lesson";
-    public string TypeBn { get; set; } = "ইন্টারেক্টিভ পাঠ";
+    public string TypeBn { get; set; } = "à¦‡à¦¨à§à¦Ÿà¦¾à¦°à§‡à¦•à§à¦Ÿà¦¿à¦­ à¦ªà¦¾à¦ ";
     public string ContentMarkdown { get; set; } = string.Empty;
     public string OptionalMaterials { get; set; } = string.Empty; // Resource links / downloadable files
 }
@@ -112,7 +112,7 @@ public class CreateCourseViewModel
     public string TitleEn { get; set; } = string.Empty;
     public string TitleBn { get; set; } = string.Empty;
     public string CategoryEn { get; set; } = "Cyber Safety";
-    public string CategoryBn { get; set; } = "সাইবার নিরাপত্তা";
+    public string CategoryBn { get; set; } = "à¦¸à¦¾à¦‡à¦¬à¦¾à¦° à¦¨à¦¿à¦°à¦¾à¦ªà¦¤à§à¦¤à¦¾";
     public string TargetGen { get; set; } = "Gen Z & Alpha (10-24y)";
     
     // Mandatory Language Selection Tag
@@ -133,21 +133,21 @@ public class CreateCourseViewModel
         { 
             StepNumber = 1, 
             TitleEn = "Introduction & Safety Fundamentals", 
-            TitleBn = "সূচনা ও সুরক্ষা মূলনীতি", 
-            ShortDescriptionBn = "সাইবার নিরাপত্তা ও প্রমাণ সংরক্ষণের প্রাথমিক ধারণা।",
+            TitleBn = "à¦¸à§‚à¦šà¦¨à¦¾ à¦“ à¦¸à§à¦°à¦•à§à¦·à¦¾ à¦®à§‚à¦²à¦¨à§€à¦¤à¦¿", 
+            ShortDescriptionBn = "à¦¸à¦¾à¦‡à¦¬à¦¾à¦° à¦¨à¦¿à¦°à¦¾à¦ªà¦¤à§à¦¤à¦¾ à¦“ à¦ªà§à¦°à¦®à¦¾à¦£ à¦¸à¦‚à¦°à¦•à§à¦·à¦£à§‡à¦° à¦ªà§à¦°à¦¾à¦¥à¦®à¦¿à¦• à¦§à¦¾à¦°à¦£à¦¾à¥¤",
             Duration = "10 mins", 
             ContentMarkdown = "Safety fundamentals overview and core rules.",
-            OptionalMaterials = "https://haven.org/resources/cyber-safety-guide.pdf"
+            OptionalMaterials = "https://obhoy.org/resources/cyber-safety-guide.pdf"
         },
         new() 
         { 
             StepNumber = 2, 
             TitleEn = "Practical Defense & Evidence Preservation", 
-            TitleBn = "প্র্যাকটিক্যাল প্রতিরক্ষা ও প্রমাণ সংরক্ষণ", 
-            ShortDescriptionBn = "ডিজিটাল প্রমাণ সংগ্রহ ও আইনি অভিযোগ দায়েরের ধাপ।",
+            TitleBn = "à¦ªà§à¦°à§à¦¯à¦¾à¦•à¦Ÿà¦¿à¦•à§à¦¯à¦¾à¦² à¦ªà§à¦°à¦¤à¦¿à¦°à¦•à§à¦·à¦¾ à¦“ à¦ªà§à¦°à¦®à¦¾à¦£ à¦¸à¦‚à¦°à¦•à§à¦·à¦£", 
+            ShortDescriptionBn = "à¦¡à¦¿à¦œà¦¿à¦Ÿà¦¾à¦² à¦ªà§à¦°à¦®à¦¾à¦£ à¦¸à¦‚à¦—à§à¦°à¦¹ à¦“ à¦†à¦‡à¦¨à¦¿ à¦…à¦­à¦¿à¦¯à§‹à¦— à¦¦à¦¾à§Ÿà§‡à¦°à§‡à¦° à¦§à¦¾à¦ªà¥¤",
             Duration = "15 mins", 
             ContentMarkdown = "Step-by-step action plan for preserving screenshots and links.",
-            OptionalMaterials = "https://haven.org/resources/evidence-checklist.pdf"
+            OptionalMaterials = "https://obhoy.org/resources/evidence-checklist.pdf"
         }
     };
 }

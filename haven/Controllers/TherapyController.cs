@@ -1,24 +1,24 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Haven.Data;
-using Haven.Models;
-using Haven.Services;
+using Obhoy.Data;
+using Obhoy.Models;
+using Obhoy.Services;
 using System.Security.Claims;
 
-namespace Haven.Controllers;
+namespace Obhoy.Controllers;
 
 public class TherapyController : Controller
 {
-    private readonly HavenDbContext _db;
+    private readonly ObhoyDbContext _db;
 
-    public TherapyController(HavenDbContext db)
+    public TherapyController(ObhoyDbContext db)
     {
         _db = db;
     }
 
     public async Task<IActionResult> Index(string specialty = "All", string mode = "All")
     {
-        var therapists = HavenDataStore.GetTherapists();
+        var therapists = ObhoyDataStore.GetTherapists();
 
         // Include database approved Professional profiles dynamically
         var dbApproved = await _db.ProfessionalProfiles
@@ -39,7 +39,7 @@ public class TherapyController : Controller
                 IsBMDCVerified = dbProf.IsBmdcVerified,
                 DegreeEn = dbProf.TitleEn,
                 DegreeBn = dbProf.TitleBn,
-                InstitutionEn = "HAVEN Verified Professional Sanctuary",
+                InstitutionEn = "Obhoy Verified Professional Sanctuary",
                 InstitutionBn = "হেভেন ভেরিফায়েড প্রফেশনাল স্যাঙ্কচুয়ারি",
                 ExperienceYears = dbProf.YearsOfExperience > 0 ? dbProf.YearsOfExperience : 5,
                 Rating = 4.98,
@@ -121,13 +121,13 @@ public class TherapyController : Controller
         if (userId <= 0)
         {
             // Anonymous booking: link with designated anonymous user account to preserve FK integrity
-            var anonUser = await _db.Users.FirstOrDefaultAsync(u => u.Email == "anonymous@haven.org");
+            var anonUser = await _db.Users.FirstOrDefaultAsync(u => u.Email == "anonymous@obhoy.org");
             if (anonUser == null)
             {
                 anonUser = new User
                 {
                     FullName = string.IsNullOrWhiteSpace(request.Name) ? "Anonymous Patient" : request.Name.Trim(),
-                    Email = "anonymous@haven.org",
+                    Email = "anonymous@obhoy.org",
                     PasswordHash = "ANONYMOUS_PATIENT_RESERVED",
                     Role = "User",
                     UserType = "Individual",
@@ -155,7 +155,7 @@ public class TherapyController : Controller
 
         int targetTherapistId = therapist?.Id ?? request.TherapistId;
         decimal fee = (therapist != null && !request.RequestFeeSubsidy) ? therapist.HourlyRateBDT : 0;
-        var bookingCode = $"HVN-BK-{Random.Shared.Next(10000, 99999)}";
+        var bookingCode = $"OBH-BK-{Random.Shared.Next(10000, 99999)}";
         DateTime bookingDate = DateTime.TryParse(request.Date, out DateTime parsedDate) 
             ? parsedDate.Date 
             : DateTime.UtcNow.AddDays(1).Date;

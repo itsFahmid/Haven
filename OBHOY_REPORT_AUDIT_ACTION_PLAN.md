@@ -1,11 +1,11 @@
-# HAVEN Codebase Audit & Implementation Action Plan
+﻿# OBHOY Codebase Audit & Implementation Action Plan
 **Compliance & Requirements Mapping based on CSE 3224 (Report 03) & CSE 3200 (Project Proposal)**
 
 ---
 
 ## Executive Summary
 
-This document provides an in-depth audit of the **HAVEN** platform against the academic specifications set forth in:
+This document provides an in-depth audit of the **OBHOY** platform against the academic specifications set forth in:
 1. **CSE 3224 (Report 03)**: Information System Design & Software Engineering Lab Report (Subsystems S1–S7, Use Cases UC-01 to UC-25, Cost-Benefit Analysis).
 2. **CSE 3200 (Project Proposal)**: Software Development - V Report (Functional Requirements FR-1 to FR-12, 13 Entity ER Diagram, SDG Alignments).
 
@@ -17,11 +17,11 @@ This document provides an in-depth audit of the **HAVEN** platform against the a
 | :--- | :--- | :--- | :--- |
 | **FR-1** | Account registration/login under Individual or Parent/Guardian modes with age-aware consent checks. | **PARTIAL** | Add `UserType` (Individual vs Parent) and `Age` fields to `User.cs` entity and `RegisterViewModel.cs`. Update `Register.cshtml` to offer account type selection. |
 | **FR-2** | Parent/Guardian account creates and manages linked Child Profiles without collecting unnecessary personal data. | **MISSING** | Create `ChildProfile.cs` entity linked to `User`. Add parent dashboard actions in `AccountController.cs` for managing child aliases & age brackets. |
-| **FR-3** | Quick-Exit / Hide-Mode safety control on sensitive pages immediately redirecting browser and clearing storage. | **IMPLEMENTED** | Implemented via `window.havenQuickExit()` in `site.js` and `ESC` key global event handler. |
-| **FR-4** | Self-paced enrollment in free and low-cost paid courses with per-module progress tracking. | **PARTIAL** | Move course mock data from `HavenDataStore.cs` into EF Core database entities (`Course`, `CourseModule`, `Enrollment`). Persist completion status. |
+| **FR-3** | Quick-Exit / Hide-Mode safety control on sensitive pages immediately redirecting browser and clearing storage. | **IMPLEMENTED** | Implemented via `window.obhoyQuickExit()` in `site.js` and `ESC` key global event handler. |
+| **FR-4** | Self-paced enrollment in free and low-cost paid courses with per-module progress tracking. | **PARTIAL** | Move course mock data from `ObhoyDataStore.cs` into EF Core database entities (`Course`, `CourseModule`, `Enrollment`). Persist completion status. |
 | **FR-5** | Enable booking, rescheduling, and cancellation of appointments with verified clinicians. | **PARTIAL** | Add `Appointment.cs` EF Core entity. Build appointment booking, slot locking, rescheduling, and cancellation actions in `TherapyController.cs`. |
 | **FR-6** | AI safety chatbot for psychoeducation and triage in Bangla and English. | **IMPLEMENTED** | Gemini API integration in `HotlineController.cs` supporting bilingual conversation. |
-| **FR-7** | Risk-classification layer detecting acute danger with automatic emergency contact surfacing (109/999/Haven Hotline) and human handoff. | **IMPLEMENTED** | Keyword risk classification in `HotlineController.cs` triggering `_CrisisEscalationModal.cshtml`. |
+| **FR-7** | Risk-classification layer detecting acute danger with automatic emergency contact surfacing (109/999/Obhoy Hotline) and human handoff. | **IMPLEMENTED** | Keyword risk classification in `HotlineController.cs` triggering `_CrisisEscalationModal.cshtml`. |
 | **FR-8** | Support anonymous, low-data hotline chat via SignalR without mandatory account creation. | **MISSING** | Add `HotlineHub.cs` SignalR hub for real-time WebSocket communication between citizens and hotline operators. |
 | **FR-9** | Allow clinicians and authors to create articles and safety courses. | **PARTIAL** | Created `Article.cs` EF Core entity. Add `ArticlesController.cs`, article reader view, and clinician publishing editor (FR-9). |
 | **FR-10** | Admin credential verification tools to review professional licence/ID uploads before elevating account status. | **MISSING** | Create `ProfessionalProfile.cs` entity with `LicenseNo`, `LicenseDocumentUrl`, `ApprovalStatus` and Admin review UI in `AdminController.cs`. |
@@ -70,7 +70,7 @@ This document provides an in-depth audit of the **HAVEN** platform against the a
 
 ## Part 3: Database Entity Expansion Plan (13 Entities)
 
-Currently, `HavenDbContext.cs` only contains `DbSet<User>`. To satisfy the Project Proposal's 13-Entity ER Diagram, the following model classes and DbSets must be added:
+Currently, `ObhoyDbContext.cs` only contains `DbSet<User>`. To satisfy the Project Proposal's 13-Entity ER Diagram, the following model classes and DbSets must be added:
 
 1. **`User`** *(Identity & Access)* - Extend with `Age`, `UserType` (Parent/Individual).
 2. **`ChildProfile`** *(Identity & Access)* - Parent-linked child profiles.
@@ -91,12 +91,12 @@ Currently, `HavenDbContext.cs` only contains `DbSet<User>`. To satisfy the Proje
 ## Part 4: Step-by-Step Implementation Roadmap
 
 ### Step 1: EF Core Models & Migration
-- Create entity model files under `haven/Models/`.
-- Update `HavenDbContext.cs` with all 13 DbSets and fluent configuration.
-- Run EF Core Migration (`dotnet ef migrations add ExpandHavenEntities`).
+- Create entity model files under `obhoy/Models/`.
+- Update `ObhoyDbContext.cs` with all 13 DbSets and fluent configuration.
+- Run EF Core Migration (`dotnet ef migrations add ExpandObhoyEntities`).
 
 ### Step 2: SignalR Real-Time Hotline Hub (FR-8)
-- Create `haven/Hubs/HotlineHub.cs` handling anonymous WebSocket chat connections.
+- Create `obhoy/Hubs/HotlineHub.cs` handling anonymous WebSocket chat connections.
 - Map SignalR Hub endpoint `/hubs/hotline` in `Program.cs`.
 
 ### Step 3: Controller & View Extensions

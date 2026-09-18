@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.SignalR;
-using Haven.Models;
-using Haven.Services;
+﻿using Microsoft.AspNetCore.SignalR;
+using Obhoy.Models;
+using Obhoy.Services;
 
-namespace Haven.Hubs;
+namespace Obhoy.Hubs;
 
 public class HotlineHub : Hub
 {
@@ -11,7 +11,7 @@ public class HotlineHub : Hub
     private static readonly HashSet<string> AcuteKeywords = new(StringComparer.OrdinalIgnoreCase)
     {
         "suicide", "kill myself", "die", "end my life", "hanging", "poison", "self harm", "cut myself", "depressed",
-        "আত্মহত্যা", "মরে যাব", "মরতে চাই", "বাঁচতে চাই না", "বেঁচে থাকতে চাই না", "ফাঁস", "বিষ", "নিজেকে শেষ", "হাত কাটা", "কষ্ট সহ্য হচ্ছে না"
+        "à¦†à¦¤à§à¦®à¦¹à¦¤à§à¦¯à¦¾", "à¦®à¦°à§‡ à¦¯à¦¾à¦¬", "à¦®à¦°à¦¤à§‡ à¦šà¦¾à¦‡", "à¦¬à¦¾à¦à¦šà¦¤à§‡ à¦šà¦¾à¦‡ à¦¨à¦¾", "à¦¬à§‡à¦à¦šà§‡ à¦¥à¦¾à¦•à¦¤à§‡ à¦šà¦¾à¦‡ à¦¨à¦¾", "à¦«à¦¾à¦à¦¸", "à¦¬à¦¿à¦·", "à¦¨à¦¿à¦œà§‡à¦•à§‡ à¦¶à§‡à¦·", "à¦¹à¦¾à¦¤ à¦•à¦¾à¦Ÿà¦¾", "à¦•à¦·à§à¦Ÿ à¦¸à¦¹à§à¦¯ à¦¹à¦šà§à¦›à§‡ à¦¨à¦¾"
     };
 
     public HotlineHub(ICrisisAiService crisisAiService)
@@ -30,7 +30,7 @@ public class HotlineHub : Hub
             connectionId,
             roomName,
             status = "Connected",
-            message = "হেভেন গোপনীয় আইনি ও মানসিক সুরক্ষা চ্যাটে সংযুক্ত হয়েছেন। আপনার পরিচয় গোপন রাখা হয়েছে।"
+            message = "à¦¹à§‡à¦­à§‡à¦¨ à¦—à§‹à¦ªà¦¨à§€à§Ÿ à¦†à¦‡à¦¨à¦¿ à¦“ à¦®à¦¾à¦¨à¦¸à¦¿à¦• à¦¸à§à¦°à¦•à§à¦·à¦¾ à¦šà§à¦¯à¦¾à¦Ÿà§‡ à¦¸à¦‚à¦¯à§à¦•à§à¦¤ à¦¹à§Ÿà§‡à¦›à§‡à¦¨à¥¤ à¦†à¦ªà¦¨à¦¾à¦° à¦ªà¦°à¦¿à¦šà§Ÿ à¦—à§‹à¦ªà¦¨ à¦°à¦¾à¦–à¦¾ à¦¹à§Ÿà§‡à¦›à§‡à¥¤"
         });
     }
 
@@ -68,23 +68,23 @@ public class HotlineHub : Hub
             if (isHighRisk)
             {
                 messageEn = "I can feel how much pain you are holding right now, and I want you to know: **You are not alone, and your life matters deeply.** Please reach out right now to a certified crisis counselor who cares and is waiting to support you unconditionally.";
-                messageBn = "আমি বুঝতে পারছি আপনি এই মুহূর্তে তীব্র মানসিক কষ্টের মধ্য দিয়ে যাচ্ছেন। একটি কথা মনে রাখবেন: **আপনি একা নন, আপনার জীবনের মূল্য অপরিসীম।** অনুগ্রহ করে এখনই বিনামূল্যে আমাদের সংকটকালীন কাউন্সেলরদের সাথে যোগাযোগ করুন। তারা ভালোবাসা ও সহমর্মিতা নিয়ে আপনার পাশে আছেন।";
+                messageBn = "à¦†à¦®à¦¿ à¦¬à§à¦à¦¤à§‡ à¦ªà¦¾à¦°à¦›à¦¿ à¦†à¦ªà¦¨à¦¿ à¦à¦‡ à¦®à§à¦¹à§‚à¦°à§à¦¤à§‡ à¦¤à§€à¦¬à§à¦° à¦®à¦¾à¦¨à¦¸à¦¿à¦• à¦•à¦·à§à¦Ÿà§‡à¦° à¦®à¦§à§à¦¯ à¦¦à¦¿à¦¯à¦¼à§‡ à¦¯à¦¾à¦šà§à¦›à§‡à¦¨à¥¤ à¦à¦•à¦Ÿà¦¿ à¦•à¦¥à¦¾ à¦®à¦¨à§‡ à¦°à¦¾à¦–à¦¬à§‡à¦¨: **à¦†à¦ªà¦¨à¦¿ à¦à¦•à¦¾ à¦¨à¦¨, à¦†à¦ªà¦¨à¦¾à¦° à¦œà§€à¦¬à¦¨à§‡à¦° à¦®à§‚à¦²à§à¦¯ à¦…à¦ªà¦°à¦¿à¦¸à§€à¦®à¥¤** à¦…à¦¨à§à¦—à§à¦°à¦¹ à¦•à¦°à§‡ à¦à¦–à¦¨à¦‡ à¦¬à¦¿à¦¨à¦¾à¦®à§‚à¦²à§à¦¯à§‡ à¦†à¦®à¦¾à¦¦à§‡à¦° à¦¸à¦‚à¦•à¦Ÿà¦•à¦¾à¦²à§€à¦¨ à¦•à¦¾à¦‰à¦¨à§à¦¸à§‡à¦²à¦°à¦¦à§‡à¦° à¦¸à¦¾à¦¥à§‡ à¦¯à§‹à¦—à¦¾à¦¯à§‹à¦— à¦•à¦°à§à¦¨à¥¤ à¦¤à¦¾à¦°à¦¾ à¦­à¦¾à¦²à§‹à¦¬à¦¾à¦¸à¦¾ à¦“ à¦¸à¦¹à¦®à¦°à§à¦®à¦¿à¦¤à¦¾ à¦¨à¦¿à§Ÿà§‡ à¦†à¦ªà¦¨à¦¾à¦° à¦ªà¦¾à¦¶à§‡ à¦†à¦›à§‡à¦¨à¥¤";
                 crisisHelpline = "1098 / 01779554391";
             }
-            else if (text.Contains("blackmail") || text.Contains("photo") || text.Contains("ছবি") || text.Contains("ব্ল্যাকমেইল") || text.Contains("হুমকি"))
+            else if (text.Contains("blackmail") || text.Contains("photo") || text.Contains("à¦›à¦¬à¦¿") || text.Contains("à¦¬à§à¦²à§à¦¯à¦¾à¦•à¦®à§‡à¦‡à¦²") || text.Contains("à¦¹à§à¦®à¦•à¦¿"))
             {
-                messageEn = "🛡️ **Cyber Safety Protocol Initiated:**\n1. Do **NOT** pay any money or send more photos.\n2. **Take full-screen screenshots** with timestamps, URL, and profile IDs.\n3. Do not delete chats—they are legal evidence.\n4. Call **Child Helpline 1098** or contact **Police Cyber Support for Women (01320000888)** or National Emergency **999** immediately.";
-                messageBn = "🛡️ **সাইবার ব্ল্যাকমেইল প্রতিরোধ জরুরি গাইড:**\n১. অপরাধীকে কোনো টাকা পাঠাবেন না বা কোনো শর্তে রাজি হবেন না।\n২. অপরাধীর প্রোফাইল লিংক, চ্যাট ও তারিখের স্পষ্ট স্ক্রিনশট সংগ্রহ করুন।\n৩. চ্যাট হিস্ট্রি ডিলিট করবেন না—এটি আইনি প্রমাণ।\n৪. দ্রুত **চাইল্ড হেল্পলাইন ১০৯৮**, **পুলিশ সাইবার সাপোর্ট উইমেন (০১৩২-০০০০৮৮৮)** বা **৯৯৯** এ যোগাযোগ করুন।";
+                messageEn = "ðŸ›¡ï¸ **Cyber Safety Protocol Initiated:**\n1. Do **NOT** pay any money or send more photos.\n2. **Take full-screen screenshots** with timestamps, URL, and profile IDs.\n3. Do not delete chatsâ€”they are legal evidence.\n4. Call **Child Helpline 1098** or contact **Police Cyber Support for Women (01320000888)** or National Emergency **999** immediately.";
+                messageBn = "ðŸ›¡ï¸ **à¦¸à¦¾à¦‡à¦¬à¦¾à¦° à¦¬à§à¦²à§à¦¯à¦¾à¦•à¦®à§‡à¦‡à¦² à¦ªà§à¦°à¦¤à¦¿à¦°à§‹à¦§ à¦œà¦°à§à¦°à¦¿ à¦—à¦¾à¦‡à¦¡:**\nà§§. à¦…à¦ªà¦°à¦¾à¦§à§€à¦•à§‡ à¦•à§‹à¦¨à§‹ à¦Ÿà¦¾à¦•à¦¾ à¦ªà¦¾à¦ à¦¾à¦¬à§‡à¦¨ à¦¨à¦¾ à¦¬à¦¾ à¦•à§‹à¦¨à§‹ à¦¶à¦°à§à¦¤à§‡ à¦°à¦¾à¦œà¦¿ à¦¹à¦¬à§‡à¦¨ à¦¨à¦¾à¥¤\nà§¨. à¦…à¦ªà¦°à¦¾à¦§à§€à¦° à¦ªà§à¦°à§‹à¦«à¦¾à¦‡à¦² à¦²à¦¿à¦‚à¦•, à¦šà§à¦¯à¦¾à¦Ÿ à¦“ à¦¤à¦¾à¦°à¦¿à¦–à§‡à¦° à¦¸à§à¦ªà¦·à§à¦Ÿ à¦¸à§à¦•à§à¦°à¦¿à¦¨à¦¶à¦Ÿ à¦¸à¦‚à¦—à§à¦°à¦¹ à¦•à¦°à§à¦¨à¥¤\nà§©. à¦šà§à¦¯à¦¾à¦Ÿ à¦¹à¦¿à¦¸à§à¦Ÿà§à¦°à¦¿ à¦¡à¦¿à¦²à¦¿à¦Ÿ à¦•à¦°à¦¬à§‡à¦¨ à¦¨à¦¾â€”à¦à¦Ÿà¦¿ à¦†à¦‡à¦¨à¦¿ à¦ªà§à¦°à¦®à¦¾à¦£à¥¤\nà§ª. à¦¦à§à¦°à§à¦¤ **à¦šà¦¾à¦‡à¦²à§à¦¡ à¦¹à§‡à¦²à§à¦ªà¦²à¦¾à¦‡à¦¨ à§§à§¦à§¯à§®**, **à¦ªà§à¦²à¦¿à¦¶ à¦¸à¦¾à¦‡à¦¬à¦¾à¦° à¦¸à¦¾à¦ªà§‹à¦°à§à¦Ÿ à¦‰à¦‡à¦®à§‡à¦¨ (à§¦à§§à§©à§¨-à§¦à§¦à§¦à§¦à§®à§®à§®)** à¦¬à¦¾ **à§¯à§¯à§¯** à¦ à¦¯à§‹à¦—à¦¾à¦¯à§‹à¦— à¦•à¦°à§à¦¨à¥¤";
             }
-            else if (text.Contains("panic") || text.Contains("anxiety") || text.Contains("ভয়") || text.Contains("প্যানিক") || text.Contains("অস্থির"))
+            else if (text.Contains("panic") || text.Contains("anxiety") || text.Contains("à¦­à¦¯à¦¼") || text.Contains("à¦ªà§à¦¯à¦¾à¦¨à¦¿à¦•") || text.Contains("à¦…à¦¸à§à¦¥à¦¿à¦°"))
             {
-                messageEn = "🌿 **Let's Pause Together:** You are safe in this moment. Try the **4-7-8 Breathing Technique**:\n- Inhale slowly through your nose for **4 seconds**\n- Hold your breath gently for **7 seconds**\n- Exhale slowly through your mouth for **8 seconds**.\nNotice 5 things you can see around you right now.";
-                messageBn = "🌿 **চলুন একসাথে একটি দীর্ঘ শ্বাস নেই:** এই মুহূর্তে আপনি নিরাপদ আছেন। **৪-৭-৮ ব্রিদিং পদ্ধতি** চেষ্টা করুন:\n- নাক দিয়ে ৪ সেকেন্ড ধীরে ধীরে শ্বাস নিন\n- ৭ সেকেন্ড শ্বাসটি ধরে রাখুন\n- মুখ দিয়ে ৮ সেকেন্ড ধরে ধীরে ধীরে শ্বাস ছাড়ুন।\nআপনার চারপাশের ৫টি শান্ত বস্তু লক্ষ্য করুন।";
+                messageEn = "ðŸŒ¿ **Let's Pause Together:** You are safe in this moment. Try the **4-7-8 Breathing Technique**:\n- Inhale slowly through your nose for **4 seconds**\n- Hold your breath gently for **7 seconds**\n- Exhale slowly through your mouth for **8 seconds**.\nNotice 5 things you can see around you right now.";
+                messageBn = "ðŸŒ¿ **à¦šà¦²à§à¦¨ à¦à¦•à¦¸à¦¾à¦¥à§‡ à¦à¦•à¦Ÿà¦¿ à¦¦à§€à¦°à§à¦˜ à¦¶à§à¦¬à¦¾à¦¸ à¦¨à§‡à¦‡:** à¦à¦‡ à¦®à§à¦¹à§‚à¦°à§à¦¤à§‡ à¦†à¦ªà¦¨à¦¿ à¦¨à¦¿à¦°à¦¾à¦ªà¦¦ à¦†à¦›à§‡à¦¨à¥¤ **à§ª-à§­-à§® à¦¬à§à¦°à¦¿à¦¦à¦¿à¦‚ à¦ªà¦¦à§à¦§à¦¤à¦¿** à¦šà§‡à¦·à§à¦Ÿà¦¾ à¦•à¦°à§à¦¨:\n- à¦¨à¦¾à¦• à¦¦à¦¿à¦¯à¦¼à§‡ à§ª à¦¸à§‡à¦•à§‡à¦¨à§à¦¡ à¦§à§€à¦°à§‡ à¦§à§€à¦°à§‡ à¦¶à§à¦¬à¦¾à¦¸ à¦¨à¦¿à¦¨\n- à§­ à¦¸à§‡à¦•à§‡à¦¨à§à¦¡ à¦¶à§à¦¬à¦¾à¦¸à¦Ÿà¦¿ à¦§à¦°à§‡ à¦°à¦¾à¦–à§à¦¨\n- à¦®à§à¦– à¦¦à¦¿à¦¯à¦¼à§‡ à§® à¦¸à§‡à¦•à§‡à¦¨à§à¦¡ à¦§à¦°à§‡ à¦§à§€à¦°à§‡ à¦§à§€à¦°à§‡ à¦¶à§à¦¬à¦¾à¦¸ à¦›à¦¾à¦¡à¦¼à§à¦¨à¥¤\nà¦†à¦ªà¦¨à¦¾à¦° à¦šà¦¾à¦°à¦ªà¦¾à¦¶à§‡à¦° à§«à¦Ÿà¦¿ à¦¶à¦¾à¦¨à§à¦¤ à¦¬à¦¸à§à¦¤à§ à¦²à¦•à§à¦·à§à¦¯ à¦•à¦°à§à¦¨à¥¤";
             }
             else
             {
-                messageEn = "Thank you for reaching out. HAVEN is your completely anonymous safe sanctuary. How can I best support you right now? You can ask about cyber safety, emotional coping, reporting abuse, or booking a confidential therapist.";
-                messageBn = "আমাদের কাছে লেখার জন্য ধন্যবাদ। হেভেন আপনার ১০০% নিরাপদ ও বেনামী আশ্রয়স্থল। আমি আপনাকে কীভাবে সহায়তা করতে পারি? সাইবার নিরাপত্তা, মানসিক স্বাস্থ্য, নির্যাতন প্রতিকার বা থেরাপিস্ট বুকিং সম্পর্কে যেকোনো প্রশ্ন করতে পারেন।";
+                messageEn = "Thank you for reaching out. Obhoy is your completely anonymous safe sanctuary. How can I best support you right now? You can ask about cyber safety, emotional coping, reporting abuse, or booking a confidential therapist.";
+                messageBn = "à¦†à¦®à¦¾à¦¦à§‡à¦° à¦•à¦¾à¦›à§‡ à¦²à§‡à¦–à¦¾à¦° à¦œà¦¨à§à¦¯ à¦§à¦¨à§à¦¯à¦¬à¦¾à¦¦à¥¤ à¦¹à§‡à¦­à§‡à¦¨ à¦†à¦ªà¦¨à¦¾à¦° à§§à§¦à§¦% à¦¨à¦¿à¦°à¦¾à¦ªà¦¦ à¦“ à¦¬à§‡à¦¨à¦¾à¦®à§€ à¦†à¦¶à§à¦°à¦¯à¦¼à¦¸à§à¦¥à¦²à¥¤ à¦†à¦®à¦¿ à¦†à¦ªà¦¨à¦¾à¦•à§‡ à¦•à§€à¦­à¦¾à¦¬à§‡ à¦¸à¦¹à¦¾à¦¯à¦¼à¦¤à¦¾ à¦•à¦°à¦¤à§‡ à¦ªà¦¾à¦°à¦¿? à¦¸à¦¾à¦‡à¦¬à¦¾à¦° à¦¨à¦¿à¦°à¦¾à¦ªà¦¤à§à¦¤à¦¾, à¦®à¦¾à¦¨à¦¸à¦¿à¦• à¦¸à§à¦¬à¦¾à¦¸à§à¦¥à§à¦¯, à¦¨à¦¿à¦°à§à¦¯à¦¾à¦¤à¦¨ à¦ªà§à¦°à¦¤à¦¿à¦•à¦¾à¦° à¦¬à¦¾ à¦¥à§‡à¦°à¦¾à¦ªà¦¿à¦¸à§à¦Ÿ à¦¬à§à¦•à¦¿à¦‚ à¦¸à¦®à§à¦ªà¦°à§à¦•à§‡ à¦¯à§‡à¦•à§‹à¦¨à§‹ à¦ªà§à¦°à¦¶à§à¦¨ à¦•à¦°à¦¤à§‡ à¦ªà¦¾à¦°à§‡à¦¨à¥¤";
             }
         }
 
@@ -92,12 +92,12 @@ public class HotlineHub : Hub
         {
             await Clients.Caller.SendAsync("AcuteDangerAlert", new
             {
-                alert = "জরুরি সংকট সনাক্ত করা হয়েছে। অনুগ্রহ করে ১০৯৮ বা ৯৯৯ এ কল করুন।",
+                alert = "à¦œà¦°à§à¦°à¦¿ à¦¸à¦‚à¦•à¦Ÿ à¦¸à¦¨à¦¾à¦•à§à¦¤ à¦•à¦°à¦¾ à¦¹à§Ÿà§‡à¦›à§‡à¥¤ à¦…à¦¨à§à¦—à§à¦°à¦¹ à¦•à¦°à§‡ à§§à§¦à§¯à§® à¦¬à¦¾ à§¯à§¯à§¯ à¦ à¦•à¦² à¦•à¦°à§à¦¨à¥¤",
                 escalate = true,
                 hotlines = new[] {
-                    new { name = "জাতীয় জরুরি সেবা", number = "999", type = "Emergency" },
-                    new { name = "চাইল্ড হেল্পলাইন", number = "1098", type = "ChildProtection" },
-                    new { name = "কান পেতে রই", number = "01779554391", type = "Emotional" }
+                    new { name = "à¦œà¦¾à¦¤à§€à¦¯à¦¼ à¦œà¦°à§à¦°à¦¿ à¦¸à§‡à¦¬à¦¾", number = "999", type = "Emergency" },
+                    new { name = "à¦šà¦¾à¦‡à¦²à§à¦¡ à¦¹à§‡à¦²à§à¦ªà¦²à¦¾à¦‡à¦¨", number = "1098", type = "ChildProtection" },
+                    new { name = "à¦•à¦¾à¦¨ à¦ªà§‡à¦¤à§‡ à¦°à¦‡", number = "01779554391", type = "Emotional" }
                 }
             });
         }

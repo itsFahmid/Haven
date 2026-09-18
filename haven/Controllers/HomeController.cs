@@ -1,9 +1,9 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Haven.Models;
-using Haven.Services;
+using Obhoy.Models;
+using Obhoy.Services;
 
-namespace Haven.Controllers;
+namespace Obhoy.Controllers;
 
 public class HomeController : Controller
 {
@@ -18,10 +18,10 @@ public class HomeController : Controller
     {
         var model = new HomeViewModel
         {
-            Hotlines = HavenDataStore.GetEmergencyHotlines(),
-            FeaturedCourses = HavenDataStore.GetCourses().Take(3).ToList(),
-            FeaturedTherapists = HavenDataStore.GetTherapists().Take(3).ToList(),
-            HallOfFameDonors = HavenDataStore.GetRecentDonors(),
+            Hotlines = ObhoyDataStore.GetEmergencyHotlines(),
+            FeaturedCourses = ObhoyDataStore.GetCourses().Take(3).ToList(),
+            FeaturedTherapists = ObhoyDataStore.GetTherapists().Take(3).ToList(),
+            HallOfFameDonors = ObhoyDataStore.GetRecentDonors(),
             ActiveYouthProtected = 28490,
             CrisesDeescalated = 4120,
             VerifiedTherapistsCount = 38
@@ -40,8 +40,8 @@ public class HomeController : Controller
     {
         if (lang == "en" || lang == "bn")
         {
-            HttpContext.Session.SetString("Haven_Lang", lang);
-            Response.Cookies.Append("Haven_Lang", lang, new CookieOptions
+            HttpContext.Session.SetString("Obhoy_Lang", lang);
+            Response.Cookies.Append("Obhoy_Lang", lang, new CookieOptions
             {
                 Expires = DateTimeOffset.UtcNow.AddYears(1),
                 IsEssential = true

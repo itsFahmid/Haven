@@ -1,19 +1,19 @@
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Haven.Data;
-using Haven.Models;
+using Obhoy.Data;
+using Obhoy.Models;
 
-namespace Haven.Controllers;
+namespace Obhoy.Controllers;
 
 [Authorize(Roles = "Professional,Admin")]
 public class TherapistDashboardController : Controller
 {
-    private readonly HavenDbContext _db;
+    private readonly ObhoyDbContext _db;
     private readonly ILogger<TherapistDashboardController> _logger;
 
-    public TherapistDashboardController(HavenDbContext db, ILogger<TherapistDashboardController> logger)
+    public TherapistDashboardController(ObhoyDbContext db, ILogger<TherapistDashboardController> logger)
     {
         _db = db;
         _logger = logger;

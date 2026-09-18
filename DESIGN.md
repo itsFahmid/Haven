@@ -1,5 +1,5 @@
----
-name: HAVEN
+﻿---
+name: OBHOY
 description: Bangladesh Youth Safety & Mental Health Sanctuary
 colors:
   primary: "#0f766e"
@@ -94,13 +94,13 @@ components:
     padding: "12px 18px"
 ---
 
-# Design System: HAVEN
+# Design System: OBHOY
 
 ## Overview
 
 **Creative North Star: "The Digital Healing Sanctuary"**
 
-HAVEN is an anonymous, trauma-informed child & adult safety education, mental health, and emergency recovery platform for Bangladesh. The visual interface is designed to evoke absolute safety, emotional calm, and immediate clarity. Built around soft warm paper backgrounds, deep organic sanctuary teal accents, and protective glassmorphic layers, HAVEN balances immediate crisis response with reassuring mental health sanctuary aesthetics.
+OBHOY is an anonymous, trauma-informed child & adult safety education, mental health, and emergency recovery platform for Bangladesh. The visual interface is designed to evoke absolute safety, emotional calm, and immediate clarity. Built around soft warm paper backgrounds, deep organic sanctuary teal accents, and protective glassmorphic layers, OBHOY balances immediate crisis response with reassuring mental health sanctuary aesthetics.
 
 The visual tone is **Empathetic, Protective, Calming & Modern**. It rejects cold, clinical hospital vibes and aggressive neon aesthetics in favor of welcoming warm surfaces (`#fdfcf9`), organic rounded geometries (16px–24px radii), fluid somatic animations (19-second breathing loops), and dual-script (Bengali & English) typographic harmony.
 
@@ -113,7 +113,7 @@ The visual tone is **Empathetic, Protective, Calming & Modern**. It rejects cold
 
 ## Colors
 
-The HAVEN color system is built around soothing organic teals, warm cream neutral surfaces, and high-visibility emergency rose accents.
+The OBHOY color system is built around soothing organic teals, warm cream neutral surfaces, and high-visibility emergency rose accents.
 
 ### Primary
 - **Sanctuary Teal** (`#0f766e` / `rgb(15, 118, 110)`): The core identity color representing sanctuary, growth, and trust. Used for primary call-to-action buttons, key brand badges, active navigation indicators, and primary header elements.
@@ -163,7 +163,7 @@ These specialist colors serve specific, non-repeatable contexts. Use them only i
 
 ## Layout
 
-HAVEN uses a responsive 12-column grid layout with a max container width of `72rem` (`1152px` / `max-w-7xl`).
+OBHOY uses a responsive 12-column grid layout with a max container width of `72rem` (`1152px` / `max-w-7xl`).
 
 - **Grid Columns:** 12 columns on desktop (`lg:grid-cols-12`), 2–3 columns on tablet (`md:grid-cols-3`), 1 column on mobile.
 - **Margins & Container Padding:** `px-4 sm:px-6 lg:px-8` (16px mobile, 24px tablet, 32px desktop).
@@ -172,7 +172,7 @@ HAVEN uses a responsive 12-column grid layout with a max container width of `72r
 
 ## Elevation & Depth
 
-HAVEN uses flat warm surfaces at rest with soft, ambient teal-tinted hover elevations and translucent glassmorphism for overlays.
+OBHOY uses flat warm surfaces at rest with soft, ambient teal-tinted hover elevations and translucent glassmorphism for overlays.
 
 ### Shadow Vocabulary
 - **Card Hover Elevation** (`box-shadow: 0 16px 32px -8px rgba(15, 118, 110, 0.08), 0 8px 16px -4px rgba(0, 0, 0, 0.03)`): Soft ambient glow applied on hover with `translateY(-4px)` lift.
@@ -185,7 +185,7 @@ HAVEN uses flat warm surfaces at rest with soft, ambient teal-tinted hover eleva
 
 ## Shapes
 
-HAVEN features organic, protective form language with generous border radii and smooth curves.
+OBHOY features organic, protective form language with generous border radii and smooth curves.
 
 - **Cards & Modules:** `rounded-3xl` (24px radius) with thin slate borders (`border-slate-200/90`).
 - **Primary Buttons & Form Inputs:** `rounded-2xl` (16px radius) or `rounded-xl` (12px radius).

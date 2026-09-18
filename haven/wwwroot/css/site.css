@@ -1,38 +1,60 @@
-@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 /* ─── Design Tokens ──────────────────────────────────────────── */
 :root {
-    /* Teal scale */
-    --haven-teal-50: #f0fdfa;
-    --haven-teal-100: #ccfbf1;
-    --haven-teal-500: #14b8a6;
-    --haven-teal-600: #0d9488;
-    --haven-teal-700: #0f766e;
-    --haven-teal-800: #115e59;
-    --haven-teal-900: #134e4a;
+    /* Obhoy Teal scale */
+    --obhoy-teal-50: #f0fdfa;
+    --obhoy-teal-100: #ccfbf1;
+    --obhoy-teal-500: #14b8a6;
+    --obhoy-teal-600: #0d9488;
+    --obhoy-teal-700: #0f766e;
+    --obhoy-teal-800: #115e59;
+    --obhoy-teal-900: #134e4a;
 
     /* Neutral surfaces */
-    --haven-warm-bg: #fdfcf9;
-    --haven-card-bg: #ffffff;
-    --haven-slate-800: #1e293b;
-    --haven-slate-900: #0f172a;
+    --obhoy-warm-bg: #fdfcf9;
+    --obhoy-card-bg: #ffffff;
+    --obhoy-slate-800: #1e293b;
+    --obhoy-slate-900: #0f172a;
 
     /* Alerts */
-    --haven-alert-red: #e11d48;
+    --obhoy-alert-red: #e11d48;
 
     /* BMDC verified badge */
-    --haven-verified-green: #059669;
-    --haven-verified-green-deep: #047857;
+    --obhoy-verified-green: #059669;
+    --obhoy-verified-green-deep: #047857;
 
     /* Chat bubble radii (signature asymmetric shape) */
-    --haven-chat-radius-user: 18px 18px 4px 18px;
-    --haven-chat-radius-bot: 18px 18px 18px 4px;
-    --haven-chat-radius-crisis: 18px 18px 18px 4px;
+    --obhoy-chat-radius-user: 18px 18px 4px 18px;
+    --obhoy-chat-radius-bot: 18px 18px 18px 4px;
+    --obhoy-chat-radius-crisis: 18px 18px 18px 4px;
 
     /* Payment gateway brand colors */
-    --haven-bkash: #e2136e;
-    --haven-nagad: #f7941d;
-    --haven-rocket: #8c3494;
+    --obhoy-bkash: #e2136e;
+    --obhoy-nagad: #f7941d;
+    --obhoy-rocket: #8c3494;
+
+    /* Backward compatibility aliases */
+    --haven-teal-50: var(--obhoy-teal-50);
+    --haven-teal-100: var(--obhoy-teal-100);
+    --haven-teal-500: var(--obhoy-teal-500);
+    --haven-teal-600: var(--obhoy-teal-600);
+    --haven-teal-700: var(--obhoy-teal-700);
+    --haven-teal-800: var(--obhoy-teal-800);
+    --haven-teal-900: var(--obhoy-teal-900);
+    --haven-warm-bg: var(--obhoy-warm-bg);
+    --haven-card-bg: var(--obhoy-card-bg);
+    --haven-slate-800: var(--obhoy-slate-800);
+    --haven-slate-900: var(--obhoy-slate-900);
+    --haven-alert-red: var(--obhoy-alert-red);
+    --haven-verified-green: var(--obhoy-verified-green);
+    --haven-verified-green-deep: var(--obhoy-verified-green-deep);
+    --haven-chat-radius-user: var(--obhoy-chat-radius-user);
+    --haven-chat-radius-bot: var(--obhoy-chat-radius-bot);
+    --haven-chat-radius-crisis: var(--obhoy-chat-radius-crisis);
+    --haven-bkash: var(--obhoy-bkash);
+    --haven-nagad: var(--obhoy-nagad);
+    --haven-rocket: var(--obhoy-rocket);
 }
 
 /* ─── Custom Browser Surface Theming ─────────────────────────── */
@@ -84,13 +106,13 @@ body {
     border: 1px solid rgba(51, 65, 85, 0.6);
 }
 
-.haven-card {
+.obhoy-card, .haven-card {
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
                 box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
                 border-color 0.25s ease;
 }
 
-.haven-card:hover {
+.obhoy-card, .haven-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 16px 32px -8px rgba(15, 118, 110, 0.08), 0 8px 16px -4px rgba(0, 0, 0, 0.03);
 }
@@ -164,11 +186,11 @@ body {
     }
 
     /* Card hover: remove translateY lift, keep shadow */
-    .haven-card {
+    .obhoy-card, .haven-card {
         transition: box-shadow 0.15s ease, border-color 0.15s ease;
     }
 
-    .haven-card:hover {
+    .obhoy-card, .haven-card:hover {
         transform: none;
         box-shadow: 0 4px 16px -4px rgba(15, 118, 110, 0.12);
     }
@@ -185,8 +207,8 @@ body {
     .breathing-bubble,
     .pulse-red,
     .pulse-teal,
-    .haven-card,
-    .haven-card:hover {
+    .obhoy-card, .haven-card,
+    .obhoy-card, .haven-card:hover {
         transition-duration: 0ms;
     }
 }
@@ -271,7 +293,7 @@ body {
 
 /* ─── Minimum Touch Targets ──────────────────────────────────── */
 /* Ensure all interactive elements meet 44x44px touch target minimum */
-.haven-touch-target {
+.obhoy-touch-target, .haven-touch-target {
     min-width: 44px;
     min-height: 44px;
     display: inline-flex;

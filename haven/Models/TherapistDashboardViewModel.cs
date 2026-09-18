@@ -1,4 +1,4 @@
-namespace Haven.Models;
+﻿namespace Obhoy.Models;
 
 public class TherapistDashboardViewModel
 {

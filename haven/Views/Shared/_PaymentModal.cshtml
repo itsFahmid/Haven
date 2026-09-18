@@ -1,5 +1,5 @@
-<!-- Micro-Donation & Bangladeshi Checkout Modal -->
-<div id="paymentModal" class="haven-modal fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm overflow-y-auto" role="dialog" aria-modal="true">
+﻿<!-- Micro-Donation & Bangladeshi Checkout Modal -->
+<div id="paymentModal" class="obhoy-modal fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm overflow-y-auto" role="dialog" aria-modal="true">
     <div class="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all my-8">
         
         <!-- Step 1: Payment Formulation View -->
@@ -32,16 +32,16 @@
                     অনুদানের পরিমাণ নির্বাচন করুন
                 </label>
                 <div class="grid grid-cols-4 gap-2.5">
-                    <button type="button" onclick="HavenPayment.setAmount(50, this)" class="amount-preset-btn py-2.5 px-3 rounded-xl border border-slate-200 text-center font-semibold text-sm hover:border-teal-600 transition bg-white text-slate-700">
+                    <button type="button" onclick="ObhoyPayment.setAmount(50, this)" class="amount-preset-btn py-2.5 px-3 rounded-xl border border-slate-200 text-center font-semibold text-sm hover:border-teal-600 transition bg-white text-slate-700">
                         ৳৫০
                     </button>
-                    <button type="button" onclick="HavenPayment.setAmount(100, this)" class="amount-preset-btn py-2.5 px-3 rounded-xl border border-teal-700 text-center font-semibold text-sm transition bg-teal-700 text-white">
+                    <button type="button" onclick="ObhoyPayment.setAmount(100, this)" class="amount-preset-btn py-2.5 px-3 rounded-xl border border-teal-700 text-center font-semibold text-sm transition bg-teal-700 text-white">
                         ৳১০০
                     </button>
-                    <button type="button" onclick="HavenPayment.setAmount(500, this)" class="amount-preset-btn py-2.5 px-3 rounded-xl border border-slate-200 text-center font-semibold text-sm hover:border-teal-600 transition bg-white text-slate-700">
+                    <button type="button" onclick="ObhoyPayment.setAmount(500, this)" class="amount-preset-btn py-2.5 px-3 rounded-xl border border-slate-200 text-center font-semibold text-sm hover:border-teal-600 transition bg-white text-slate-700">
                         ৳৫০০
                     </button>
-                    <button type="button" onclick="HavenPayment.setAmount(1000, this)" class="amount-preset-btn py-2.5 px-3 rounded-xl border border-slate-200 text-center font-semibold text-sm hover:border-teal-600 transition bg-white text-slate-700">
+                    <button type="button" onclick="ObhoyPayment.setAmount(1000, this)" class="amount-preset-btn py-2.5 px-3 rounded-xl border border-slate-200 text-center font-semibold text-sm hover:border-teal-600 transition bg-white text-slate-700">
                         ৳১০০০
                     </button>
                 </div>
@@ -60,7 +60,7 @@
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                     
                     <!-- bKash -->
-                    <div onclick="HavenPayment.setGateway('bkash')" data-gateway="bkash" class="gateway-card active bkash p-3 rounded-2xl border-2 cursor-pointer text-center flex flex-col items-center justify-center transition">
+                    <div onclick="ObhoyPayment.setGateway('bkash')" data-gateway="bkash" class="gateway-card active bkash p-3 rounded-2xl border-2 cursor-pointer text-center flex flex-col items-center justify-center transition">
                         <div class="w-8 h-8 rounded-full bg-[#e2136e] text-white flex items-center justify-center font-bold text-xs mb-1">
                             bK
                         </div>
@@ -68,7 +68,7 @@
                     </div>
 
                     <!-- Nagad -->
-                    <div onclick="HavenPayment.setGateway('nagad')" data-gateway="nagad" class="gateway-card p-3 rounded-2xl border-2 border-slate-200 cursor-pointer text-center flex flex-col items-center justify-center transition">
+                    <div onclick="ObhoyPayment.setGateway('nagad')" data-gateway="nagad" class="gateway-card p-3 rounded-2xl border-2 border-slate-200 cursor-pointer text-center flex flex-col items-center justify-center transition">
                         <div class="w-8 h-8 rounded-full bg-[#f7941d] text-white flex items-center justify-center font-bold text-xs mb-1">
                             নগদ
                         </div>
@@ -76,7 +76,7 @@
                     </div>
 
                     <!-- Rocket -->
-                    <div onclick="HavenPayment.setGateway('rocket')" data-gateway="rocket" class="gateway-card p-3 rounded-2xl border-2 border-slate-200 cursor-pointer text-center flex flex-col items-center justify-center transition">
+                    <div onclick="ObhoyPayment.setGateway('rocket')" data-gateway="rocket" class="gateway-card p-3 rounded-2xl border-2 border-slate-200 cursor-pointer text-center flex flex-col items-center justify-center transition">
                         <div class="w-8 h-8 rounded-full bg-[#8c3494] text-white flex items-center justify-center font-bold text-xs mb-1">
                             R
                         </div>
@@ -84,7 +84,7 @@
                     </div>
 
                     <!-- SSLCommerz Cards -->
-                    <div onclick="HavenPayment.setGateway('sslcommerz')" data-gateway="sslcommerz" class="gateway-card p-3 rounded-2xl border-2 border-slate-200 cursor-pointer text-center flex flex-col items-center justify-center transition">
+                    <div onclick="ObhoyPayment.setGateway('sslcommerz')" data-gateway="sslcommerz" class="gateway-card p-3 rounded-2xl border-2 border-slate-200 cursor-pointer text-center flex flex-col items-center justify-center transition">
                         <div class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-xs mb-1">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                         </div>
@@ -94,7 +94,7 @@
 
                 <div id="paymentGatewayHelper" class="mt-2.5 text-xs text-teal-800 bg-teal-50 p-2.5 rounded-xl font-medium border border-teal-100 flex items-center gap-2">
                     <svg class="w-4 h-4 text-teal-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    <span>bKash Merchant / Direct Payment: 01700-000000 (Haven Safe Foundation)</span>
+                    <span>bKash Merchant / Direct Payment: 01700-000000 (Obhoy Safe Foundation)</span>
                 </div>
             </div>
 
@@ -103,8 +103,8 @@
                 <label class="flex items-start gap-3 cursor-pointer select-none">
                     <input type="checkbox" id="optHallOfFameCheck" class="mt-1 rounded text-teal-700 focus:ring-teal-500 h-4 w-4 border-slate-300" onchange="document.getElementById('donorNameContainer').classList.toggle('hidden', !this.checked)" />
                     <div>
-                        <div class="text-xs font-semibold text-slate-800" data-bn="হেভেন 'হল অফ ফেম' (Hall of Fame) দাতা তালিকায় নাম প্রকাশ করুন" data-en="Feature my name on the Haven 'Hall of Fame' donor list">
-                            হেভেন 'হল অফ ফেম' (Hall of Fame) দাতা তালিকায় নাম প্রকাশ করুন
+                        <div class="text-xs font-semibold text-slate-800" data-bn="অভয় 'হল অফ ফেম' (Hall of Fame) দাতা তালিকায় নাম প্রকাশ করুন" data-en="Feature my name on the Obhoy 'Hall of Fame' donor list">
+                            অভয় 'হল অফ ফেম' (Hall of Fame) দাতা তালিকায় নাম প্রকাশ করুন
                         </div>
                         <div class="text-[11px] text-slate-500" data-bn="অন্যান্য তরুণদের অনুপ্রাণিত করতে আপনার অবদান প্রদর্শিত হবে" data-en="Inspire other youth supporters across Bangladesh">
                             অন্যান্য তরুণদের অনুপ্রাণিত করতে আপনার অবদান প্রদর্শিত হবে
@@ -122,7 +122,7 @@
                         <div class="text-xs font-semibold text-slate-800" data-bn="সম্পূর্ণ গোপনীয় ও বেনামী লেনদেন বজায় রাখুন" data-en="Keep payment 100% confidential & anonymous">
                             সম্পূর্ণ গোপনীয় ও বেনামী লেনদেন বজায় রাখুন
                         </div>
-                        <div class="text-[11px] text-slate-500" data-bn="আপনার আর্থিক তথ্য বা পরিচয় কোনো তৃতীয় পক্ষের কাছে সংরক্ষণ করা হবে না" data-en="Zero sensitive identity retention per Haven Privacy Shield">
+                        <div class="text-[11px] text-slate-500" data-bn="আপনার আর্থিক তথ্য বা পরিচয় কোনো তৃতীয় পক্ষের কাছে সংরক্ষণ করা হবে না" data-en="Zero sensitive identity retention per Obhoy Privacy Shield">
                             আপনার আর্থিক তথ্য বা পরিচয় কোনো তৃতীয় পক্ষের কাছে সংরক্ষণ করা হবে না
                         </div>
                     </div>
@@ -131,7 +131,7 @@
 
             <!-- Actions -->
             <div class="pt-2">
-                <button type="button" id="confirmPaymentBtn" onclick="HavenPayment.processPayment()" class="w-full py-3.5 px-5 bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm rounded-2xl shadow-sm transition flex items-center justify-center gap-2">
+                <button type="button" id="confirmPaymentBtn" onclick="ObhoyPayment.processPayment()" class="w-full py-3.5 px-5 bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm rounded-2xl shadow-sm transition flex items-center justify-center gap-2">
                     <span data-bn="নিরাপদে অনুদান প্রদান করুন" data-en="Proceed to Secure Payment">নিরাপদে অনুদান প্রদান করুন</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                 </button>
@@ -174,7 +174,7 @@
             </div>
 
             <div class="pt-2 flex flex-col gap-2">
-                <button onclick="HavenPayment.resetPaymentModal(); closeModal('paymentModal')" class="w-full py-3 bg-teal-700 hover:bg-teal-800 text-white font-semibold text-sm rounded-xl transition" data-bn="সম্পন্ন হয়েছে / বন্ধ করুন" data-en="Done / Close Modal">
+                <button onclick="ObhoyPayment.resetPaymentModal(); closeModal('paymentModal')" class="w-full py-3 bg-teal-700 hover:bg-teal-800 text-white font-semibold text-sm rounded-xl transition" data-bn="সম্পন্ন হয়েছে / বন্ধ করুন" data-en="Done / Close Modal">
                     সম্পন্ন হয়েছে / বন্ধ করুন
                 </button>
             </div>

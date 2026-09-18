@@ -1,7 +1,7 @@
-{
+﻿{
   "schemaVersion": 2,
   "generatedAt": "2026-08-31T23:47:00Z",
-  "title": "Design System: HAVEN",
+  "title": "Design System: OBHOY",
   "extensions": {
     "colorMeta": {
       "primary": {
@@ -155,7 +155,7 @@
       "css": ".ds-btn-crisis { background: linear-gradient(135deg, #e11d48 0%, #be123c 100%); color: #ffffff; padding: 14px 20px; font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif; font-weight: 700; font-size: 13px; border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3); transition: transform 0.2s; } .ds-btn-crisis:hover { transform: scale(1.03); }"
     },
     {
-      "name": "Haven Feature Card",
+      "name": "Obhoy Feature Card",
       "kind": "card",
       "refersTo": "card",
       "description": "Interactive content module card with hover lift and ambient teal shadow.",
@@ -173,7 +173,7 @@
   ],
   "narrative": {
     "northStar": "The Digital Healing Sanctuary",
-    "overview": "HAVEN is an anonymous, trauma-informed child & adult safety education, mental health, and emergency recovery platform for Bangladesh. The visual interface is designed to evoke absolute safety, emotional calm, and immediate clarity. Built around soft warm paper backgrounds, deep organic sanctuary teal accents, and protective glassmorphic layers, HAVEN balances immediate crisis response with reassuring mental health sanctuary aesthetics.",
+    "overview": "OBHOY is an anonymous, trauma-informed child & adult safety education, mental health, and emergency recovery platform for Bangladesh. The visual interface is designed to evoke absolute safety, emotional calm, and immediate clarity. Built around soft warm paper backgrounds, deep organic sanctuary teal accents, and protective glassmorphic layers, OBHOY balances immediate crisis response with reassuring mental health sanctuary aesthetics.",
     "keyCharacteristics": [
       "Trauma-Informed Warmth: Soft warm-cream background (#fdfcf9) eliminating stark white glare.",
       "Sanctuary Teal Hierarchy: Deep teal (#0f766e) anchors primary actions and trust badges.",

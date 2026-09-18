@@ -1,4 +1,4 @@
-@model Haven.Models.PatientBookingsViewModel
+﻿@model Obhoy.Models.PatientBookingsViewModel
 @{
     ViewData["Title"] = "আমার থেরাপি বুকিং সমূহ | My Bookings";
 }
@@ -114,28 +114,28 @@
                         <div class="flex items-center gap-3 w-full lg:w-auto justify-between lg:justify-end">
                             
                             <!-- Status Pill -->
-                            @if (status == Haven.Models.BookingStatus.Pending)
+                            @if (status == Obhoy.Models.BookingStatus.Pending)
                             {
                                 <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">
                                     <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
                                     <span>অপেক্ষমান (Pending)</span>
                                 </span>
                             }
-                            else if (status == Haven.Models.BookingStatus.Approved)
+                            else if (status == Obhoy.Models.BookingStatus.Approved)
                             {
                                 <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-900 border border-emerald-300">
                                     <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
                                     <span>অনুমোদিত (Approved)</span>
                                 </span>
                             }
-                            else if (status == Haven.Models.BookingStatus.Rejected)
+                            else if (status == Obhoy.Models.BookingStatus.Rejected)
                             {
                                 <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-rose-100 text-rose-900 border border-rose-300">
                                     <span class="w-2 h-2 rounded-full bg-rose-600"></span>
                                     <span>প্রত্যাখ্যাত (Rejected)</span>
                                 </span>
                             }
-                            else if (status == Haven.Models.BookingStatus.Cancelled)
+                            else if (status == Obhoy.Models.BookingStatus.Cancelled)
                             {
                                 <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 border border-slate-300">
                                     <span>বাতিল (Cancelled)</span>
@@ -149,7 +149,7 @@
                             }
 
                             <!-- Cancel button for pending bookings -->
-                            @if (status == Haven.Models.BookingStatus.Pending)
+                            @if (status == Obhoy.Models.BookingStatus.Pending)
                             {
                                 <form asp-action="Cancel" asp-route-id="@booking.Id" method="post" onsubmit="return confirm('আপনি কি নিশ্চিত যে এই অ্যাপয়েন্টমেন্ট অনুরোধটি বাতিল করতে চান?');">
                                     @Html.AntiForgeryToken()

@@ -1,4 +1,4 @@
-namespace Haven.Models;
+﻿namespace Obhoy.Models;
 
 public class TherapistViewModel
 {
@@ -34,13 +34,13 @@ public class TherapySlot
 {
     public int Id { get; set; }
     public string DayEn { get; set; } = "Today";
-    public string DayBn { get; set; } = "আজ";
+    public string DayBn { get; set; } = "à¦†à¦œ";
     public string TimeEn { get; set; } = "04:00 PM - 05:00 PM";
-    public string TimeBn { get; set; } = "বিকাল ৪:০০ - ৫:০০";
+    public string TimeBn { get; set; } = "à¦¬à¦¿à¦•à¦¾à¦² à§ª:à§¦à§¦ - à§«:à§¦à§¦";
     public string DateFormatted { get; set; } = "2026-08-29";
     public bool IsAvailable { get; set; } = true;
     public string Type { get; set; } = "Video / Confidential Audio";
-    public string TypeBn { get; set; } = "ভিডিও / গোপনীয় অডিও";
+    public string TypeBn { get; set; } = "à¦­à¦¿à¦¡à¦¿à¦“ / à¦—à§‹à¦ªà¦¨à§€à¦¯à¦¼ à¦…à¦¡à¦¿à¦“";
 }
 
 public class TherapyDirectoryViewModel

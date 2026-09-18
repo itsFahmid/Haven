@@ -1,4 +1,4 @@
-@model Haven.Models.TherapistDashboardViewModel
+﻿@model Obhoy.Models.TherapistDashboardViewModel
 @{
     ViewData["Title"] = "থেরাপিস্ট ড্যাশবোর্ড - বুকিং অনুরোধ ব্যবস্থাপনা | Manage Booking Requests";
     var therapistName = Model.Therapist?.User?.FullName ?? "Dr. Specialist";
@@ -127,7 +127,7 @@
                         @foreach (var request in Model.Requests)
                         {
                             var patientName = request.User?.FullName ?? "Anonymous Patient";
-                            var patientEmail = request.User?.Email ?? "confidential@haven.org";
+                            var patientEmail = request.User?.Email ?? "confidential@obhoy.org";
                             var status = request.Status;
 
                             <tr class="hover:bg-slate-50/80 transition-colors">
@@ -184,21 +184,21 @@
 
                                 <!-- Status Badge -->
                                 <td class="py-4 px-6">
-                                    @if (status == Haven.Models.BookingStatus.Pending)
+                                    @if (status == Obhoy.Models.BookingStatus.Pending)
                                     {
                                         <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
                                             <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                                             <span>Pending</span>
                                         </span>
                                     }
-                                    else if (status == Haven.Models.BookingStatus.Approved)
+                                    else if (status == Obhoy.Models.BookingStatus.Approved)
                                     {
                                         <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
                                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
                                             <span>Approved</span>
                                         </span>
                                     }
-                                    else if (status == Haven.Models.BookingStatus.Rejected)
+                                    else if (status == Obhoy.Models.BookingStatus.Rejected)
                                     {
                                         <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
                                             <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span>
@@ -215,7 +215,7 @@
 
                                 <!-- Action Buttons: Approve & Reject -->
                                 <td class="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
-                                    @if (status == Haven.Models.BookingStatus.Pending)
+                                    @if (status == Obhoy.Models.BookingStatus.Pending)
                                     {
                                         <form asp-action="ApproveRequest" asp-route-id="@request.Id" method="post" class="inline">
                                             @Html.AntiForgeryToken()
@@ -231,7 +231,7 @@
                                             </button>
                                         </form>
                                     }
-                                    else if (status == Haven.Models.BookingStatus.Approved)
+                                    else if (status == Obhoy.Models.BookingStatus.Approved)
                                     {
                                         <form asp-action="RejectRequest" asp-route-id="@request.Id" method="post" class="inline" onsubmit="return confirm('অনুমোদন প্রত্যাহার করে প্রত্যাখ্যান করতে চান?');">
                                             @Html.AntiForgeryToken()
@@ -240,7 +240,7 @@
                                             </button>
                                         </form>
                                     }
-                                    else if (status == Haven.Models.BookingStatus.Rejected)
+                                    else if (status == Obhoy.Models.BookingStatus.Rejected)
                                     {
                                         <form asp-action="ApproveRequest" asp-route-id="@request.Id" method="post" class="inline">
                                             @Html.AntiForgeryToken()

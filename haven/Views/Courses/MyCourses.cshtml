@@ -1,6 +1,6 @@
-@using System.Text.Encodings.Web
-@using Haven.Services
-@model List<Haven.Models.CourseViewModel>
+﻿@using System.Text.Encodings.Web
+@using Obhoy.Services
+@model List<Obhoy.Models.CourseViewModel>
 @{
     ViewData["Title"] = "আমার অ্যানরোলকৃত কোর্স সমূহ | My Enrolled Courses";
 }
@@ -27,7 +27,7 @@
     </div>
 
     @{
-        var submittedCourses = ViewBag.SubmittedCourses as List<Haven.Models.CourseViewModel> ?? new List<Haven.Models.CourseViewModel>();
+        var submittedCourses = ViewBag.SubmittedCourses as List<Obhoy.Models.CourseViewModel> ?? new List<Obhoy.Models.CourseViewModel>();
         bool isTherapistOrAdmin = User.IsInRole("Professional") || User.IsInRole("Admin");
     }
 

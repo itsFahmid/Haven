@@ -1,18 +1,18 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Haven.Data;
-using Haven.Models;
+using Obhoy.Data;
+using Obhoy.Models;
 using System.Security.Claims;
 
-namespace Haven.Controllers;
+namespace Obhoy.Controllers;
 
 public class CommunityController : Controller
 {
-    private readonly HavenDbContext _db;
+    private readonly ObhoyDbContext _db;
     private readonly ILogger<CommunityController> _logger;
 
-    public CommunityController(HavenDbContext db, ILogger<CommunityController> logger)
+    public CommunityController(ObhoyDbContext db, ILogger<CommunityController> logger)
     {
         _db = db;
         _logger = logger;
@@ -36,7 +36,7 @@ public class CommunityController : Controller
         // Age Gate Verification (Must be 18+)
         if (user.Age.HasValue && user.Age.Value < 18)
         {
-            return (false, "সুরক্ষা নীতি অনুযায়ী HAVEN কমিউনিটি সেকশনটি শুধুমাত্র ১৮+ বয়সের তরুণদের জন্য সংরক্ষিত। আপনার বয়স ১৮ এর কম হওয়ায় সরাসরি প্রবেশাধিকার সুরক্ষিত। / Under HAVEN safety policy, the peer support community is restricted to 18+ users.", user);
+            return (false, "সুরক্ষা নীতি অনুযায়ী Obhoy কমিউনিটি সেকশনটি শুধুমাত্র ১৮+ বয়সের তরুণদের জন্য সংরক্ষিত। আপনার বয়স ১৮ এর কম হওয়ায় সরাসরি প্রবেশাধিকার সুরক্ষিত। / Under Obhoy safety policy, the peer support community is restricted to 18+ users.", user);
         }
 
         return (true, string.Empty, user);

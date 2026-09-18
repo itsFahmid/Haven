@@ -1,4 +1,4 @@
-@model List<Haven.Models.ProfessionalProfile>
+﻿@model List<Obhoy.Models.ProfessionalProfile>
 @{
     ViewData["Title"] = "ভেরিফায়েড থেরাপিস্ট ডিরেক্টরি | Verified Therapist Directory";
     var selectedSpecialty = (string)(ViewBag.SelectedSpecialty ?? "All");
@@ -209,4 +209,4 @@
 </div>
 
 <!-- Render Booking Modal Partial -->
-<partial name="_TherapistBookingModal" model="new Haven.Models.BookingCreateModel()" />
+<partial name="_TherapistBookingModal" model="new Obhoy.Models.BookingCreateModel()" />

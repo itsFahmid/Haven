@@ -1,5 +1,5 @@
-/**
- * HAVEN Platform - Production Frontend Core Script
+﻿/**
+ * OBHOY Platform - Production Frontend Core Script
  * Child & Adult Safety Education, Mental Health & Emergency Recovery Platform
  * Multi-Language Engine (Bangla / English), Quick Exit Safety, Crisis Escalation & Payment Gateways
  */
@@ -10,14 +10,14 @@
     // -------------------------------------------------------------
     // 1. Multi-Language (Bilingual) Engine: Bangla (Default) / English
     // -------------------------------------------------------------
-    window.HavenLang = {
-        current: localStorage.getItem('haven_lang') || 'bn',
+    window.ObhoyLang = window.HavenLang = {
+        current: (localStorage.getItem('obhoy_lang') || localStorage.getItem('haven_lang')) || 'bn',
 
         set: function (lang) {
             if (lang !== 'bn' && lang !== 'en') lang = 'bn';
             this.current = lang;
-            localStorage.setItem('haven_lang', lang);
-            document.cookie = `Haven_Lang=${lang};path=/;max-age=31536000;SameSite=Lax`;
+            localStorage.setItem('obhoy_lang', lang); localStorage.setItem('haven_lang', lang);
+            document.cookie = `Obhoy_Lang=${lang};path=/;max-age=31536000;SameSite=Lax`;
             document.documentElement.lang = lang;
             document.body.setAttribute('data-current-lang', lang);
 
@@ -45,7 +45,7 @@
                 }
             });
 
-            window.dispatchEvent(new CustomEvent('havenLanguageChanged', { detail: { lang: lang } }));
+            window.dispatchEvent(new CustomEvent('obhoyLanguageChanged', { detail: { lang: lang } }));
         },
 
         init: function () {
@@ -56,7 +56,7 @@
     // -------------------------------------------------------------
     // 2. Universal "Quick Exit" Emergency Safety Mechanism
     // -------------------------------------------------------------
-    window.havenQuickExit = function () {
+    window.obhoyQuickExit = window.havenQuickExit = function () {
         try {
             // Wipe client-side traces instantly
             localStorage.clear();
@@ -68,9 +68,9 @@
             });
 
             // Cancel any active streaming timers
-            if (window.HavenChat && window.HavenChat.activeTypingTimers) {
-                window.HavenChat.activeTypingTimers.forEach(function (t) { clearInterval(t); });
-                window.HavenChat.activeTypingTimers = [];
+            if (window.HavenChat && window.ObhoyChat.activeTypingTimers) {
+                window.ObhoyChat.activeTypingTimers.forEach(function (t) { clearInterval(t); });
+                window.ObhoyChat.activeTypingTimers = [];
             }
 
             // Explicitly purge active chat stream and inputs
@@ -117,13 +117,13 @@
                 return;
             }
 
-            const activeModal = document.querySelector('.haven-modal:not(.hidden)');
+            const activeModal = document.querySelector('.obhoy-modal:not(.hidden), .haven-modal:not(.hidden)');
             if (activeModal && !activeModal.classList.contains('urgent-crisis-modal')) {
                 // If standard modal open, ESC closes modal first
                 closeAllModals();
             } else {
                 // Otherwise ESC initiates Quick Exit
-                window.havenQuickExit();
+                window.obhoyQuickExit();
             }
         }
     });
@@ -150,7 +150,7 @@
     };
 
     window.closeAllModals = function () {
-        document.querySelectorAll('.haven-modal').forEach(m => {
+        document.querySelectorAll('.obhoy-modal, .haven-modal').forEach(m => {
             m.classList.add('hidden');
             m.classList.remove('flex');
         });
@@ -194,7 +194,7 @@
     // -------------------------------------------------------------
     // 5. Interactive Anonymous AI Chatbot Engine
     // -------------------------------------------------------------
-    window.HavenChat = {
+    window.ObhoyChat = window.HavenChat = {
         signalRConnection: null,
         activeTypingTimers: [],
 
@@ -209,7 +209,7 @@
             const text = input.value.trim();
             if (!text) return;
 
-            const lang = (window.HavenLang && window.HavenLang.current) || 'bn';
+            const lang = (window.HavenLang && window.ObhoyLang.current) || 'bn';
             const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
             // 1. Append User Message immediately
@@ -279,7 +279,7 @@
         handleBotResponse: function (data) {
             this.hideTypingIndicator();
             if (!data) return;
-            const lang = (window.HavenLang && window.HavenLang.current) || 'bn';
+            const lang = (window.HavenLang && window.ObhoyLang.current) || 'bn';
             const msg = lang === 'bn' ? (data.messageBn || data.messageEn) : (data.messageEn || data.messageBn);
             const time = data.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             const type = (data.isHighRisk || data.triggerEscalationModal) ? 'crisis' : 'bot';
@@ -403,7 +403,7 @@
                     <span class="inline-block w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
                     <span class="inline-block w-2 h-2 rounded-full bg-teal-500 animate-pulse" style="animation-delay: 0.2s"></span>
                     <span class="inline-block w-2 h-2 rounded-full bg-teal-500 animate-pulse" style="animation-delay: 0.4s"></span>
-                    <span data-bn="হেভেন এআই সহমর্মী উত্তর লিখছে..." data-en="HAVEN AI is thinking empathetically...">হেভেন এআই লিখছে...</span>
+                    <span data-bn="অভয় এআই সহমর্মী উত্তর লিখছে..." data-en="OBHOY AI is thinking empathetically...">অভয় এআই লিখছে...</span>
                 `;
                 chatStream.appendChild(indicator);
             }
@@ -417,7 +417,7 @@
         },
 
         generateEmpatheticReply: function (rawText, isCrisisMatched) {
-            const lang = (window.HavenLang && window.HavenLang.current) || 'bn';
+            const lang = (window.HavenLang && window.ObhoyLang.current) || 'bn';
             const text = rawText.toLowerCase();
 
             if (isCrisisMatched) {
@@ -452,7 +452,7 @@
                 isCrisis: false,
                 message: lang === 'bn'
                     ? 'আপনার অনুভূতি শেয়ার করার জন্য ধন্যবাদ। হেভেন আপনার ১০০% বেনামী ও নিরাপদ প্ল্যাটফর্ম। আপনি চাইলে আমাদের **কোর্স সেকশন** থেকে সাইবার সুরক্ষা শিখতে পারেন, অথবা **থেরাপি ডিরেক্টরি** থেকে ভেরিফায়েড প্রফেশনালের সাথে বিনামূল্যে/কম খরচে সেশন বুক করতে পারেন।'
-                    : 'Thank you for reaching out. HAVEN is your completely anonymous, safe sanctuary. You can explore our safety courses, practice grounding exercises, or book a confidential session with a verified specialist anytime.'
+                    : 'Thank you for reaching out. OBHOY is your completely anonymous, safe sanctuary. You can explore our safety courses, practice grounding exercises, or book a confidential session with a verified specialist anytime.'
             };
         },
 
@@ -465,7 +465,7 @@
         },
 
         sendQuickPrompt: function (btn) {
-            const lang = (window.HavenLang && window.HavenLang.current) || 'bn';
+            const lang = (window.HavenLang && window.ObhoyLang.current) || 'bn';
             const text = lang === 'bn' ? btn.getAttribute('data-bn') : btn.getAttribute('data-en');
             const input = document.getElementById('chatMessageInput');
             if (input && text) {
@@ -478,7 +478,7 @@
     // -------------------------------------------------------------
     // 6. Payment & Micro-Donation Modal Engine (bKash, Nagad, Rocket, SSLCommerz)
     // -------------------------------------------------------------
-    window.HavenPayment = {
+    window.ObhoyPayment = window.HavenPayment = {
         selectedGateway: 'bkash',
         selectedAmount: 100,
 
@@ -494,11 +494,11 @@
             // Update dynamic instructions
             const helperText = document.getElementById('paymentGatewayHelper');
             if (helperText) {
-                const lang = window.HavenLang.current;
+                const lang = window.ObhoyLang.current;
                 if (gateway === 'bkash') {
                     helperText.innerText = lang === 'bn'
-                        ? 'bKash Merchant / Send Money: 01700-000000 (Haven Safe Foundation)'
-                        : 'bKash Merchant Number: 01700-000000 (Haven Safe Foundation)';
+                        ? 'bKash Merchant / Send Money: 01700-000000 (Obhoy Safe Foundation)'
+                        : 'bKash Merchant Number: 01700-000000 (Obhoy Safe Foundation)';
                 } else if (gateway === 'nagad') {
                     helperText.innerText = lang === 'bn'
                         ? 'Nagad Direct Pay: 01800-000000'
@@ -578,7 +578,7 @@
     // -------------------------------------------------------------
     // 7. Interactive Therapy Directory & Booking Modal
     // -------------------------------------------------------------
-    window.HavenTherapy = {
+    window.ObhoyTherapy = window.HavenTherapy = {
         selectedTherapist: null,
         selectedSlotId: null,
 
@@ -589,7 +589,7 @@
 
             const nameEl = document.getElementById('bookingTherapistName');
             if (nameEl) {
-                const isBn = window.HavenLang.current === 'bn';
+                const isBn = window.ObhoyLang.current === 'bn';
                 nameEl.innerText = isBn ? nameBn : nameEn;
             }
 
@@ -626,9 +626,9 @@
 
                 closeModal('therapyBookingModal');
                 showToast(
-                    window.HavenLang.current === 'bn'
-                        ? 'আপনার গোপনীয় থেরাপি সেশনটি নিশ্চিত করা হয়েছে! কনফার্মেশন কোড: ' + ('HVN-' + Math.floor(1000 + Math.random() * 9000))
-                        : 'Confidential therapy session confirmed! Reference code: ' + ('HVN-' + Math.floor(1000 + Math.random() * 9000))
+                    window.ObhoyLang.current === 'bn'
+                        ? 'আপনার গোপনীয় থেরাপি সেশনটি নিশ্চিত করা হয়েছে! কনফার্মেশন কোড: ' + ('OBH-' + Math.floor(1000 + Math.random() * 9000))
+                        : 'Confidential therapy session confirmed! Reference code: ' + ('OBH-' + Math.floor(1000 + Math.random() * 9000))
                 );
             }, 1000);
         }
@@ -638,10 +638,10 @@
     // 8. Toast Notification Utility
     // -------------------------------------------------------------
     window.showToast = function (message) {
-        let toast = document.getElementById('havenToastNotification');
+        let toast = document.getElementById('obhoyToastNotification');
         if (!toast) {
             toast = document.createElement('div');
-            toast.id = 'havenToastNotification';
+            toast.id = 'obhoyToastNotification';
             toast.className = 'fixed bottom-6 right-6 z-50 max-w-md bg-slate-900 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 transition-all transform translate-y-12 opacity-0 text-sm font-medium';
             document.body.appendChild(toast);
         }
@@ -672,7 +672,7 @@
             const percentText = parentCard.querySelector('.course-progress-text');
             if (progressBar) progressBar.style.width = percent + '%';
             if (percentText) {
-                percentText.innerText = (window.HavenLang.current === 'bn')
+                percentText.innerText = (window.ObhoyLang.current === 'bn')
                     ? `${completed}/${total} সম্পন্ন (${percent}%)`
                     : `${completed}/${total} Completed (${percent}%)`;
             }
@@ -683,14 +683,14 @@
     // 10. Document Ready Initialization
     // -------------------------------------------------------------
     document.addEventListener('DOMContentLoaded', function () {
-        window.HavenLang.init();
+        window.ObhoyLang.init();
 
         // Bind chat input enter key
         const chatInput = document.getElementById('chatMessageInput');
         if (chatInput) {
             chatInput.addEventListener('keypress', function (e) {
                 if (e.key === 'Enter') {
-                    window.HavenChat.sendMessage();
+                    window.ObhoyChat.sendMessage();
                 }
             });
         }

@@ -1,4 +1,4 @@
-# Product
+﻿# Product
 
 <!-- impeccable:product-schema 1 -->
 
@@ -10,7 +10,7 @@ web
 Youth, adolescents, parents, and vulnerable individuals across Bangladesh facing cyber harassment, blackmail, emotional distress, or mental health crises.
 
 ## Product Purpose
-HAVEN is a 100% anonymous, trauma-informed digital safe space and emergency recovery platform for Bangladesh. It provides instant AI crisis assistance, emergency hotline connections, safety courses, and BMDC-verified therapy booking without required signups or identity logging.
+OBHOY is a 100% anonymous, trauma-informed digital safe space and emergency recovery platform for Bangladesh. It provides instant AI crisis assistance, emergency hotline connections, safety courses, and BMDC-verified therapy booking without required signups or identity logging.
 
 ## Positioning
 Bangladesh's first zero-tracking youth safety sanctuary combining immediate emergency hotlines (1098, 999, 109), AI triage, cyber safety education, and verified psychiatric/counseling resources.
@@ -29,13 +29,13 @@ Web platform accessible via mobile phones and desktop browsers across all teleco
 - Zero mandatory user tracking or activity logging
 
 ## Brand Commitments
-- Name: HAVEN | হেভেন
+- Name: OBHOY | অভয়
 - Visual Identity: "The Digital Healing Sanctuary" (Sanctuary Teal `#0f766e`, Warm Cream `#fdfcf9`, Mint Tint `#f0fdfa`, Slate Navy `#1e293b`)
 - Voice: Empathetic, Protective, Calming & Modern
 - Emergency Red Rule: Emergency Red (`#e11d48`) is strictly reserved for 999/1098/109/SOS crisis triggers.
 
 ## Evidence on Hand
-- Full ASP.NET Core MVC C# codebase (`haven/`)
+- Full ASP.NET Core MVC C# codebase (`obhoy/`)
 - Integrated BMDC doctor database seed
 - Integrated Bangladeshi national helpline registry
 - Complete bilingual language engine in `wwwroot/js/site.js`

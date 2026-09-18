@@ -1,7 +1,7 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Haven.Models;
+namespace Obhoy.Models;
 
 [Table("Payments")]
 public class Payment

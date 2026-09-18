@@ -1,4 +1,4 @@
-@model Haven.Models.HotlineViewModel
+﻿@model Obhoy.Models.HotlineViewModel
 @{
     ViewData["Title"] = "এআই সুরক্ষা সহকারী ও বেনামী হটলাইন | AI Safety Assistant";
 }
@@ -15,8 +15,8 @@
             </div>
             <div>
                 <div class="flex items-center gap-2">
-                    <h1 class="text-lg font-extrabold text-slate-900" data-bn="হেভেন বেনামী এআই সুরক্ষা হটলাইন" data-en="HAVEN Anonymous AI Safety Assistant">
-                        হেভেন বেনামী এআই সুরক্ষা হটলাইন
+                    <h1 class="text-lg font-extrabold text-slate-900" data-bn="অভয় বেনামী এআই সুরক্ষা হটলাইন" data-en="OBHOY Anonymous AI Safety Assistant">
+                        অভয় বেনামী এআই সুরক্ষা হটলাইন
                     </h1>
                     <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
                         ● 100% Anonymous
@@ -39,7 +39,7 @@
                 </svg>
                 <span data-bn="জরুরি সংকট SOS" data-en="Crisis Hotlines">জরুরি সংকট SOS</span>
             </button>
-            <button type="button" onclick="window.havenQuickExit()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-black text-white font-bold text-xs transition flex items-center gap-1.5">
+            <button type="button" onclick="window.obhoyQuickExit()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-black text-white font-bold text-xs transition flex items-center gap-1.5">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
@@ -69,15 +69,15 @@
             <!-- Messages Stream -->
             <div id="chatMessagesStream" class="flex-grow p-4 md:p-6 overflow-y-auto space-y-4 bg-[#faf9f6]/40">
                 
-                <!-- Initial Welcome Message from Haven AI -->
+                <!-- Initial Welcome Message from Obhoy AI -->
                 <div class="flex flex-col items-start mb-4 animate-fade-in">
                     <div class="max-w-[85%] md:max-w-[80%] p-4 chat-bubble-bot text-sm leading-relaxed shadow-sm">
                         <div class="flex items-center gap-2 mb-2 pb-2 border-b border-slate-200/80">
                             <span class="w-5 h-5 rounded-full bg-teal-700 text-white text-[10px] flex items-center justify-center font-bold">H</span>
-                            <span class="font-bold text-xs text-teal-900" data-bn="হেভেন সেফটি অ্যাসিস্ট্যান্ট" data-en="HAVEN Safety Assistant">হেভেন সেফটি অ্যাসিস্ট্যান্ট</span>
+                            <span class="font-bold text-xs text-teal-900" data-bn="অভয় সেফটি অ্যাসিস্ট্যান্ট" data-en="OBHOY Safety Assistant">অভয় সেফটি অ্যাসিস্ট্যান্ট</span>
                         </div>
-                        <p data-bn="আসসালামু আলাইকুম / নমস্কার। হেভেন-এ আপনাকে স্বাগতম। আপনি এখানে সম্পূর্ণ নিরাপদ ও বেনামে আছেন। আপনার নাম, আইপি বা কোনো ব্যক্তিগত তথ্য সংরক্ষণ করা হয় না।<br/><br/>আপনি কি কোনো মানসিক কষ্ট, সাইবার ব্ল্যাকমেইল, বা বিপদের সম্মুখীন? আপনি নির্ভয়ে যে কোনো কথা এখানে শেয়ার করতে পারেন।" data-en="Welcome to HAVEN. You are in a 100% confidential and anonymous sanctuary. Zero information is stored.<br/><br/>Are you dealing with emotional distress, cyber extortion, or personal safety questions? Feel free to speak your mind freely.">
-                            আসসালামু আলাইকুম / নমস্কার। হেভেন-এ আপনাকে স্বাগতম। আপনি এখানে সম্পূর্ণ নিরাপদ ও বেনামে আছেন। আপনার নাম, আইপি বা কোনো ব্যক্তিগত তথ্য সংরক্ষণ করা হয় না।<br/><br/>আপনি কি কোনো মানসিক কষ্ট, সাইবার ব্ল্যাকমেইল, বা বিপদের সম্মুখীন? আপনি নির্ভয়ে যে কোনো কথা এখানে শেয়ার করতে পারেন।
+                        <p data-bn="আসসালামু আলাইকুম / নমস্কার। অভয়-এ আপনাকে স্বাগতম। আপনি এখানে সম্পূর্ণ নিরাপদ ও বেনামে আছেন। আপনার নাম, আইপি বা কোনো ব্যক্তিগত তথ্য সংরক্ষণ করা হয় না।<br/><br/>আপনি কি কোনো মানসিক কষ্ট, সাইবার ব্ল্যাকমেইল, বা বিপদের সম্মুখীন? আপনি নির্ভয়ে যে কোনো কথা এখানে শেয়ার করতে পারেন।" data-en="Welcome to OBHOY. You are in a 100% confidential and anonymous sanctuary. Zero information is stored.<br/><br/>Are you dealing with emotional distress, cyber extortion, or personal safety questions? Feel free to speak your mind freely.">
+                            আসসালামু আলাইকুম / নমস্কার। অভয়-এ আপনাকে স্বাগতম। আপনি এখানে সম্পূর্ণ নিরাপদ ও বেনামে আছেন। আপনার নাম, আইপি বা কোনো ব্যক্তিগত তথ্য সংরক্ষণ করা হয় না।<br/><br/>আপনি কি কোনো মানসিক কষ্ট, সাইবার ব্ল্যাকমেইল, বা বিপদের সম্মুখীন? আপনি নির্ভয়ে যে কোনো কথা এখানে শেয়ার করতে পারেন।
                         </p>
                     </div>
                     <span class="text-[11px] text-slate-400 mt-1 px-1">Just now</span>
@@ -90,7 +90,7 @@
                 <span class="text-[11px] font-bold text-slate-400 whitespace-nowrap pl-1" data-bn="দ্রুত টপিক:" data-en="Quick Prompts:">দ্রুত টপিক:</span>
                 @foreach (var prompt in Model.QuickPrompts)
                 {
-                    <button type="button" onclick="HavenChat.sendQuickPrompt(this)" data-bn="@prompt.PromptBn" data-en="@prompt.PromptEn" class="px-3 py-1.5 rounded-full bg-slate-100 hover:bg-teal-50 hover:text-teal-800 hover:border-teal-300 border border-slate-200 text-xs text-slate-700 whitespace-nowrap transition flex-shrink-0">
+                    <button type="button" onclick="ObhoyChat.sendQuickPrompt(this)" data-bn="@prompt.PromptBn" data-en="@prompt.PromptEn" class="px-3 py-1.5 rounded-full bg-slate-100 hover:bg-teal-50 hover:text-teal-800 hover:border-teal-300 border border-slate-200 text-xs text-slate-700 whitespace-nowrap transition flex-shrink-0">
                         <span data-bn="@prompt.PromptBn" data-en="@prompt.PromptEn">@prompt.PromptBn</span>
                     </button>
                 }
@@ -105,7 +105,7 @@
                             ❤️‍🩹
                         </button>
                     </div>
-                    <button type="button" onclick="HavenChat.sendMessage()" class="px-5 py-3.5 bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm rounded-2xl shadow-md shadow-teal-900/15 transition transform active:scale-95 flex items-center gap-1.5 flex-shrink-0">
+                    <button type="button" onclick="ObhoyChat.sendMessage()" class="px-5 py-3.5 bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm rounded-2xl shadow-md shadow-teal-900/15 transition transform active:scale-95 flex items-center gap-1.5 flex-shrink-0">
                         <span data-bn="পাঠান" data-en="Send">পাঠান</span>
                         <span>➔</span>
                     </button>
@@ -246,11 +246,11 @@
                 .configureLogging(signalR.LogLevel.Warning)
                 .build();
 
-            // Expose connection on HavenChat so sendMessage can use it
-            window.HavenChat.signalRConnection = connection;
+            // Expose connection on ObhoyChat so sendMessage can use it
+            window.ObhoyChat.signalRConnection = connection;
 
             connection.start().then(function () {
-                console.log("Connected to HAVEN SignalR Hotline Hub");
+                console.log("Connected to OBHOY SignalR Hotline Hub");
                 connection.invoke("JoinHotlineSession", "AnonymousHotline")
                     .catch(function (err) { console.error("JoinHotlineSession error:", err); });
             }).catch(function (err) {
@@ -262,10 +262,10 @@
                 console.log("Hotline Session Initialized:", data);
             });
 
-            // AI triage response — stream it via HavenChat
+            // AI triage response — stream it via ObhoyChat
             connection.on("ReceiveBotResponse", function (data) {
-                if (window.HavenChat && typeof window.HavenChat.handleBotResponse === 'function') {
-                    window.HavenChat.handleBotResponse(data);
+                if (window.ObhoyChat && typeof window.ObhoyChat.handleBotResponse === 'function') {
+                    window.ObhoyChat.handleBotResponse(data);
                 }
             });
 

@@ -1,4 +1,4 @@
-@model Haven.Models.RegisterViewModel
+﻿@model Obhoy.Models.RegisterViewModel
 @{
     ViewData["Title"] = "রেজিস্ট্রেশন | Sign Up";
 }
@@ -15,8 +15,8 @@
                 </svg>
             </div>
 
-            <h1 class="text-3xl font-black text-slate-900 tracking-tight" data-bn="হেভেনে নতুন অ্যাকাউন্ট তৈরি করুন" data-en="Create Your Haven Sanctuary Account">
-                হেভেনে নতুন অ্যাকাউন্ট তৈরি করুন
+            <h1 class="text-3xl font-black text-slate-900 tracking-tight" data-bn="অভয়ে নতুন অ্যাকাউন্ট তৈরি করুন" data-en="Create Your Obhoy Sanctuary Account">
+                অভয়ে নতুন অ্যাকাউন্ট তৈরি করুন
             </h1>
             
             <p class="text-sm text-slate-500 max-w-md mx-auto" data-bn="আপনার নিরাপত্তা ও মানসিক শান্তির জন্য একটি সম্পূর্ণ নিরাপদ ও এনক্রিপ্টেড প্রোফাইল তৈরি করুন।" data-en="Create a private, zero-tracking safe profile to bookmark courses, access counseling, and protect yourself.">
@@ -98,7 +98,7 @@
                             </svg>
                         </div>
                         <input asp-for="Email" type="email" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition" 
-                               placeholder="example@haven.org" required />
+                               placeholder="example@obhoy.org" required />
                     </div>
                     <span asp-validation-for="Email" class="text-xs font-medium text-amber-800 mt-1.5 block"></span>
                     <p class="text-xs text-slate-400 mt-1" data-bn="আপনার ইমেইল সম্পূর্ণ গোপন রাখা হবে এবং কোনো বিজ্ঞাপনী কাজে ব্যবহৃত হবে না।" data-en="Your email is strictly encrypted and never shared or spammed.">
@@ -157,8 +157,8 @@
                     <label class="flex items-start gap-3 cursor-pointer">
                         <input asp-for="AgreeToTerms" type="checkbox" class="w-4 h-4 mt-0.5 rounded text-teal-700 focus:ring-teal-500 border-slate-300 cursor-pointer" />
                         <span class="text-sm text-slate-600 leading-relaxed select-none">
-                            <span data-bn="আমি হেভেন-এর সুরক্ষা নীতিমালা ও শর্তাবলীতে সম্মত আছি এবং স্বীকার করছি যে হেভেন একটি নিরাপদ ক্ষেত্র।" data-en="I agree to Haven's Safe Space & Privacy Policy terms.">
-                                আমি হেভেন-এর সুরক্ষা নীতিমালা ও শর্তাবলীতে সম্মত আছি এবং স্বীকার করছি যে হেভেন একটি নিরাপদ ক্ষেত্র।
+                            <span data-bn="আমি অভয়-এর সুরক্ষা নীতিমালা ও শর্তাবলীতে সম্মত আছি এবং স্বীকার করছি যে অভয় একটি নিরাপদ ক্ষেত্র।" data-en="I agree to Obhoy's Safe Space & Privacy Policy terms.">
+                                আমি অভয়-এর সুরক্ষা নীতিমালা ও শর্তাবলীতে সম্মত আছি এবং স্বীকার করছি যে অভয় একটি নিরাপদ ক্ষেত্র।
                             </span>
                         </span>
                     </label>

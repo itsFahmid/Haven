@@ -1,4 +1,4 @@
-@model Haven.Models.HomeViewModel
+﻿@model Obhoy.Models.HomeViewModel
 @{
     ViewData["Title"] = "হোম | Home";
 }
@@ -31,8 +31,8 @@
                 </h1>
 
                 <!-- Hero Subtitle -->
-                <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed" data-bn="সাইবার ব্ল্যাকমেইল, মানসিক হতাশা, ব্যক্তিগত সীমানা বা সংকটময় মুহূর্তে হেভেন আপনার নির্ভরযোগ্য নিরাপদ আশ্রয়। কোনো নাম বা লগইন ছাড়াই তাৎক্ষণিক কাউন্সেলিং এবং আইনি সুরক্ষা গাইড পান।" data-en="Whether dealing with cyber extortion, acute depression, relationship trauma, or digital privacy threats, HAVEN offers unconditional safety without signups or tracking.">
-                    সাইবার ব্ল্যাকমেইল, মানসিক হতাশা, ব্যক্তিগত সীমানা বা সংকটময় মুহূর্তে হেভেন আপনার নির্ভরযোগ্য নিরাপদ আশ্রয়। কোনো নাম বা লগইন ছাড়াই তাৎক্ষণিক কাউন্সেলিং এবং আইনি সুরক্ষা গাইড পান।
+                <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed" data-bn="সাইবার ব্ল্যাকমেইল, মানসিক হতাশা, ব্যক্তিগত সীমানা বা সংকটময় মুহূর্তে অভয় আপনার নির্ভরযোগ্য নিরাপদ আশ্রয়। কোনো নাম বা লগইন ছাড়াই তাৎক্ষণিক কাউন্সেলিং এবং আইনি সুরক্ষা গাইড পান।" data-en="Whether dealing with cyber extortion, acute depression, relationship trauma, or digital privacy threats, OBHOY offers unconditional safety without signups or tracking.">
+                    সাইবার ব্ল্যাকমেইল, মানসিক হতাশা, ব্যক্তিগত সীমানা বা সংকটময় মুহূর্তে অভয় আপনার নির্ভরযোগ্য নিরাপদ আশ্রয়। কোনো নাম বা লগইন ছাড়াই তাৎক্ষণিক কাউন্সেলিং এবং আইনি সুরক্ষা গাইড পান।
                 </p>
 
                 <!-- Hero Action Buttons -->
@@ -95,7 +95,7 @@
                                 <span class="text-[11px] text-emerald-700 font-bold">● Active 24/7 Assistance</span>
                             </div>
                         </div>
-                        <button onclick="HavenChat.sendMessage()" class="text-xs text-teal-700 hover:text-teal-900 font-bold" data-bn="চ্যাট চালু করুন" data-en="Launch Chat">
+                        <button onclick="ObhoyChat.sendMessage()" class="text-xs text-teal-700 hover:text-teal-900 font-bold" data-bn="চ্যাট চালু করুন" data-en="Launch Chat">
                             চ্যাট চালু ➔
                         </button>
                     </div>
@@ -152,7 +152,7 @@
                     <!-- Bottom Quick Exit Warning -->
                     <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
                         <span data-bn="গোপনীয় প্রস্থান করতে ESC চাপুন" data-en="Press ESC to quickly leave page">গোপনীয় প্রস্থান করতে ESC চাপুন</span>
-                        <button onclick="window.havenQuickExit()" class="text-slate-700 hover:text-slate-900 hover:underline font-bold" data-bn="Exit Now" data-en="Exit Now">Exit Now</button>
+                        <button onclick="window.obhoyQuickExit()" class="text-slate-700 hover:text-slate-900 hover:underline font-bold" data-bn="Exit Now" data-en="Exit Now">Exit Now</button>
                     </div>
 
                 </div>
@@ -212,7 +212,7 @@
     </div>
 </section>
 
-<!-- Interactive Action Cards Section (Core Pillars of HAVEN) -->
+<!-- Interactive Action Cards Section (Core Pillars of OBHOY) -->
 <section class="py-16 md:py-24 bg-[#fdfcf9]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -364,8 +364,8 @@
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900" data-bn="একটি ছোট অনুদান, একটি মূল্যবান জীবন রক্ষা" data-en="A Micro-Donation That Saves Real Lives">
                     একটি ছোট অনুদান, একটি মূল্যবান জীবন রক্ষা
                 </h2>
-                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed" data-bn="হেভেন একটি অলাভজনক নিরাপদ প্ল্যাটফর্ম। আপনার দেওয়া ৳৫০ বা ৳১০০ অনুদান কোনো এক প্রান্তিক কিশোরীর সাইবার আইনি সহায়তা বা বিষণ্ণতায় ভোগা তরুণের ফ্রি থেরাপি সেশন নিশ্চিত করে।" data-en="HAVEN is a youth-run safe sanctuary. Your ৳50 or ৳100 contribution sponsors immediate psychological first-aid and cyber rescue for vulnerable peers across Bangladesh.">
-                    হেভেন একটি অলাভজনক নিরাপদ প্ল্যাটফর্ম। আপনার দেওয়া ৳৫০ বা ৳১০০ অনুদান কোনো এক প্রান্তিক কিশোরীর সাইবার আইনি সহায়তা বা বিষণ্ণতায় ভোগা তরুণের ফ্রি থেরাপি সেশন নিশ্চিত করে।
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed" data-bn="অভয় একটি অলাভজনক নিরাপদ প্ল্যাটফর্ম। আপনার দেওয়া ৳৫০ বা ৳১০০ অনুদান কোনো এক প্রান্তিক কিশোরীর সাইবার আইনি সহায়তা বা বিষণ্ণতায় ভোগা তরুণের ফ্রি থেরাপি সেশন নিশ্চিত করে।" data-en="OBHOY is a youth-run safe sanctuary. Your ৳50 or ৳100 contribution sponsors immediate psychological first-aid and cyber rescue for vulnerable peers across Bangladesh.">
+                    অভয় একটি অলাভজনক নিরাপদ প্ল্যাটফর্ম। আপনার দেওয়া ৳৫০ বা ৳১০০ অনুদান কোনো এক প্রান্তিক কিশোরীর সাইবার আইনি সহায়তা বা বিষণ্ণতায় ভোগা তরুণের ফ্রি থেরাপি সেশন নিশ্চিত করে।
                 </p>
                 <div class="pt-2 flex items-center gap-3">
                     <button onclick="openModal('paymentModal')" class="px-6 py-3 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs sm:text-sm rounded-xl transition flex items-center gap-2 shadow-sm">

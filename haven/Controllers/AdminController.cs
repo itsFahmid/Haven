@@ -1,19 +1,19 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Haven.Data;
-using Haven.Models;
+using Obhoy.Data;
+using Obhoy.Models;
 using System.Security.Claims;
 
-namespace Haven.Controllers;
+namespace Obhoy.Controllers;
 
 [Authorize(Roles = "Admin")]
 public class AdminController : Controller
 {
-    private readonly HavenDbContext _db;
+    private readonly ObhoyDbContext _db;
     private readonly ILogger<AdminController> _logger;
 
-    public AdminController(HavenDbContext db, ILogger<AdminController> logger)
+    public AdminController(ObhoyDbContext db, ILogger<AdminController> logger)
     {
         _db = db;
         _logger = logger;

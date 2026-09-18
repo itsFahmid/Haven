@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using Haven.Models;
+using Obhoy.Models;
 
-namespace Haven.Data;
+namespace Obhoy.Data;
 
-public class HavenDbContext : DbContext
+public class ObhoyDbContext : DbContext
 {
-    public HavenDbContext(DbContextOptions<HavenDbContext> options) : base(options)
+    public ObhoyDbContext(DbContextOptions<ObhoyDbContext> options) : base(options)
     {
     }
 

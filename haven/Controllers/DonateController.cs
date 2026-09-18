@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-using Haven.Models;
-using Haven.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using Obhoy.Models;
+using Obhoy.Services;
 
-namespace Haven.Controllers;
+namespace Obhoy.Controllers;
 
 public class DonateController : Controller
 {
@@ -10,7 +10,7 @@ public class DonateController : Controller
     {
         var model = new PaymentViewModel
         {
-            RecentDonors = HavenDataStore.GetRecentDonors()
+            RecentDonors = ObhoyDataStore.GetRecentDonors()
         };
         return View(model);
     }
@@ -34,7 +34,7 @@ public class DonateController : Controller
             gateway = submission.Gateway,
             donorName = donorName,
             optedIntoHallOfFame = submission.OptIntoHallOfFame,
-            messageEn = $"Thank you for your generous contribution of ৳{submission.AmountBDT}! Your support keeps HAVEN completely free for vulnerable youth.",
+            messageEn = $"Thank you for your generous contribution of ৳{submission.AmountBDT}! Your support keeps Obhoy completely free for vulnerable youth.",
             messageBn = $"আপনার ৳{submission.AmountBDT} উদার অনুদানের জন্য আন্তরিক ধন্যবাদ! আপনার এই সহযোগিতা বিপদগ্রস্ত তরুণ-কিশোরদের জন্য হেভেনকে উন্মুক্ত রাখতে সাহায্য করবে।"
         });
     }

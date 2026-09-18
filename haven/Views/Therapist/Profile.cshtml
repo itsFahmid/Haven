@@ -1,4 +1,4 @@
-@model Haven.Models.ProfessionalProfile
+﻿@model Obhoy.Models.ProfessionalProfile
 @{
     var therapistName = Model.User?.FullName ?? "Dr. Specialist";
     var avatarUrl = Model.User?.ProfilePictureUrl;
@@ -106,7 +106,7 @@
                 <!-- Confidentiality Pledge -->
                 <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-emerald-900 text-xs space-y-1">
                     <div class="font-bold flex items-center gap-1.5">
-                        <span>🛡️ হেভেন গোপনীয়তা অঙ্গীকার</span>
+                        <span>🛡️ অভয় গোপনীয়তা অঙ্গীকার</span>
                     </div>
                     <p class="text-emerald-800 text-[11px] leading-relaxed">
                         আপনার প্রতিটি সেশন সম্পূর্ণভাবে এন্ড-টু-এন্ড এনক্রিপ্টেড এবং কোনো ব্যক্তিগত তথ্য তৃতীয় পক্ষের সাথে শেয়ার করা হয় না।
@@ -165,4 +165,4 @@
 </div>
 
 <!-- Render Booking Modal Partial -->
-<partial name="_TherapistBookingModal" model="new Haven.Models.BookingCreateModel()" />
+<partial name="_TherapistBookingModal" model="new Obhoy.Models.BookingCreateModel()" />

@@ -1,7 +1,7 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Haven.Models;
+namespace Obhoy.Models;
 
 [Table("Courses")]
 public class Course
@@ -35,7 +35,7 @@ public class Course
     public string DescriptionEn { get; set; } = string.Empty;
 
     [MaxLength(50)]
-    public string DurationBn { get; set; } = "৩০ মিনিট";
+    public string DurationBn { get; set; } = "à§©à§¦ à¦®à¦¿à¦¨à¦¿à¦Ÿ";
 
     [MaxLength(50)]
     public string DurationEn { get; set; } = "30 Mins";

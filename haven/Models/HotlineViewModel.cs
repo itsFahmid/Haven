@@ -1,8 +1,8 @@
-namespace Haven.Models;
+namespace Obhoy.Models;
 
 public class HotlineViewModel
 {
-    public string AnonymousSessionId { get; set; } = "HAVEN-ANON-" + Random.Shared.Next(1000, 9999);
+    public string AnonymousSessionId { get; set; } = "OBHOY-ANON-" + Random.Shared.Next(1000, 9999);
     public string UserAlias { get; set; } = "Anonymous Ally #" + Random.Shared.Next(100, 999);
     public string UserAliasBn { get; set; } = "বেনামী বন্ধু #" + Random.Shared.Next(100, 999);
     public List<EmergencyContact> EmergencyHotlines { get; set; } = new();

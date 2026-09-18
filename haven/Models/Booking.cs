@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Haven.Models;
+namespace Obhoy.Models;
 
 public enum BookingStatus
 {
@@ -47,7 +47,7 @@ public class Booking
     public BookingStatus Status { get; set; } = BookingStatus.Pending;
 
     [MaxLength(50)]
-    public string BookingReference { get; set; } = string.Empty; // e.g. "HVN-BK-84920"
+    public string BookingReference { get; set; } = string.Empty; // e.g. "OBH-BK-84920"
 
     [Column(TypeName = "decimal(18,2)")]
     public decimal FeeBDT { get; set; } = 0;

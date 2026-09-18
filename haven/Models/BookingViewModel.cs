@@ -1,17 +1,17 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Haven.Models;
+namespace Obhoy.Models;
 
 public class BookingCreateModel
 {
     [Required]
     public int TherapistId { get; set; }
 
-    [Required(ErrorMessage = "অনুগ্রহ করে একটি সেশন তারিখ নির্বাচন করুন / Please select an appointment date.")]
+    [Required(ErrorMessage = "à¦…à¦¨à§à¦—à§à¦°à¦¹ à¦•à¦°à§‡ à¦à¦•à¦Ÿà¦¿ à¦¸à§‡à¦¶à¦¨ à¦¤à¦¾à¦°à¦¿à¦– à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨ / Please select an appointment date.")]
     [DataType(DataType.Date)]
     public DateTime BookingDate { get; set; }
 
-    [Required(ErrorMessage = "অনুগ্রহ করে একটি সময় স্লট নির্বাচন করুন / Please select a time slot.")]
+    [Required(ErrorMessage = "à¦…à¦¨à§à¦—à§à¦°à¦¹ à¦•à¦°à§‡ à¦à¦•à¦Ÿà¦¿ à¦¸à¦®à¦¯à¦¼ à¦¸à§à¦²à¦Ÿ à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨ / Please select a time slot.")]
     [MaxLength(50)]
     public string TimeSlot { get; set; } = string.Empty;
 

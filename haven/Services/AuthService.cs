@@ -1,18 +1,18 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Haven.Data;
-using Haven.Models;
+using Obhoy.Data;
+using Obhoy.Models;
 
-namespace Haven.Services;
+namespace Obhoy.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly HavenDbContext _context;
+    private readonly ObhoyDbContext _context;
     private readonly IPasswordHasher<User> _passwordHasher;
     private readonly ILogger<AuthService> _logger;
 
     public AuthService(
-        HavenDbContext context,
+        ObhoyDbContext context,
         IPasswordHasher<User> passwordHasher,
         ILogger<AuthService> logger)
     {
@@ -31,7 +31,7 @@ public class AuthService : IAuthService
             var emailExists = await _context.Users.AnyAsync(u => u.Email.ToLower() == normalizedEmail);
             if (emailExists)
             {
-                return (false, "An account with this email already exists / এই ইমেইল দিয়ে ইতিমধ্যে অ্যাকাউন্ট খোলা আছে।", null);
+                return (false, "An account with this email already exists / à¦à¦‡ à¦‡à¦®à§‡à¦‡à¦² à¦¦à¦¿à¦¯à¦¼à§‡ à¦‡à¦¤à¦¿à¦®à¦§à§à¦¯à§‡ à¦…à§à¦¯à¦¾à¦•à¦¾à¦‰à¦¨à§à¦Ÿ à¦–à§‹à¦²à¦¾ à¦†à¦›à§‡à¥¤", null);
             }
 
             var user = new User
@@ -67,7 +67,7 @@ public class AuthService : IAuthService
         {
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             {
-                return (false, "Email and password are required / ইমেইল ও পাসওয়ার্ড প্রদান করুন।", null);
+                return (false, "Email and password are required / à¦‡à¦®à§‡à¦‡à¦² à¦“ à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§à¦¡ à¦ªà§à¦°à¦¦à¦¾à¦¨ à¦•à¦°à§à¦¨à¥¤", null);
             }
 
             var normalizedEmail = email.Trim().ToLowerInvariant();
@@ -76,19 +76,19 @@ public class AuthService : IAuthService
             if (user == null)
             {
                 _logger.LogWarning("Authentication failed: User not found for email {Email}", normalizedEmail);
-                return (false, "Invalid email or password / ভুল ইমেইল অথবা পাসওয়ার্ড।", null);
+                return (false, "Invalid email or password / à¦­à§à¦² à¦‡à¦®à§‡à¦‡à¦² à¦…à¦¥à¦¬à¦¾ à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§à¦¡à¥¤", null);
             }
 
             if (!user.IsActive)
             {
-                return (false, "Your account has been deactivated. Please contact Haven support.", null);
+                return (false, "Your account has been deactivated. Please contact Obhoy support.", null);
             }
 
             var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
             if (verificationResult == PasswordVerificationResult.Failed)
             {
                 _logger.LogWarning("Authentication failed: Incorrect password for user {Email}", normalizedEmail);
-                return (false, "Invalid email or password / ভুল ইমেইল অথবা পাসওয়ার্ড।", null);
+                return (false, "Invalid email or password / à¦­à§à¦² à¦‡à¦®à§‡à¦‡à¦² à¦…à¦¥à¦¬à¦¾ à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§à¦¡à¥¤", null);
             }
 
             // If password needs rehash (security update algorithm), update it

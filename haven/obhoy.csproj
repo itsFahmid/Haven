@@ -4,8 +4,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Haven</RootNamespace>
-    <AssemblyName>Haven</AssemblyName>
+    <RootNamespace>Obhoy</RootNamespace>
+    <AssemblyName>Obhoy</AssemblyName>
     <UserSecretsId>8a220865-295e-4ca9-8b60-2c3005081193</UserSecretsId>
   </PropertyGroup>
 

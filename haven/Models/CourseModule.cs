@@ -1,7 +1,7 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Haven.Models;
+namespace Obhoy.Models;
 
 [Table("CourseModules")]
 public class CourseModule
@@ -26,13 +26,13 @@ public class CourseModule
     public string TitleEn { get; set; } = string.Empty;
 
     [MaxLength(100)]
-    public string TypeBn { get; set; } = "পাঠ ও কুইজ";
+    public string TypeBn { get; set; } = "à¦ªà¦¾à¦  à¦“ à¦•à§à¦‡à¦œ";
 
     [MaxLength(100)]
     public string TypeEn { get; set; } = "Lesson & Quiz";
 
     [MaxLength(50)]
-    public string DurationBn { get; set; } = "১০ মিনিট";
+    public string DurationBn { get; set; } = "à§§à§¦ à¦®à¦¿à¦¨à¦¿à¦Ÿ";
 
     [MaxLength(50)]
     public string DurationEn { get; set; } = "10 Mins";

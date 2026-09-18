@@ -1,7 +1,7 @@
-using Markdig;
+﻿using Markdig;
 using System.Text.RegularExpressions;
 
-namespace Haven.Services
+namespace Obhoy.Services
 {
     public static class MarkdownHelper
     {

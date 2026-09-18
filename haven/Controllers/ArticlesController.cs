@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Haven.Data;
-using Haven.Models;
+using Obhoy.Data;
+using Obhoy.Models;
 using System.Security.Claims;
 
-namespace Haven.Controllers;
+namespace Obhoy.Controllers;
 
 public class ArticlesController : Controller
 {
-    private readonly HavenDbContext _db;
+    private readonly ObhoyDbContext _db;
 
-    public ArticlesController(HavenDbContext db)
+    public ArticlesController(ObhoyDbContext db)
     {
         _db = db;
     }
@@ -164,7 +164,7 @@ public class ArticlesController : Controller
                     TitleBn = "অনলাইন গ্রুমিং চেনার ১০টি পূর্বলক্ষণ ও প্রতিরোধ নির্দেশিকা",
                     TitleEn = "10 Early Warning Signs of Online Grooming and Prevention Guide",
                     Category = "Grooming Prevention",
-                    ContentMarkdown = "অনলাইন প্ল্যাটফর্মে কিশোর ও শিশুদের সাথে বন্ধুত্ব তৈরি করে গোপনীয় তথ্য হাসিল করা এবং পরবর্তীতে ব্ল্যাকমেইল করার প্রক্রিয়াকে গ্রুমিং বলা হয়।\n\n### গ্রুমিং চেনার ১০টি মূল লক্ষণ:\n1. অতিরিক্ত প্রশংসামূলক কথা বলা এবং উপহার পাঠানো।\n2. অভিভাবক বা বন্ধুদের কাছ থেকে চ্যাট লুকানোর জন্য চাপ দেওয়া।\n3. ক্যামেরা অন রাখা বা ব্যক্তিগত ছবি চাওয়ার অন্যায় অনুরোধ।\n\n### আইনি ও টেকনিক্যাল প্রতিরোধ পদক্ষেপ:\n- অবিলম্বে কোনো মন্তব্য ছাড়াই মেসেজের স্ক্রিনশট এবং লিঙ্ক সংরক্ষণ করুন।\n- সিআইডি সাইবার পুলিশ হটলাইন (০১৭৩০০০১৯৯৯) অথবা হেভেনের হটলাইনে যোগাযোগ করুন।",
+                    ContentMarkdown = "অনলাইন প্ল্যাটফর্মে কিশোর ও শিশুদের সাথে বন্ধুত্ব তৈরি করে গোপনীয় তথ্য হাসিল করা এবং পরবর্তীতে ব্ল্যাকমেইল করার প্রক্রিয়াকে গ্রুমিং বলা হয়।\n\n### গ্রুমিং চেনার ১০টি মূল লক্ষণ:\n1. অতিরিক্ত প্রশংসামূলক কথা বলা এবং উপহার পাঠানো।\n2. অভিভাবক বা বন্ধুদের কাছ থেকে চ্যাট লুকানোর জন্য চাপ দেওয়া।\n3. ক্যামেরা অন রাখা বা ব্যক্তিগত ছবি চাওয়ার অন্যায় অনুরোধ।\n\n### আইনি ও টেকনিক্যাল প্রতিরোধ পদক্ষেপ:\n- অবিলম্বে কোনো মন্তব্য ছাড়াই মেসেজের স্ক্রিনশট এবং লিঙ্ক সংরক্ষণ করুন।\n- সিআইডি সাইবার পুলিশ হটলাইন (০১৭৩০০০১৯৯৯) অথবা অভয়ের হটলাইনে যোগাযোগ করুন।",
                     CreatedAt = DateTime.UtcNow.AddDays(-2)
                 },
                 new Article

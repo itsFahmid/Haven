@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Haven.Models;
-using Haven.Services;
+using Obhoy.Models;
+using Obhoy.Services;
 
-namespace Haven.Controllers;
+namespace Obhoy.Controllers;
 
 public class HotlineController : Controller
 {
@@ -87,11 +87,11 @@ public class HotlineController : Controller
     {
         var model = new HotlineViewModel
         {
-            AnonymousSessionId = "HAVEN-ANON-" + Random.Shared.Next(1000, 9999),
+            AnonymousSessionId = "OBHOY-ANON-" + Random.Shared.Next(1000, 9999),
             UserAlias = "Anonymous Ally #" + Random.Shared.Next(100, 999),
             UserAliasBn = "বেনামী বন্ধু #" + Random.Shared.Next(100, 999),
-            EmergencyHotlines = HavenDataStore.GetEmergencyHotlines(),
-            QuickPrompts = HavenDataStore.GetQuickPrompts()
+            EmergencyHotlines = ObhoyDataStore.GetEmergencyHotlines(),
+            QuickPrompts = ObhoyDataStore.GetQuickPrompts()
         };
 
         return View(model);
@@ -158,8 +158,8 @@ public class HotlineController : Controller
         }
         else
         {
-            response.MessageEn = "Thank you for reaching out. HAVEN is your completely anonymous safe sanctuary. How can I best support you right now? You can ask about cyber safety, emotional coping, reporting abuse, or booking a confidential therapist.";
-            response.MessageBn = "আমাদের কাছে লেখার জন্য ধন্যবাদ। হেভেন আপনার ১০০% নিরাপদ ও বেনামী আশ্রয়স্থল। আমি আপনাকে কীভাবে সহায়তা করতে পারি? সাইবার নিরাপত্তা, মানসিক স্বাস্থ্য, নির্যাতন প্রতিকার বা থেরাপিস্ট বুকিং সম্পর্কে যেকোনো প্রশ্ন করতে পারেন।";
+            response.MessageEn = "Thank you for reaching out. Obhoy is your completely anonymous safe sanctuary. How can I best support you right now? You can ask about cyber safety, emotional coping, reporting abuse, or booking a confidential therapist.";
+            response.MessageBn = "আমাদের কাছে লেখার জন্য ধন্যবাদ। অভয় আপনার ১০০% নিরাপদ ও বেনামী আশ্রয়স্থল। আমি আপনাকে কীভাবে সহায়তা করতে পারি? সাইবার নিরাপত্তা, মানসিক স্বাস্থ্য, নির্যাতন প্রতিকার বা থেরাপিস্ট বুকিং সম্পর্কে যেকোনো প্রশ্ন করতে পারেন।";
         }
 
         return Json(response);

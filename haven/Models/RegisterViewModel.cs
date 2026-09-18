@@ -1,18 +1,18 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Haven.Models;
+namespace Obhoy.Models;
 
 public class RegisterViewModel
 {
-    [Required(ErrorMessage = "Full name is required / আপনার পূর্ণ নাম আবশ্যক")]
+    [Required(ErrorMessage = "Full name is required / à¦†à¦ªà¦¨à¦¾à¦° à¦ªà§‚à¦°à§à¦£ à¦¨à¦¾à¦® à¦†à¦¬à¦¶à§à¦¯à¦•")]
     [StringLength(100, MinimumLength = 2, ErrorMessage = "Name must be between 2 and 100 characters")]
-    [Display(Name = "Full Name / পূর্ণ নাম")]
+    [Display(Name = "Full Name / à¦ªà§‚à¦°à§à¦£ à¦¨à¦¾à¦®")]
     public string FullName { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Email address is required / ইমেইল ঠিকানা আবশ্যক")]
-    [EmailAddress(ErrorMessage = "Invalid email address format / সঠিক ইমেইল প্রদান করুন")]
+    [Required(ErrorMessage = "Email address is required / à¦‡à¦®à§‡à¦‡à¦² à¦ à¦¿à¦•à¦¾à¦¨à¦¾ à¦†à¦¬à¦¶à§à¦¯à¦•")]
+    [EmailAddress(ErrorMessage = "Invalid email address format / à¦¸à¦ à¦¿à¦• à¦‡à¦®à§‡à¦‡à¦² à¦ªà§à¦°à¦¦à¦¾à¦¨ à¦•à¦°à§à¦¨")]
     [StringLength(150)]
-    [Display(Name = "Email Address / ইমেইল")]
+    [Display(Name = "Email Address / à¦‡à¦®à§‡à¦‡à¦²")]
     public string Email { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Account Mode selection is required")]
@@ -21,20 +21,20 @@ public class RegisterViewModel
     [Range(10, 120, ErrorMessage = "Please enter a valid age")]
     public int? Age { get; set; }
 
-    [Required(ErrorMessage = "Password is required / পাসওয়ার্ড আবশ্যক")]
-    [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters / পাসওয়ার্ড ন্যূনতম ৬ অক্ষরের হতে হবে")]
+    [Required(ErrorMessage = "Password is required / à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§à¦¡ à¦†à¦¬à¦¶à§à¦¯à¦•")]
+    [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters / à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§à¦¡ à¦¨à§à¦¯à§‚à¦¨à¦¤à¦® à§¬ à¦…à¦•à§à¦·à¦°à§‡à¦° à¦¹à¦¤à§‡ à¦¹à¦¬à§‡")]
     [DataType(DataType.Password)]
-    [Display(Name = "Password / পাসওয়ার্ড")]
+    [Display(Name = "Password / à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§à¦¡")]
     public string Password { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Please confirm your password / পাসওয়ার্ড নিশ্চিত করুন")]
+    [Required(ErrorMessage = "Please confirm your password / à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§ à¦¡ à¦¨à¦¿à¦¶à§ à¦šà¦¿à¦¤ à¦•à¦°à§ à¦¨")]
     [DataType(DataType.Password)]
-    [Compare("Password", ErrorMessage = "Passwords do not match / দুটি পাসওয়ার্ড মিলছে না")]
-    [Display(Name = "Confirm Password / পুনরায় পাসওয়ার্ড")]
+    [Compare("Password", ErrorMessage = "Passwords do not match / à¦¦à§ à¦Ÿà¦¿ à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§ à¦¡ à¦®à¦¿à¦²à¦›à§‡ à¦¨à¦¾")]
+    [Display(Name = "Confirm Password / à¦ªà§ à¦¨à¦°à¦¾à¦¯à¦¼ à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§ à¦¡")]
     public string ConfirmPassword { get; set; } = string.Empty;
 
-    [Range(typeof(bool), "true", "true", ErrorMessage = "You must accept the Haven safety and privacy terms / শর্তাবলীতে সম্মতি প্রদান করুন")]
-    [Display(Name = "I agree to Haven Safe Space and Privacy Terms")]
+    [Range(typeof(bool), "true", "true", ErrorMessage = "You must accept the Obhoy safety and privacy terms / শর্তাবলীতে সম্মতি প্রদান করুন")]
+    [Display(Name = "I agree to Obhoy Safe Space and Privacy Terms")]
     public bool AgreeToTerms { get; set; } = true;
 
     public string? ReturnUrl { get; set; }

@@ -1,4 +1,4 @@
-@model Haven.Models.CreateCourseViewModel
+﻿@model Obhoy.Models.CreateCourseViewModel
 @{
     ViewData["Title"] = "নতুন কোর্স তৈরি করুন | Publish Course";
 }
@@ -149,7 +149,7 @@
                             <!-- Optional Materials Resource Links -->
                             <div>
                                 <label class="block text-[11px] font-bold text-slate-700 mb-1">সহায়ক রিসোর্স লিঙ্ক/ফাইল (Optional Materials Links or File URLs)</label>
-                                <input type="text" name="Modules[@i].OptionalMaterials" value="@Model.Modules[i].OptionalMaterials" placeholder="https://haven.org/resources/guide.pdf" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs" />
+                                <input type="text" name="Modules[@i].OptionalMaterials" value="@Model.Modules[i].OptionalMaterials" placeholder="https://obhoy.org/resources/guide.pdf" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs" />
                             </div>
                         </div>
                     }
@@ -213,7 +213,7 @@
 
                 <div>
                     <label class="block text-[11px] font-bold text-slate-700 mb-1">সহায়ক রিসোর্স লিঙ্ক/ফাইল (Optional Materials Links or File URLs)</label>
-                    <input type="text" name="Modules[${newIndex}].OptionalMaterials" placeholder="https://haven.org/resources/guide.pdf" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs" />
+                    <input type="text" name="Modules[${newIndex}].OptionalMaterials" placeholder="https://obhoy.org/resources/guide.pdf" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs" />
                 </div>
             `;
 
