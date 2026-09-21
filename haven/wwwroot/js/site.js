@@ -1,4 +1,4 @@
-﻿/**
+/**
  * OBHOY Platform - Production Frontend Core Script
  * Child & Adult Safety Education, Mental Health & Emergency Recovery Platform
  * Multi-Language Engine (Bangla / English), Quick Exit Safety, Crisis Escalation & Payment Gateways
@@ -694,6 +694,88 @@
                 }
             });
         }
+
+        // -------------------------------------------------------------
+        // Navbar Active Page Visual Indicator & Instant Feedback Engine
+        // -------------------------------------------------------------
+        const updateNavbarActiveState = function () {
+            const currentPath = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
+            const allNavLinks = document.querySelectorAll('.nav-link-item, .nav-mobile-item');
+
+            allNavLinks.forEach(function (link) {
+                const href = (link.getAttribute('href') || '').toLowerCase().replace(/\/$/, '') || '/';
+                let isMatch = false;
+
+                if (href === '/' && currentPath === '/') {
+                    isMatch = true;
+                } else if (href !== '/' && (currentPath === href || currentPath.startsWith(href + '/'))) {
+                    isMatch = true;
+                }
+
+                if (isMatch) {
+                    link.classList.add('active', 'text-teal-900', 'font-bold');
+                    link.classList.remove('text-slate-600', 'border-transparent');
+                    link.setAttribute('aria-current', 'page');
+                }
+            });
+        };
+
+        // Complete top progress bar animation smoothly on page mount
+        const navBar = document.getElementById('navProgressBar');
+        if (navBar) {
+            navBar.style.width = '100%';
+            navBar.style.opacity = '1';
+            setTimeout(function () {
+                navBar.style.opacity = '0';
+                setTimeout(function () {
+                    navBar.style.width = '0%';
+                }, 300);
+            }, 180);
+        }
+
+        // Sync on DOM ready and history back/forward restoration
+        updateNavbarActiveState();
+        window.addEventListener('pageshow', updateNavbarActiveState);
+
+        // Bind instant visual feedback for navbar items on click
+        const navLinks = document.querySelectorAll('.nav-link-item, .nav-mobile-item');
+        navLinks.forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                if (e.ctrlKey || e.metaKey || e.shiftKey || e.which === 2) return;
+                const href = this.getAttribute('href');
+                if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+
+                const targetPath = (href.split('?')[0] || '').toLowerCase().replace(/\/$/, '') || '/';
+
+                // Instantly update both desktop and mobile items matching target
+                document.querySelectorAll('.nav-link-item, .nav-mobile-item').forEach(function (el) {
+                    const elHref = (el.getAttribute('href') || '').split('?')[0].toLowerCase().replace(/\/$/, '') || '/';
+                    const isTarget = (elHref === targetPath);
+
+                    if (isTarget) {
+                        el.classList.add('active', 'text-teal-900', 'font-bold');
+                        el.classList.remove('text-slate-600', 'border-transparent');
+                        el.setAttribute('aria-current', 'page');
+                    } else {
+                        el.classList.remove('active', 'text-teal-900', 'font-bold', 'bg-teal-50', 'bg-teal-50/90', 'border-teal-200/80', 'shadow-2xs');
+                        el.classList.add('border-transparent');
+                        el.removeAttribute('aria-current');
+                    }
+                });
+
+                // Trigger snappy loading progress bar
+                if (navBar) {
+                    navBar.style.transition = 'width 250ms ease-out, opacity 150ms ease';
+                    navBar.style.opacity = '1';
+                    navBar.style.width = '40%';
+                    setTimeout(function () {
+                        if (navBar.style.opacity === '1') {
+                            navBar.style.width = '85%';
+                        }
+                    }, 100);
+                }
+            });
+        });
     });
 
 })();

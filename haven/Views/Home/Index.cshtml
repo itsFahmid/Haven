@@ -1,4 +1,4 @@
-﻿@model Obhoy.Models.HomeViewModel
+@model Obhoy.Models.HomeViewModel
 @{
     ViewData["Title"] = "হোম | Home";
 }
@@ -12,12 +12,43 @@
             <!-- Hero Left Copy -->
             <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
                 
-                <!-- Safe badge -->
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-100/90 border border-teal-200 text-teal-900 text-xs font-bold">
-                    <span class="w-2 h-2 rounded-full bg-teal-600 animate-pulse" aria-hidden="true"></span>
-                    <span data-bn="বাংলাদেশের প্রথম সম্পূর্ণ এনক্রিপ্টেড যুব সুরক্ষা ও মানসিক স্বাস্থ্য প্ল্যাটফর্ম" data-en="Bangladesh's First 100% Encrypted Youth & Family Safety Sanctuary">
-                        বাংলাদেশের প্রথম সম্পূর্ণ এনক্রিপ্টেড যুব সুরক্ষা ও মানসিক স্বাস্থ্য প্ল্যাটফর্ম
-                    </span>
+                <!-- Safe badge & Theme Song Play Button -->
+                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-100/90 border border-teal-200 text-teal-900 text-xs font-bold shadow-2xs">
+                        <span class="w-2 h-2 rounded-full bg-teal-600 animate-pulse" aria-hidden="true"></span>
+                        <span data-bn="বাংলাদেশের প্রথম সম্পূর্ণ এনক্রিপ্টেড যুব সুরক্ষা ও মানসিক স্বাস্থ্য প্ল্যাটফর্ম" data-en="Bangladesh's First 100% Encrypted Youth & Family Safety Sanctuary">
+                            বাংলাদেশের প্রথম সম্পূর্ণ এনক্রিপ্টেড যুব সুরক্ষা ও মানসিক স্বাস্থ্য প্ল্যাটফর্ম
+                        </span>
+                    </div>
+
+                    <!-- Small Theme Song Play Button -->
+                    <button type="button" 
+                            id="obhoyThemePlayBtn" 
+                            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/95 hover:bg-teal-50 text-teal-900 border border-teal-200/90 hover:border-teal-400 shadow-2xs hover:shadow-xs transition-all duration-200 text-xs font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 group cursor-pointer active:scale-95 select-none"
+                            aria-label="অভয় থিম সং চালান" 
+                            title="OBHOY Theme Song">
+                        <span id="themePlayIconWrap" class="w-5 h-5 rounded-full bg-teal-700 text-white flex items-center justify-center group-hover:scale-105 group-hover:bg-teal-800 transition-all shadow-xs">
+                            <!-- Play SVG -->
+                            <svg id="themePlaySvg" class="w-2.5 h-2.5 ml-0.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            <!-- Pause SVG -->
+                            <svg id="themePauseSvg" class="w-2.5 h-2.5 hidden" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                            </svg>
+                        </span>
+
+                        <!-- Animated Sound Bars -->
+                        <span id="themeSoundBars" class="hidden items-center gap-0.5 h-3" aria-hidden="true">
+                            <span class="w-0.5 bg-teal-600 rounded-full animate-music-bar-1 h-2"></span>
+                            <span class="w-0.5 bg-teal-600 rounded-full animate-music-bar-2 h-3"></span>
+                            <span class="w-0.5 bg-teal-600 rounded-full animate-music-bar-3 h-1.5"></span>
+                            <span class="w-0.5 bg-teal-600 rounded-full animate-music-bar-4 h-2.5"></span>
+                        </span>
+
+                        <span id="themeBtnLabel" data-bn="থিম সং শুনুন" data-en="Play Theme Song">থিম সং শুনুন</span>
+                        <span id="themeTimeDisplay" class="text-[11px] text-teal-700 font-semibold font-mono hidden tabular-nums">0:00</span>
+                    </button>
                 </div>
 
                 <!-- Main Hero Headline -->
@@ -416,3 +447,263 @@
 
     </div>
 </section>
+
+<!-- Dedicated Home Page Audio Element -->
+<audio id="obhoyThemeAudio" preload="metadata">
+    <source src="@Url.Content("~/audio/Obhoy.m4a")" type="audio/mp4">
+    <source src="@Url.Content("~/audio/Obhoy.m4a")" type="audio/x-m4a">
+    <source src="@Url.Content("~/Obhoy.m4a")" type="audio/mp4">
+</audio>
+
+<!-- Floating Mini Theme Controller (Active on Home Page when playing and scrolled) -->
+<div id="floatingThemePlayer" class="fixed bottom-5 left-5 z-40 hidden items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/95 backdrop-blur-md border border-teal-200/90 shadow-xl text-slate-800 transition-all duration-300 transform translate-y-6 opacity-0" role="region" aria-label="Theme Song Controller">
+    <button type="button" id="floatingThemePlayBtn" class="w-9 h-9 rounded-xl bg-teal-700 hover:bg-teal-800 text-white flex items-center justify-center transition-all active:scale-95 shadow-xs" aria-label="Toggle Theme Song Playback">
+        <svg id="floatingPlaySvg" class="w-3.5 h-3.5 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+        </svg>
+        <svg id="floatingPauseSvg" class="w-3.5 h-3.5 hidden" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+        </svg>
+    </button>
+    <div class="flex flex-col min-w-[110px]">
+        <div class="flex items-center gap-1.5">
+            <span class="text-xs font-bold text-teal-900" data-bn="অভয় থিম সং" data-en="OBHOY Theme">অভয় থিম সং</span>
+            <span class="inline-flex items-center gap-0.5 h-2.5" aria-hidden="true">
+                <span class="w-0.5 bg-teal-600 rounded-full animate-music-bar-1 h-1.5"></span>
+                <span class="w-0.5 bg-teal-600 rounded-full animate-music-bar-2 h-2.5"></span>
+                <span class="w-0.5 bg-teal-600 rounded-full animate-music-bar-3 h-2"></span>
+            </span>
+        </div>
+        <div class="flex items-center gap-2 text-[10px] text-slate-500 font-mono">
+            <span id="floatingTimeDisplay">0:00</span>
+            <div class="w-16 h-1 bg-slate-200 rounded-full overflow-hidden">
+                <div id="floatingProgressBar" class="h-full bg-teal-600 rounded-full w-0 transition-all duration-150"></div>
+            </div>
+        </div>
+    </div>
+    <div class="flex items-center gap-1 border-l border-slate-200/80 pl-2">
+        <button type="button" id="floatingMuteBtn" class="p-1.5 text-slate-400 hover:text-teal-700 transition rounded-lg hover:bg-slate-100" title="শব্দ বন্ধ/চালু" aria-label="Mute or Unmute">
+            <svg id="floatingVolUpSvg" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+            <svg id="floatingVolMuteSvg" class="w-4 h-4 hidden text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z M17 14l4-4m0 4l-4-4"/></svg>
+        </button>
+        <button type="button" id="floatingCloseBtn" class="p-1.5 text-slate-400 hover:text-slate-700 transition rounded-lg hover:bg-slate-100" title="লুকিয়ে রাখুন" aria-label="Dismiss Floating Controller">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+(function () {
+    const audio = document.getElementById('obhoyThemeAudio');
+    const playBtn = document.getElementById('obhoyThemePlayBtn');
+    const playSvg = document.getElementById('themePlaySvg');
+    const pauseSvg = document.getElementById('themePauseSvg');
+    const soundBars = document.getElementById('themeSoundBars');
+    const btnLabel = document.getElementById('themeBtnLabel');
+    const timeDisplay = document.getElementById('themeTimeDisplay');
+    const floatingPlayer = document.getElementById('floatingThemePlayer');
+    const floatingPlayBtn = document.getElementById('floatingThemePlayBtn');
+    const floatingPlaySvg = document.getElementById('floatingPlaySvg');
+    const floatingPauseSvg = document.getElementById('floatingPauseSvg');
+    const floatingTimeDisplay = document.getElementById('floatingTimeDisplay');
+    const floatingProgressBar = document.getElementById('floatingProgressBar');
+    const floatingMuteBtn = document.getElementById('floatingMuteBtn');
+    const floatingVolUpSvg = document.getElementById('floatingVolUpSvg');
+    const floatingVolMuteSvg = document.getElementById('floatingVolMuteSvg');
+    const floatingCloseBtn = document.getElementById('floatingCloseBtn');
+
+    if (!audio || !playBtn) return;
+
+    let isPlaying = false;
+    let floatingDismissed = false;
+    let wasPlayingBeforeHidden = false;
+
+    // Set gentle, pleasing initial volume
+    audio.volume = 0.85;
+
+    function formatTime(seconds) {
+        if (isNaN(seconds) || seconds < 0) return "0:00";
+        const m = Math.floor(seconds / 60);
+        const s = Math.floor(seconds % 60);
+        return m + ":" + (s < 10 ? "0" : "") + s;
+    }
+
+    function updateUI(playing) {
+        isPlaying = playing;
+        const currentLang = document.documentElement.lang || 'bn';
+
+        if (playing) {
+            playSvg.classList.add('hidden');
+            pauseSvg.classList.remove('hidden');
+            soundBars.classList.remove('hidden');
+            soundBars.classList.add('inline-flex');
+            playBtn.classList.add('theme-audio-playing');
+            timeDisplay.classList.remove('hidden');
+
+            btnLabel.innerText = currentLang === 'en' ? 'Playing Theme...' : 'বাজছে...';
+
+            if (floatingPlaySvg && floatingPauseSvg) {
+                floatingPlaySvg.classList.add('hidden');
+                floatingPauseSvg.classList.remove('hidden');
+            }
+            checkFloatingVisibility();
+        } else {
+            playSvg.classList.remove('hidden');
+            pauseSvg.classList.add('hidden');
+            soundBars.classList.add('hidden');
+            soundBars.classList.remove('inline-flex');
+            playBtn.classList.remove('theme-audio-playing');
+
+            btnLabel.innerText = currentLang === 'en' ? 'Play Theme Song' : 'থিম সং শুনুন';
+
+            if (floatingPlaySvg && floatingPauseSvg) {
+                floatingPlaySvg.classList.remove('hidden');
+                floatingPauseSvg.classList.add('hidden');
+            }
+            checkFloatingVisibility();
+        }
+    }
+
+    function checkFloatingVisibility() {
+        if (!floatingPlayer) return;
+        if (floatingDismissed) {
+            floatingPlayer.classList.add('hidden');
+            return;
+        }
+
+        // Display floating mini player if currently playing and scrolled past hero
+        if (isPlaying && window.scrollY > 220) {
+            floatingPlayer.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                floatingPlayer.classList.remove('translate-y-6', 'opacity-0');
+                floatingPlayer.classList.add('translate-y-0', 'opacity-100');
+            });
+        } else if (!isPlaying || window.scrollY <= 140) {
+            floatingPlayer.classList.remove('translate-y-0', 'opacity-100');
+            floatingPlayer.classList.add('translate-y-6', 'opacity-0');
+            setTimeout(() => {
+                if (!isPlaying || window.scrollY <= 140) {
+                    floatingPlayer.classList.add('hidden');
+                }
+            }, 250);
+        }
+    }
+
+    async function togglePlay() {
+        try {
+            if (audio.paused) {
+                await audio.play();
+                updateUI(true);
+            } else {
+                audio.pause();
+                updateUI(false);
+            }
+        } catch (err) {
+            console.warn('Playback notice:', err);
+            updateUI(false);
+        }
+    }
+
+    function stopAudio() {
+        try {
+            audio.pause();
+            audio.currentTime = 0;
+            updateUI(false);
+        } catch (e) {}
+    }
+
+    playBtn.addEventListener('click', togglePlay);
+
+    if (floatingPlayBtn) {
+        floatingPlayBtn.addEventListener('click', togglePlay);
+    }
+
+    if (floatingMuteBtn) {
+        floatingMuteBtn.addEventListener('click', function () {
+            audio.muted = !audio.muted;
+            if (audio.muted) {
+                floatingVolUpSvg.classList.add('hidden');
+                floatingVolMuteSvg.classList.remove('hidden');
+            } else {
+                floatingVolUpSvg.classList.remove('hidden');
+                floatingVolMuteSvg.classList.add('hidden');
+            }
+        });
+    }
+
+    if (floatingCloseBtn) {
+        floatingCloseBtn.addEventListener('click', function () {
+            floatingDismissed = true;
+            floatingPlayer.classList.remove('translate-y-0', 'opacity-100');
+            floatingPlayer.classList.add('translate-y-6', 'opacity-0');
+            setTimeout(() => floatingPlayer.classList.add('hidden'), 250);
+        });
+    }
+
+    audio.addEventListener('timeupdate', function () {
+        const cur = audio.currentTime;
+        const dur = audio.duration;
+        const formatted = formatTime(cur);
+        timeDisplay.textContent = formatted;
+        if (floatingTimeDisplay) floatingTimeDisplay.textContent = formatted;
+        if (floatingProgressBar && dur > 0) {
+            const pct = Math.min(100, Math.max(0, (cur / dur) * 100));
+            floatingProgressBar.style.width = pct + '%';
+        }
+    });
+
+    audio.addEventListener('ended', function () {
+        updateUI(false);
+        audio.currentTime = 0;
+        timeDisplay.textContent = "0:00";
+        if (floatingTimeDisplay) floatingTimeDisplay.textContent = "0:00";
+        if (floatingProgressBar) floatingProgressBar.style.width = '0%';
+    });
+
+    window.addEventListener('scroll', checkFloatingVisibility, { passive: true });
+
+    // Strict Requirement: The song will only play when user is on the home page!
+    // 1. Intercept navigation links
+    document.querySelectorAll('a[href]').forEach(function (link) {
+        link.addEventListener('click', function () {
+            const href = link.getAttribute('href');
+            if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
+                stopAudio();
+            }
+        });
+    });
+
+    // 2. Unload / Page Hide listeners
+    window.addEventListener('beforeunload', stopAudio);
+    window.addEventListener('pagehide', stopAudio);
+
+    // 3. Visibility changes: pause when switching away from the tab, resume on return
+    document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+            if (isPlaying) {
+                wasPlayingBeforeHidden = true;
+                audio.pause();
+                updateUI(false);
+            }
+        } else {
+            if (wasPlayingBeforeHidden) {
+                wasPlayingBeforeHidden = false;
+                audio.play().then(() => updateUI(true)).catch(() => {});
+            }
+        }
+    });
+
+    // 4. Sync with bilingual language switcher
+    window.addEventListener('obhoyLanguageChanged', function (e) {
+        const lang = e.detail?.lang || 'bn';
+        if (isPlaying) {
+            btnLabel.innerText = lang === 'en' ? 'Playing Theme...' : 'বাজছে...';
+        } else {
+            btnLabel.innerText = lang === 'en' ? 'Play Theme Song' : 'থিম সং শুনুন';
+        }
+    });
+})();
+</script>
+}
+
