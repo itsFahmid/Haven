@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Obhoy.Models;
 using Obhoy.Services;
 
@@ -6,11 +6,36 @@ namespace Obhoy.Controllers;
 
 public class DonateController : Controller
 {
+    private readonly Obhoy.Data.ObhoyDbContext _db;
+
+    public DonateController(Obhoy.Data.ObhoyDbContext db)
+    {
+        _db = db;
+    }
+
     public IActionResult Index()
     {
+        var realDonors = _db.Payments
+            .Where(p => p.Status == PaymentStatus.Completed && p.OptInHallOfFame && !string.IsNullOrEmpty(p.DisplayName))
+            .OrderByDescending(p => p.VerifiedAt ?? p.CreatedAt)
+            .Take(6)
+            .Select(p => new HallOfFameDonor
+            {
+                Name = p.DisplayName ?? "Kind Supporter",
+                AmountBDT = (int)p.Amount,
+                BadgeEn = p.Amount >= 5000 ? "Guardian Angel" : "Youth Protector",
+                BadgeBn = p.Amount >= 5000 ? "অভিভাবক দূত" : "তরুণদের রক্ষক",
+                TimeAgoEn = "Recently",
+                TimeAgoBn = "সম্প্রতি",
+                City = p.City ?? "Bangladesh"
+            })
+            .ToList();
+
+        var displayDonors = realDonors.Any() ? realDonors : ObhoyDataStore.GetRecentDonors();
+
         var model = new PaymentViewModel
         {
-            RecentDonors = ObhoyDataStore.GetRecentDonors()
+            RecentDonors = displayDonors
         };
         return View(model);
     }

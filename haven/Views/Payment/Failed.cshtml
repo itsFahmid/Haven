@@ -1,0 +1,56 @@
+@model Obhoy.Models.PaymentReceiptViewModel
+@{
+    ViewData["Title"] = "পেমেন্ট সম্পন্ন হয়নি | Payment Incomplete";
+}
+
+<div class="max-w-xl mx-auto px-4 sm:px-6 py-16 text-center space-y-6">
+    
+    <div class="w-16 h-16 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center text-3xl mx-auto border border-rose-200">
+        <svg class="w-8 h-8 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+    </div>
+
+    <div class="space-y-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-xs font-bold uppercase tracking-wider">
+            <span>লেনদেন অসম্পূর্ণ</span>
+        </span>
+        <h1 class="text-2xl sm:text-3xl font-black text-slate-900" data-bn="পেমেন্টটি সম্পন্ন করা সম্ভব হয়নি" data-en="Payment Could Not Be Completed">
+            পেমেন্টটি সম্পন্ন করা সম্ভব হয়নি
+        </h1>
+        <p class="text-slate-600 text-xs sm:text-sm max-w-md mx-auto" data-bn="@(Model.MessageBn ?? "ব্যাংক নেটওয়ার্কের ধীরগতি বা ওটিপি সময়োত্তীর্ণ হওয়ার কারণে লেনদেনটি বাতিল হতে পারে। আপনার অ্যাকাউন্ট থেকে কোনো টাকা কাটা হয়নি।")" data-en="@(Model.MessageEn ?? "Your transaction could not be verified by the banking gateway. No funds were charged.")">
+            @(Model.MessageBn ?? "ব্যাংক নেটওয়ার্কের ধীরগতি বা ওটিপি সময়োত্তীর্ণ হওয়ার কারণে লেনদেনটি বাতিল হতে পারে। আপনার অ্যাকাউন্ট থেকে কোনো টাকা কাটা হয়নি।")
+        </p>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.TransactionId))
+    {
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs font-mono text-slate-600 max-w-sm mx-auto">
+            <span class="text-slate-400">ট্রানজ্যাকশন রেফারেন্স:</span> <span class="font-bold text-slate-800">@Model.TransactionId</span>
+        </div>
+    }
+
+    <!-- Troubleshooting Tips -->
+    <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-4 text-left text-xs text-amber-900 space-y-1.5 max-w-md mx-auto">
+        <div class="font-bold text-amber-950 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>পরামর্শ / Troubleshooting Tips:</span>
+        </div>
+        <ul class="list-disc list-inside space-y-1 text-slate-700 text-[11px] pl-1">
+            <li>বিকাশ, নগদ বা রকেটের পর্যাপ্ত ব্যালেন্স ও পিন সঠিক আছে কি না নিশ্চিত করুন।</li>
+            <li>ইন্টারনেট ব্যাংকিং বা কার্ডে অনলাইন ই-কমার্স লেনদেন চালু আছে কি না পরীক্ষা করুন।</li>
+            <li>যেকোনো প্রয়োজনে আমাদের জরুরি সাপোর্ট সেলে যোগাযোগ করুন।</li>
+        </ul>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+        <a asp-controller="Donate" asp-action="Index" class="w-full sm:w-auto px-6 py-3 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl shadow-sm transition">
+            পুনরায় অনুদান চেষ্টা করুন ➔
+        </a>
+        <a asp-controller="Home" asp-action="Index" class="w-full sm:w-auto px-6 py-3 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition">
+            মূল পাতায় ফিরে যান
+        </a>
+    </div>
+
+</div>

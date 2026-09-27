@@ -1,4 +1,4 @@
-﻿@model Obhoy.Models.PatientBookingsViewModel
+@model Obhoy.Models.PatientBookingsViewModel
 @{
     ViewData["Title"] = "আমার থেরাপি বুকিং সমূহ | My Bookings";
 }
@@ -145,6 +145,24 @@
                             {
                                 <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-blue-100 text-blue-900 border border-blue-300">
                                     <span>সম্পন্ন (Completed)</span>
+                                </span>
+                            }
+
+                            <!-- Payment Button / Status Badge -->
+                            @if (booking.FeeBDT > 0 && !booking.IsPaid && status != Obhoy.Models.BookingStatus.Cancelled && status != Obhoy.Models.BookingStatus.Rejected)
+                            {
+                                <form asp-controller="Payment" asp-action="InitiateBookingPayment" method="post" class="inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="bookingId" value="@booking.Id" />
+                                    <button type="submit" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5 border border-amber-400">
+                                        <span>💳 ফি পরিশোধ করুন (৳@booking.FeeBDT.ToString("N0"))</span>
+                                    </button>
+                                </form>
+                            }
+                            else if (booking.IsPaid)
+                            {
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                                    <span>✓ ফি পরিশোধিত (Paid)</span>
                                 </span>
                             }
 

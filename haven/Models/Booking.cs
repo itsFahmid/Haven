@@ -54,6 +54,10 @@ public class Booking
 
     public bool IsFeeSubsidized { get; set; } = false;
 
+    public bool IsPaid { get; set; } = false;
+
+    public int? PaymentId { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime? UpdatedAt { get; set; }

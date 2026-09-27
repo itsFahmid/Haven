@@ -537,32 +537,65 @@
             const optHallOfFame = document.getElementById('optHallOfFameCheck')?.checked ?? false;
             const phone = document.getElementById('donorPhoneInput')?.value || '';
 
-            const btn = document.getElementById('confirmPaymentBtn');
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = `<span class="inline-block animate-spin mr-2">⏳</span> Processing...`;
+            if (!amount || amount < 10) {
+                const isBn = window.ObhoyLang && window.ObhoyLang.current === 'bn';
+                alert(isBn 
+                    ? 'অনুগ্রহ করে কমপক্ষে ১০ টাকার পরিমাণ উল্লেখ করুন।' 
+                    : 'Please enter an amount of at least ৳10.');
+                return;
             }
 
-            // Simulate Secure Verification & Receipt Generation
-            setTimeout(() => {
+            const btn = document.getElementById('confirmPaymentBtn');
+            const originalHtml = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                const isBn = window.ObhoyLang && window.ObhoyLang.current === 'bn';
+                btn.innerHTML = isBn
+                    ? `<span class="inline-block animate-spin mr-2">⏳</span> SSLCommerz গেটওয়েতে সংযোগ হচ্ছে...`
+                    : `<span class="inline-block animate-spin mr-2">⏳</span> Connecting to SSLCommerz...`;
+            }
+
+            fetch('/Payment/InitiateDonation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    amountBDT: amount,
+                    gateway: 'sslcommerz',
+                    donorName: donorName,
+                    mobileNumber: phone,
+                    isAnonymous: isAnon,
+                    optIntoHallOfFame: optHallOfFame,
+                    purpose: 'Micro-Donation'
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.gatewayUrl) {
+                    window.location.href = data.gatewayUrl;
+                } else {
+                    const isBn = window.ObhoyLang && window.ObhoyLang.current === 'bn';
+                    alert(data.message || (isBn
+                        ? 'পেমেন্ট গেটওয়েতে সংযোগ করা যায়নি।'
+                        : 'Failed to connect to payment gateway.'));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = originalHtml;
+                    }
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                const isBn = window.ObhoyLang && window.ObhoyLang.current === 'bn';
+                alert(isBn
+                    ? 'নেটওয়ার্ক সংযোগ ত্রুটি। অনুগ্রহ করে পুনরায় চেষ্টা করুন।'
+                    : 'Network error. Please try again.');
                 if (btn) {
                     btn.disabled = false;
-                    btn.innerHTML = `Complete Contribution`;
+                    btn.innerHTML = originalHtml;
                 }
-
-                // Show Success View in Modal
-                const step1 = document.getElementById('paymentStep1');
-                const stepSuccess = document.getElementById('paymentStepSuccess');
-                if (step1 && stepSuccess) {
-                    step1.classList.add('hidden');
-                    stepSuccess.classList.remove('hidden');
-
-                    const trxId = 'TXN' + Math.floor(10000000 + Math.random() * 90000000);
-                    document.getElementById('receiptTrxId').innerText = trxId;
-                    document.getElementById('receiptAmount').innerText = '৳' + amount;
-                    document.getElementById('receiptGateway').innerText = this.selectedGateway.toUpperCase();
-                }
-            }, 1200);
+            });
         },
 
         resetPaymentModal: function () {

@@ -151,9 +151,15 @@ public class ObhoyDbContext : DbContext
         modelBuilder.Entity<Payment>(entity =>
         {
             entity.HasKey(p => p.Id);
+            entity.HasIndex(p => p.TransactionId);
+            entity.HasIndex(p => p.Status);
             entity.HasOne(p => p.User)
                   .WithMany()
                   .HasForeignKey(p => p.UserId)
+                  .OnDelete(DeleteBehavior.SetNull);
+            entity.HasOne(p => p.Booking)
+                  .WithMany()
+                  .HasForeignKey(p => p.BookingId)
                   .OnDelete(DeleteBehavior.SetNull);
         });
 

@@ -1,0 +1,149 @@
+@model Obhoy.Models.PaymentReceiptViewModel
+@{
+    ViewData["Title"] = "নিরাপদ পেমেন্ট রসিদ | Verified Payment Receipt";
+}
+
+<div class="max-w-2xl mx-auto px-4 sm:px-6 py-12 space-y-8">
+    
+    <!-- Printable Receipt Container -->
+    <div id="printableReceiptCard" class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden print:border-none print:shadow-none">
+        
+        <!-- Header Banner -->
+        <div class="bg-gradient-to-r from-teal-800 to-teal-700 p-8 text-white text-center relative">
+            <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md text-emerald-300 flex items-center justify-center text-3xl mx-auto mb-4 border border-white/20 shadow-inner">
+                <svg class="w-8 h-8 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 text-xs font-bold uppercase tracking-wider mb-2">
+                <span>✓ SSLCommerz ব্যাংক ভেরিফাইড</span>
+            </span>
+            <h1 class="text-2xl sm:text-3xl font-black tracking-tight" data-bn="লেনদেন সফলভাবে সম্পন্ন হয়েছে!" data-en="Payment Verified & Completed!">
+                লেনদেন সফলভাবে সম্পন্ন হয়েছে!
+            </h1>
+            <p class="text-teal-100 text-xs sm:text-sm mt-2 max-w-md mx-auto" data-bn="@Model.MessageBn" data-en="@Model.MessageEn">
+                @Model.MessageBn
+            </p>
+        </div>
+
+        <!-- Receipt Metadata -->
+        <div class="p-6 sm:p-8 space-y-6">
+            
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div>
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block" data-bn="রসিদ ইস্যুকারী" data-en="Issued By">রসিদ ইস্যুকারী</span>
+                    <span class="text-base font-black text-slate-900">OBHOY • অভয় ফাউন্ডেশন</span>
+                </div>
+                <div class="text-right">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block" data-bn="তারিখ ও সময়" data-en="Date & Time">তারিখ ও সময়</span>
+                    <span class="text-xs font-semibold text-slate-700">@((Model.VerifiedAt ?? Model.CreatedAt).ToString("dd MMM yyyy, hh:mm tt"))</span>
+                </div>
+            </div>
+
+            <!-- Amount Highlight -->
+            <div class="bg-teal-50/70 border border-teal-100 rounded-2xl p-5 flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-teal-900 uppercase tracking-wider block" data-bn="পরিশোধিত মোট পরিমাণ" data-en="Total Amount Paid">
+                        পরিশোধিত মোট পরিমাণ
+                    </span>
+                    <span class="text-xs text-teal-700 font-medium" data-bn="উদ্দেশ্য: @Model.Purpose" data-en="Purpose: @Model.Purpose">
+                        উদ্দেশ্য: @Model.Purpose
+                    </span>
+                </div>
+                <div class="text-3xl font-black text-teal-800">
+                    ৳@Model.Amount.ToString("N0")
+                </div>
+            </div>
+
+            <!-- Transaction Line Items -->
+            <div class="space-y-3 text-xs">
+                
+                <div class="flex justify-between py-2 border-b border-slate-100">
+                    <span class="text-slate-500 font-medium" data-bn="মার্চেন্ট ট্রানজ্যাকশন আইডি:" data-en="Merchant Transaction ID:">মার্চেন্ট ট্রানজ্যাকশন আইডি:</span>
+                    <span class="font-mono font-bold text-slate-900 select-all">@Model.TransactionId</span>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.BankTransactionId))
+                {
+                    <div class="flex justify-between py-2 border-b border-slate-100">
+                        <span class="text-slate-500 font-medium" data-bn="গেটওয়ে / ব্যাংক রেফারেন্স:" data-en="Gateway / Bank Ref:">গেটওয়ে / ব্যাংক রেফারেন্স:</span>
+                        <span class="font-mono font-bold text-slate-700">@Model.BankTransactionId</span>
+                    </div>
+                }
+
+                <div class="flex justify-between py-2 border-b border-slate-100">
+                    <span class="text-slate-500 font-medium" data-bn="পেমেন্ট মাধ্যম:" data-en="Payment Channel:">পেমেন্ট মাধ্যম:</span>
+                    <span class="font-bold text-slate-800">@Model.CardType</span>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.BookingReference))
+                {
+                    <div class="flex justify-between py-2 border-b border-slate-100">
+                        <span class="text-slate-500 font-medium" data-bn="থেরাপি বুকিং রেফারেন্স:" data-en="Therapy Booking Ref:">থেরাপি বুকিং রেফারেন্স:</span>
+                        <span class="font-bold text-teal-800 font-mono">@Model.BookingReference</span>
+                    </div>
+                }
+
+                @if (!Model.IsAnonymous && !string.IsNullOrEmpty(Model.DisplayName))
+                {
+                    <div class="flex justify-between py-2 border-b border-slate-100">
+                        <span class="text-slate-500 font-medium" data-bn="দাতা / গ্রাহকের নাম:" data-en="Donor / Patient Name:">দাতা / গ্রাহকের নাম:</span>
+                        <span class="font-bold text-slate-800">@Model.DisplayName</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="flex justify-between py-2 border-b border-slate-100">
+                        <span class="text-slate-500 font-medium" data-bn="পরিচয় সুরক্ষা:" data-en="Privacy Shield:">পরিচয় সুরক্ষা:</span>
+                        <span class="inline-flex items-center gap-1 font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded">
+                            <span>🛡️ সম্পূর্ণ গোপনীয় ও বেনামী (Zero Identity Retention)</span>
+                        </span>
+                    </div>
+                }
+
+                <div class="flex justify-between py-2">
+                    <span class="text-slate-500 font-medium" data-bn="লেনদেনের স্থিতি:" data-en="Payment Status:">লেনদেনের স্থিতি:</span>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                        <span data-bn="সফল ও অনুমোদিত (Valid)" data-en="Verified & Settled">সফল ও অনুমোদিত (Valid)</span>
+                    </span>
+                </div>
+
+            </div>
+
+            <!-- Safe Notice -->
+            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-[11px] text-slate-500 space-y-1">
+                <div class="font-bold text-slate-700" data-bn="🔐 নিরাপত্তা ও অডিট নিশ্চয়তা:" data-en="🔐 Security & Audit Guarantee:">
+                    🔐 নিরাপত্তা ও অডিট নিশ্চয়তা:
+                </div>
+                <div data-bn="এই লেনদেনটি SSLCommerz এর 256-Bit SSL এনক্রিপ্টেড পেমেন্ট গেটওয়ের মাধ্যমে যাচাইকৃত হয়েছে। অভয় প্ল্যাটফর্মে কোনো কার্ড নম্বর, পিন বা গোপনীয় ব্যাংকিং ক্রেডেনশিয়াল সংরক্ষণ করা হয় না।" data-en="This transaction was verified via SSLCommerz 256-Bit SSL encrypted gateway. Zero card numbers or banking PINs are ever retained on Obhoy.">
+                    এই লেনদেনটি SSLCommerz এর 256-Bit SSL এনক্রিপ্টেড পেমেন্ট গেটওয়ের মাধ্যমে যাচাইকৃত হয়েছে। অভয় প্ল্যাটফর্মে কোনো কার্ড নম্বর, পিন বা গোপনীয় ব্যাংকিং ক্রেডেনশিয়াল সংরক্ষণ করা হয় না।
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 print:hidden">
+        <button onclick="window.print()" class="w-full sm:w-auto px-6 py-3 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 shadow-sm transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
+            <span data-bn="রসিদ প্রিন্ট করুন" data-en="Print Receipt">রসিদ প্রিন্ট করুন</span>
+        </button>
+
+        @if (!string.IsNullOrEmpty(Model.BookingReference))
+        {
+            <a asp-controller="Booking" asp-action="MyBookings" class="w-full sm:w-auto px-6 py-3 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center justify-center gap-2">
+                <span data-bn="আমার বুকিং ড্যাশবোর্ডে ফিরুন ➔" data-en="Back to My Bookings ➔">আমার বুকিং ড্যাশবোর্ডে ফিরুন ➔</span>
+            </a>
+        }
+        else
+        {
+            <a asp-controller="Donate" asp-action="Index" class="w-full sm:w-auto px-6 py-3 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center justify-center gap-2">
+                <span data-bn="অনুদানের পাতায় ফিরুন ➔" data-en="Back to Donation Hub ➔">অনুদানের পাতায় ফিরুন ➔</span>
+            </a>
+        }
+    </div>
+
+</div>

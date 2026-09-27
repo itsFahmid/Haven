@@ -73,6 +73,10 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 // Register Gemini AI Services
 builder.Services.AddHttpClient<ICrisisAiService, GeminiAiService>();
 
+// Register SSLCommerz Payment Gateway
+builder.Services.Configure<SSLCommerzSettings>(builder.Configuration.GetSection(SSLCommerzSettings.SectionName));
+builder.Services.AddHttpClient<ISSLCommerzService, SSLCommerzService>();
+
 // Configure Cookie Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -126,6 +130,33 @@ using (var scope = app.Services.CreateScope())
                     try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN HospitalAffiliation TEXT NULL;"); } catch { }
                     try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Rating REAL NOT NULL DEFAULT 4.95;"); } catch { }
                     try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ReviewCount INTEGER NOT NULL DEFAULT 120;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Bookings ADD COLUMN IsPaid INTEGER NOT NULL DEFAULT 0;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Bookings ADD COLUMN PaymentId INTEGER NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN BookingId INTEGER NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN Currency TEXT NOT NULL DEFAULT 'BDT';"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN Status INTEGER NOT NULL DEFAULT 0;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN ValidationId TEXT NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN BankTransactionId TEXT NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN CardType TEXT NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN Purpose TEXT NOT NULL DEFAULT 'Micro-Donation';"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN IsAnonymous INTEGER NOT NULL DEFAULT 1;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN FailureReason TEXT NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN VerifiedAt TEXT NULL;"); } catch { }
+                }
+                else if (db.Database.IsNpgsql())
+                {
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Bookings"" ADD COLUMN IF NOT EXISTS ""IsPaid"" boolean DEFAULT FALSE;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Bookings"" ADD COLUMN IF NOT EXISTS ""PaymentId"" integer NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""BookingId"" integer NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""Currency"" character varying(10) DEFAULT 'BDT';"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""Status"" integer DEFAULT 0;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""ValidationId"" character varying(100) NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""BankTransactionId"" character varying(100) NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""CardType"" character varying(50) NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""Purpose"" character varying(50) DEFAULT 'Micro-Donation';"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""IsAnonymous"" boolean DEFAULT TRUE;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""FailureReason"" character varying(500) NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""VerifiedAt"" timestamp with time zone NULL;"); } catch { }
                 }
             }
         }
@@ -145,6 +176,33 @@ using (var scope = app.Services.CreateScope())
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN HospitalAffiliation TEXT NULL;"); } catch { }
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN Rating REAL NOT NULL DEFAULT 4.95;"); } catch { }
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ReviewCount INTEGER NOT NULL DEFAULT 120;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Bookings ADD COLUMN IsPaid INTEGER NOT NULL DEFAULT 0;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Bookings ADD COLUMN PaymentId INTEGER NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN BookingId INTEGER NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN Currency TEXT NOT NULL DEFAULT 'BDT';"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN Status INTEGER NOT NULL DEFAULT 0;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN ValidationId TEXT NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN BankTransactionId TEXT NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN CardType TEXT NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN Purpose TEXT NOT NULL DEFAULT 'Micro-Donation';"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN IsAnonymous INTEGER NOT NULL DEFAULT 1;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN FailureReason TEXT NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN VerifiedAt TEXT NULL;"); } catch { }
+            }
+            else if (db.Database.IsNpgsql())
+            {
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Bookings"" ADD COLUMN IF NOT EXISTS ""IsPaid"" boolean DEFAULT FALSE;"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Bookings"" ADD COLUMN IF NOT EXISTS ""PaymentId"" integer NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""BookingId"" integer NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""Currency"" character varying(10) DEFAULT 'BDT';"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""Status"" integer DEFAULT 0;"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""ValidationId"" character varying(100) NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""BankTransactionId"" character varying(100) NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""CardType"" character varying(50) NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""Purpose"" character varying(50) DEFAULT 'Micro-Donation';"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""IsAnonymous"" boolean DEFAULT TRUE;"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""FailureReason"" character varying(500) NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""VerifiedAt"" timestamp with time zone NULL;"); } catch { }
             }
         }
 
