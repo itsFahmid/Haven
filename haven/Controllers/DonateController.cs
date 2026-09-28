@@ -33,6 +33,28 @@ public class DonateController : Controller
             .Where(p => p.ApprovalStatus == "Approved" || p.IsBmdcVerified)
             .CountAsync();
 
+        // Query only admin-approved Hall of Fame donors
+        var approvedPayments = await _db.Payments
+            .Where(p => p.Status == PaymentStatus.Completed && p.OptInHallOfFame && p.IsApprovedForHallOfFame)
+            .OrderByDescending(p => p.Amount)
+            .ThenByDescending(p => p.CreatedAt)
+            .Take(24)
+            .ToListAsync();
+
+        var hallOfFameList = approvedPayments.Select(p => new HallOfFameDonor
+        {
+            Id = p.Id,
+            Name = !string.IsNullOrWhiteSpace(p.DisplayName) ? p.DisplayName : "Kind Guardian",
+            AmountBDT = p.Amount,
+            BadgeEn = p.Amount >= 1200 ? "Sanctuary Pillar" : (p.Amount >= 600 ? "Clinical Subsidy Guardian" : (p.Amount >= 300 ? "Cyber Safety Champion" : "Care Sustainer")),
+            BadgeBn = p.Amount >= 1200 ? "অভয় স্তম্ভ" : (p.Amount >= 600 ? "ক্লিনিক্যাল অভিভাবক" : (p.Amount >= 300 ? "সুরক্ষা পৃষ্ঠপোষক" : "সেবা সহযোগী")),
+            TimeAgoEn = FormatTimeAgo(p.CreatedAt, false),
+            TimeAgoBn = FormatTimeAgo(p.CreatedAt, true),
+            City = !string.IsNullOrWhiteSpace(p.City) ? p.City : "Bangladesh",
+            Message = p.RecognitionMessage,
+            CreatedAt = p.CreatedAt
+        }).ToList();
+
         var model = new PaymentViewModel
         {
             Purpose = "Clinical Care Subsidy & Infrastructure",
@@ -42,7 +64,8 @@ public class DonateController : Controller
             SubsidizedSessionsCount = 64 + (int)(realDonationsSum / 600m) + subsidizedCareRequests,
             HelplineUptimeHours = 720,
             ProtectedYouthCount = 28490 + (realCompletedCount * 12),
-            VerifiedCliniciansCount = verifiedClinicians > 0 ? verifiedClinicians : 38
+            VerifiedCliniciansCount = verifiedClinicians > 0 ? verifiedClinicians : 38,
+            HallOfFameDonors = hallOfFameList
         };
 
         return View(model);
@@ -68,6 +91,15 @@ public class DonateController : Controller
             messageBn = $"আপনার ৳{submission.AmountBDT} সহযোগিতার জন্য আন্তরিক ধন্যবাদ। এই অবদান অভয়ের সার্বক্ষণিক গোপনীয় হটলাইন অবকাঠামো ও প্রান্তিক তরুণদের ক্লিনিক্যাল থেরাপি ভর্তুকিতে ব্যয় হবে।"
         });
     }
+
+    private static string FormatTimeAgo(DateTime dt, bool isBn)
+    {
+        var span = DateTime.UtcNow - dt;
+        if (span.TotalDays > 30) return isBn ? $"{Math.Max(1, (int)(span.TotalDays / 30))} মাস আগে" : $"{Math.Max(1, (int)(span.TotalDays / 30))}mo ago";
+        if (span.TotalDays >= 1) return isBn ? $"{(int)span.TotalDays} দিন আগে" : $"{(int)span.TotalDays}d ago";
+        if (span.TotalHours >= 1) return isBn ? $"{(int)span.TotalHours} ঘণ্টা আগে" : $"{(int)span.TotalHours}h ago";
+        return isBn ? "আজ" : "Today";
+    }
 }
 
 public class DonationSubmission
@@ -78,5 +110,7 @@ public class DonationSubmission
     public string? MobileNumber { get; set; }
     public bool IsAnonymous { get; set; } = true;
     public bool OptIntoHallOfFame { get; set; } = false;
+    public string? RecognitionMessage { get; set; }
+    public string? City { get; set; }
     public string Purpose { get; set; } = "Clinical Care Subsidy & Infrastructure";
 }

@@ -77,6 +77,36 @@
                 </div>
             </div>
 
+            <!-- Optional Hall of Fame Recognition -->
+            <div class="bg-amber-50/50 border border-amber-200/70 rounded-2xl p-3.5 space-y-2.5 text-xs">
+                <label class="flex items-start gap-2.5 cursor-pointer select-none">
+                    <input type="checkbox" id="modalOptInHallOfFame" onchange="document.getElementById('modalHallOfFameFields').classList.toggle('hidden', !this.checked)" class="mt-0.5 w-4 h-4 rounded text-amber-600 focus:ring-amber-500 border-amber-300" />
+                    <div>
+                        <span class="font-bold text-amber-950 text-xs block" data-bn="অভয় অভিভাবক হল অফ ফেমে আমার নাম যুক্ত করুন (ঐচ্ছিক)" data-en="Add my name to Sanctuary Hall of Fame (Optional)">
+                            অভয় অভিভাবক হল অফ ফেমে আমার নাম যুক্ত করুন (ঐচ্ছিক)
+                        </span>
+                        <span class="text-[11px] text-amber-800/80 block mt-0.5" data-bn="টিক দিলে অনুদান সম্পন্ন হওয়ার পর অ্যাডমিন পর্যালোচনায় আপনার নাম প্রকাশিত হবে" data-en="Check to display your name publicly after admin verification">
+                            টিক দিলে অনুদান সম্পন্ন হওয়ার পর অ্যাডমিন পর্যালোচনায় আপনার নাম প্রকাশিত হবে
+                        </span>
+                    </div>
+                </label>
+
+                <div id="modalHallOfFameFields" class="hidden space-y-2.5 pt-2 border-t border-amber-200/50">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-amber-900 mb-1" data-bn="প্রদর্শন নাম / ছদ্মনাম" data-en="Public Display Name / Alias">
+                            প্রদর্শন নাম / ছদ্মনাম
+                        </label>
+                        <input type="text" id="modalDisplayName" placeholder="e.g. Farhan Chowdhury / শুভাকাঙ্ক্ষী" class="w-full px-3 py-2 bg-white border border-amber-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500" />
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-amber-900 mb-1" data-bn="উৎসাহমূলক বার্তা (ঐচ্ছিক)" data-en="Encouraging Note (Optional)">
+                            উৎসাহমূলক বার্তা (ঐচ্ছিক)
+                        </label>
+                        <input type="text" id="modalRecognitionMessage" placeholder="e.g. পাশে আছি সব সময় / Supporting young lives" class="w-full px-3 py-2 bg-white border border-amber-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500" />
+                    </div>
+                </div>
+            </div>
+
             <!-- Zero-Tracking Privacy Shield Guarantee -->
             <div class="bg-teal-50/60 border border-teal-100 rounded-2xl p-3.5 space-y-1 text-xs">
                 <div class="font-bold text-teal-900 flex items-center gap-1.5">

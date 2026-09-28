@@ -54,7 +54,10 @@ public class PaymentController : Controller
             Purpose = "Micro-Donation",
             IsAnonymous = isAnonymous,
             OptInHallOfFame = submission.OptIntoHallOfFame,
+            IsApprovedForHallOfFame = false,
             DisplayName = donorName,
+            RecognitionMessage = !string.IsNullOrWhiteSpace(submission.RecognitionMessage) ? submission.RecognitionMessage.Trim() : null,
+            City = !string.IsNullOrWhiteSpace(submission.City) ? submission.City.Trim() : null,
             CreatedAt = DateTime.UtcNow
         };
 

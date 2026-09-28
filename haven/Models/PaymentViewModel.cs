@@ -8,6 +8,7 @@ public class PaymentViewModel
     public string SelectedGateway { get; set; } = "sslcommerz"; // "sslcommerz", "bkash", "nagad", "rocket"
     public bool OptIntoHallOfFame { get; set; } = false;
     public string? DonorDisplayName { get; set; }
+    public string? RecognitionMessage { get; set; }
     public string? MobileNumber { get; set; }
     public string? TransactionId { get; set; }
     public bool IsAnonymous { get; set; } = true;
@@ -19,16 +20,19 @@ public class PaymentViewModel
     public int ProtectedYouthCount { get; set; } = 28490;
     public int VerifiedCliniciansCount { get; set; } = 38;
 
-    public List<HallOfFameDonor> RecentDonors { get; set; } = new();
+    public List<HallOfFameDonor> HallOfFameDonors { get; set; } = new();
 }
 
 public class HallOfFameDonor
 {
+    public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
-    public int AmountBDT { get; set; }
+    public decimal AmountBDT { get; set; }
     public string BadgeEn { get; set; } = "Care Sustainer";
     public string BadgeBn { get; set; } = "সেবা সহযোগী";
     public string TimeAgoEn { get; set; } = "Recently";
     public string TimeAgoBn { get; set; } = "সম্প্রতি";
     public string City { get; set; } = "Bangladesh";
+    public string? Message { get; set; }
+    public DateTime CreatedAt { get; set; }
 }

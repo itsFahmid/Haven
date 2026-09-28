@@ -142,6 +142,11 @@ using (var scope = app.Services.CreateScope())
                     try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN IsAnonymous INTEGER NOT NULL DEFAULT 1;"); } catch { }
                     try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN FailureReason TEXT NULL;"); } catch { }
                     try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN VerifiedAt TEXT NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN OptInHallOfFame INTEGER NOT NULL DEFAULT 0;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN IsApprovedForHallOfFame INTEGER NOT NULL DEFAULT 0;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN DisplayName TEXT NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN City TEXT NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN RecognitionMessage TEXT NULL;"); } catch { }
                 }
                 else if (db.Database.IsNpgsql())
                 {
@@ -157,6 +162,11 @@ using (var scope = app.Services.CreateScope())
                     try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""IsAnonymous"" boolean DEFAULT TRUE;"); } catch { }
                     try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""FailureReason"" character varying(500) NULL;"); } catch { }
                     try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""VerifiedAt"" timestamp with time zone NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""OptInHallOfFame"" boolean DEFAULT FALSE;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""IsApprovedForHallOfFame"" boolean DEFAULT FALSE;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""DisplayName"" character varying(100) NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""City"" character varying(100) NULL;"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""RecognitionMessage"" character varying(500) NULL;"); } catch { }
                 }
             }
         }
@@ -188,6 +198,11 @@ using (var scope = app.Services.CreateScope())
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN IsAnonymous INTEGER NOT NULL DEFAULT 1;"); } catch { }
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN FailureReason TEXT NULL;"); } catch { }
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN VerifiedAt TEXT NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN OptInHallOfFame INTEGER NOT NULL DEFAULT 0;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN IsApprovedForHallOfFame INTEGER NOT NULL DEFAULT 0;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN DisplayName TEXT NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN City TEXT NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw("ALTER TABLE Payments ADD COLUMN RecognitionMessage TEXT NULL;"); } catch { }
             }
             else if (db.Database.IsNpgsql())
             {
@@ -203,6 +218,11 @@ using (var scope = app.Services.CreateScope())
                 try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""IsAnonymous"" boolean DEFAULT TRUE;"); } catch { }
                 try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""FailureReason"" character varying(500) NULL;"); } catch { }
                 try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""VerifiedAt"" timestamp with time zone NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""OptInHallOfFame"" boolean DEFAULT FALSE;"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""IsApprovedForHallOfFame"" boolean DEFAULT FALSE;"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""DisplayName"" character varying(100) NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""City"" character varying(100) NULL;"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"ALTER TABLE ""Payments"" ADD COLUMN IF NOT EXISTS ""RecognitionMessage"" character varying(500) NULL;"); } catch { }
             }
         }
 

@@ -208,6 +208,36 @@
                     </div>
                 </div>
 
+                <!-- Optional Hall of Fame Recognition -->
+                <div class="bg-amber-50/60 border border-amber-200/80 rounded-2xl p-4 space-y-3 text-xs">
+                    <label class="flex items-start gap-2.5 cursor-pointer select-none">
+                        <input type="checkbox" id="optHallOfFameCheck" onchange="document.getElementById('donateHallOfFameFields').classList.toggle('hidden', !this.checked)" class="mt-0.5 w-4 h-4 rounded text-amber-600 focus:ring-amber-500 border-amber-300" />
+                        <div>
+                            <span class="font-bold text-amber-950 text-xs block" data-bn="অভয় অভিভাবক হল অফ ফেমে আমার নাম যুক্ত করুন" data-en="Add my name to Sanctuary Hall of Fame">
+                                অভয় অভিভাবক হল অফ ফেমে আমার নাম যুক্ত করুন
+                            </span>
+                            <span class="text-[11px] text-amber-800/80 block mt-0.5" data-bn="অ্যাডমিন পর্যালোচনার পর আপনার অবদান নিচের পাবলিক তালিকায় স্থান পাবে" data-en="Your contribution will be recognized publicly following admin review">
+                                অ্যাডমিন পর্যালোচনার পর আপনার অবদান নিচের পাবলিক তালিকায় স্থান পাবে
+                            </span>
+                        </div>
+                    </label>
+
+                    <div id="donateHallOfFameFields" class="hidden space-y-2.5 pt-2 border-t border-amber-200/60">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-amber-900 mb-1" data-bn="প্রদর্শন নাম / ছদ্মনাম" data-en="Public Display Name / Alias">
+                                প্রদর্শন নাম / ছদ্মনাম
+                            </label>
+                            <input type="text" id="donorDisplayNameInput" placeholder="e.g. Farhan Chowdhury / শুভাকাঙ্ক্ষী" class="w-full px-3 py-2 bg-white border border-amber-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500" />
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-amber-900 mb-1" data-bn="উৎসাহমূলক বার্তা (ঐচ্ছিক)" data-en="Encouraging Note (Optional)">
+                                উৎসাহমূলক বার্তা (ঐচ্ছিক)
+                            </label>
+                            <input type="text" id="donorRecognitionMessageInput" placeholder="e.g. পাশে আছি সব সময় / Supporting young lives" class="w-full px-3 py-2 bg-white border border-amber-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500" />
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Direct SSLCommerz Initiation Button -->
                 <div class="space-y-3 pt-2">
                     <button type="button" id="confirmPaymentBtn" onclick="ObhoyPayment.processPayment()" class="w-full py-4 px-6 bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm rounded-2xl shadow-sm transition flex items-center justify-center gap-2">
@@ -233,5 +263,93 @@
         </div>
 
     </div>
+
+    <!-- Section: Sanctuary Guardians Hall of Fame -->
+    <section class="space-y-8 pt-8 border-t border-slate-200/80" id="hallOfFame">
+        <div class="max-w-3xl mx-auto text-center space-y-3">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200">
+                <svg class="w-3.5 h-3.5 text-amber-600" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M10 2a1 1 0 01.78.375l2.25 2.875 3.633.48a1 1 0 01.554 1.705l-2.65 2.583.626 3.619a1 1 0 01-1.451 1.054L10 13.19l-3.242 1.496a1 1 0 01-1.451-1.054l.626-3.62-2.65-2.582a1 1 0 01.554-1.705l3.633-.48 2.25-2.875A1 1 0 0110 2z" clip-rule="evenodd" />
+                </svg>
+                <span data-bn="স্বীকৃত অভিভাবকবৃন্দ" data-en="Recognized Sanctuary Guardians">স্বীকৃত অভিভাবকবৃন্দ</span>
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight" data-bn="অভয় অভিভাবক হল অফ ফেম" data-en="Sanctuary Guardians Hall of Fame">
+                অভয় অভিভাবক হল অফ ফেম
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto leading-relaxed" data-bn="যেসব সহৃদয় দাতা নিজেদের নাম প্রকাশ করে বাংলাদেশের তরুণদের মানসিক স্বাস্থ্য ও সাইবার সুরক্ষায় পাশে দাঁড়িয়েছেন। সকল নাম অ্যাডমিন দ্বারা যাচাই ও অনুমোদিত।" data-en="Honoring community members who chose to stand with Bangladesh youth by publicly sponsoring mental healthcare and crisis infrastructure. All listings are verified and approved by sanctuary administrators.">
+                যেসব সহৃদয় দাতা নিজেদের নাম প্রকাশ করে বাংলাদেশের তরুণদের মানসিক স্বাস্থ্য ও সাইবার সুরক্ষায় পাশে দাঁড়িয়েছেন। সকল নাম অ্যাডমিন দ্বারা যাচাই ও অনুমোদিত।
+            </p>
+        </div>
+
+        @if (!Model.HallOfFameDonors.Any())
+        {
+            <div class="bg-white rounded-3xl p-10 sm:p-12 border border-slate-200/90 shadow-2xs text-center max-w-2xl mx-auto space-y-4">
+                <div class="w-16 h-16 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center mx-auto border border-amber-200/80">
+                    <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 21l-8.228-8.228a6 6 0 118.486-8.486L12 4.028l.742-.742a6 6 0 118.486 8.486L12 21z" />
+                    </svg>
+                </div>
+                <div class="space-y-1.5">
+                    <h3 class="text-base font-black text-slate-900" data-bn="প্রথম পাবলিক অভিভাবক হিসেবে যুক্ত হোন" data-en="Be Among Our First Recognized Guardians">
+                        প্রথম পাবলিক অভিভাবক হিসেবে যুক্ত হোন
+                    </h3>
+                    <p class="text-xs text-slate-500 max-w-md mx-auto leading-relaxed" data-bn="অনুদানের সময় 'হল অফ ফেমে নাম যুক্ত করুন' নির্বাচন করলে অ্যাডমিন পর্যালোচনার পর আপনার নাম ও অনুপ্রেরণামূলক বার্তা এখানে সম্মানের সাথে প্রদর্শিত হবে।" data-en="Select 'Add my name to Hall of Fame' during contribution. Following administrator safety review, your name and uplifting message will be recognized here.">
+                        অনুদানের সময় 'হল অফ ফেমে নাম যুক্ত করুন' নির্বাচন করলে অ্যাডমিন পর্যালোচনার পর আপনার নাম ও অনুপ্রেরণামূলক বার্তা এখানে সম্মানের সাথে প্রদর্শিত হবে।
+                    </p>
+                </div>
+                <button type="button" onclick="document.getElementById('customAmountInput').focus()" class="px-5 py-2.5 bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold text-xs rounded-xl border border-teal-200 transition">
+                    <span data-bn="উপরে অনুদান ফর্মে যান ➔" data-en="Go to Contribution Form ➔">উপরে অনুদান ফর্মে যান ➔</span>
+                </button>
+            </div>
+        }
+        else
+        {
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                @foreach (var donor in Model.HallOfFameDonors)
+                {
+                    <div class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-2xs hover:shadow-md transition-all duration-200 flex flex-col justify-between space-y-4">
+                        <div class="space-y-3">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-teal-800 via-teal-700 to-amber-700 text-white font-black text-sm flex items-center justify-center shadow-xs">
+                                        @(string.IsNullOrWhiteSpace(donor.Name) ? "G" : donor.Name.Substring(0, 1).ToUpper())
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-black text-slate-900 truncate">@donor.Name</h4>
+                                        <span class="text-[11px] text-slate-400">@donor.City • @donor.TimeAgoBn</span>
+                                    </div>
+                                </div>
+                                <span class="px-2.5 py-1 bg-amber-50 text-amber-900 border border-amber-200 rounded-xl text-xs font-black shrink-0">
+                                    ৳@donor.AmountBDT.ToString("N0")
+                                </span>
+                            </div>
+
+                            <div class="flex items-center gap-1.5">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200" data-bn="@donor.BadgeBn" data-en="@donor.BadgeEn">
+                                    <svg class="w-2.5 h-2.5 text-teal-600" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                                    <span>@donor.BadgeBn</span>
+                                </span>
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(donor.Message))
+                            {
+                                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-600 italic leading-relaxed">
+                                    "@donor.Message"
+                                </div>
+                            }
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+                            <span>BMDC থেরাপি সেবা ভর্তুকি</span>
+                            <span class="text-emerald-700 font-bold flex items-center gap-1">
+                                <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                ভেরিফায়েড
+                            </span>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </section>
 
 </div>

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Obhoy.Data;
@@ -49,6 +49,19 @@ public class AdminController : Controller
             .Take(10)
             .ToListAsync();
 
+        var pendingHallOfFame = await _db.Payments
+            .Include(p => p.User)
+            .Where(p => p.Status == PaymentStatus.Completed && p.OptInHallOfFame && !p.IsApprovedForHallOfFame)
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync();
+
+        var approvedHallOfFame = await _db.Payments
+            .Include(p => p.User)
+            .Where(p => p.Status == PaymentStatus.Completed && p.OptInHallOfFame && p.IsApprovedForHallOfFame)
+            .OrderByDescending(p => p.CreatedAt)
+            .Take(25)
+            .ToListAsync();
+
         var model = new AdminDashboardViewModel
         {
             PendingTherapists = pendingTherapists,
@@ -56,6 +69,8 @@ public class AdminController : Controller
             ReportedPosts = reportedPosts,
             RecentCrisisAlerts = recentAlerts,
             AuditLogs = auditLogs,
+            PendingHallOfFameDonors = pendingHallOfFame,
+            ApprovedHallOfFameDonors = approvedHallOfFame,
             TotalUsersCount = await _db.Users.CountAsync(),
             TotalCoursesCount = await _db.Courses.CountAsync(),
             TotalAppointmentsCount = await _db.Appointments.CountAsync(),
@@ -239,6 +254,58 @@ public class AdminController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    // UC-26: Approve Donor for Hall of Fame
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ApproveHallOfFame(int id)
+    {
+        var payment = await _db.Payments.FindAsync(id);
+        if (payment != null)
+        {
+            payment.IsApprovedForHallOfFame = true;
+
+            int adminId = GetCurrentUserId();
+            _db.AdminAuditLogs.Add(new AdminAuditLog
+            {
+                AdminUserId = adminId,
+                ActionType = "ApproveHallOfFame",
+                TargetResource = $"Payment:{id}",
+                ActionDetails = $"Approved donor '{payment.DisplayName}' (৳{payment.Amount}) for public Hall of Fame listing.",
+                ExecutedAt = DateTime.UtcNow
+            });
+
+            await _db.SaveChangesAsync();
+            TempData["SuccessMessage"] = $"দাতা '{payment.DisplayName}' (৳{payment.Amount}) সফলভাবে হল অফ ফেমে প্রদর্শনের জন্য অনুমোদিত হয়েছে! / Donor approved for Hall of Fame!";
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
+    // UC-26: Remove/Reject Donor from Hall of Fame
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RejectHallOfFame(int id)
+    {
+        var payment = await _db.Payments.FindAsync(id);
+        if (payment != null)
+        {
+            payment.IsApprovedForHallOfFame = false;
+
+            int adminId = GetCurrentUserId();
+            _db.AdminAuditLogs.Add(new AdminAuditLog
+            {
+                AdminUserId = adminId,
+                ActionType = "RejectHallOfFame",
+                TargetResource = $"Payment:{id}",
+                ActionDetails = $"Revoked/Rejected Hall of Fame listing for Payment #{id} ('{payment.DisplayName}').",
+                ExecutedAt = DateTime.UtcNow
+            });
+
+            await _db.SaveChangesAsync();
+            TempData["InfoMessage"] = $"দাতা '{payment.DisplayName}' এর হল অফ ফেম অনুমোদন বাতিল করা হয়েছে। / Donor removed from Hall of Fame.";
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
     private int GetCurrentUserId()
     {
         var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -253,6 +320,8 @@ public class AdminDashboardViewModel
     public List<CommunityPost> ReportedPosts { get; set; } = new();
     public List<CrisisAlert> RecentCrisisAlerts { get; set; } = new();
     public List<AdminAuditLog> AuditLogs { get; set; } = new();
+    public List<Payment> PendingHallOfFameDonors { get; set; } = new();
+    public List<Payment> ApprovedHallOfFameDonors { get; set; } = new();
     public int TotalUsersCount { get; set; }
     public int TotalCoursesCount { get; set; }
     public int TotalAppointmentsCount { get; set; }

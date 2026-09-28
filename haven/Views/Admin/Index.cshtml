@@ -1,4 +1,4 @@
-﻿@model Obhoy.Controllers.AdminDashboardViewModel
+@model Obhoy.Controllers.AdminDashboardViewModel
 @{
     ViewData["Title"] = "এডমিন ও প্ল্যাটফর্ম সিস্টেম কন্ট্রোল | Admin Operations";
 }
@@ -31,6 +31,10 @@
             <div class="bg-slate-800 px-4 py-2.5 rounded-2xl border border-slate-700">
                 <div class="text-lg font-black text-sky-400">@Model.PendingTherapists.Count</div>
                 <div class="text-[10px] text-slate-400">পেন্ডিং লাইসেন্স</div>
+            </div>
+            <div class="bg-slate-800 px-4 py-2.5 rounded-2xl border border-slate-700">
+                <div class="text-lg font-black text-emerald-400">@Model.PendingHallOfFameDonors.Count</div>
+                <div class="text-[10px] text-slate-400">হল অফ ফেম পেন্ডিং</div>
             </div>
         </div>
     </div>
@@ -223,7 +227,139 @@
         }
     </div>
 
-    <!-- Section 4: Audit Trail Log -->
+    <!-- Section 4: Sanctuary Hall of Fame Moderation -->
+    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-8">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+                <h3 class="text-base font-bold text-slate-900" data-bn="হল অফ ফেম অনুদান অনুমোদন ও মডারেশন" data-en="Sanctuary Hall of Fame Moderation">
+                    হল অফ ফেম অনুদান অনুমোদন ও মডারেশন
+                </h3>
+                <p class="text-xs text-slate-500">
+                    যেসব দাতা অনুদানের সময় নিজেদের নাম ও শুভেচ্ছা বার্তা হল অফ ফেমে যুক্ত করার আবেদন করেছেন, তাদের যাচাই করে অনুমোদন বা বাতিল করুন।
+                </p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold @(Model.PendingHallOfFameDonors.Any() ? "bg-amber-100 text-amber-900" : "bg-slate-100 text-slate-600")">
+                @Model.PendingHallOfFameDonors.Count Pending Approvals
+            </span>
+        </div>
+
+        <!-- Subsection 4A: Pending Approvals -->
+        <div class="space-y-4">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                <h4 class="text-xs font-black uppercase tracking-wider text-slate-700">পেন্ডিং আবেদন সমূহ / Awaiting Review</h4>
+            </div>
+
+            @if (!Model.PendingHallOfFameDonors.Any())
+            {
+                <div class="text-center py-6 text-xs text-slate-500 bg-slate-50 rounded-2xl border border-slate-100">
+                    বর্তমানে কোনো পেন্ডিং আবেদন নেই। সকল অনুদানকারী তালিকাভুক্ত বা প্রক্রিয়াজাত।
+                </div>
+            }
+            else
+            {
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @foreach (var donor in Model.PendingHallOfFameDonors)
+                    {
+                        <div class="p-5 rounded-2xl bg-amber-50/40 border border-amber-200/80 space-y-3 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="flex items-start justify-between gap-3">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-9 h-9 rounded-xl bg-amber-600 text-white font-black text-xs flex items-center justify-center shadow-xs">
+                                            @(string.IsNullOrWhiteSpace(donor.DisplayName) ? "G" : donor.DisplayName.Substring(0, 1).ToUpper())
+                                        </div>
+                                        <div>
+                                            <h5 class="text-xs font-black text-slate-900">@(donor.DisplayName ?? "Anonymous Supporter")</h5>
+                                            <span class="text-[10px] text-slate-500">@(donor.City ?? "Bangladesh") • @donor.CreatedAt.ToString("MMM dd, yyyy - HH:mm")</span>
+                                        </div>
+                                    </div>
+                                    <span class="px-2.5 py-1 bg-amber-100 text-amber-900 text-xs font-black rounded-lg border border-amber-200">
+                                        ৳@donor.Amount.ToString("N0")
+                                    </span>
+                                </div>
+
+                                @if (!string.IsNullOrWhiteSpace(donor.RecognitionMessage))
+                                {
+                                    <div class="p-3 bg-white/90 rounded-xl border border-amber-100 text-xs text-slate-700 italic">
+                                        "@donor.RecognitionMessage"
+                                    </div>
+                                }
+
+                                <div class="text-[10px] text-slate-500 font-mono">
+                                    TranId: @donor.TransactionId • Gateway: @donor.Gateway
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2 pt-2 border-t border-amber-200/60">
+                                <form asp-action="ApproveHallOfFame" method="post" class="flex-1">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@donor.Id" />
+                                    <button type="submit" class="w-full py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1.5">
+                                        <span>অনুমোদন করুন (Approve)</span> ✓
+                                    </button>
+                                </form>
+                                <form asp-action="RejectHallOfFame" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@donor.Id" />
+                                    <button type="submit" class="px-3.5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs rounded-xl transition">
+                                        বাতিল (Dismiss)
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- Subsection 4B: Active / Approved Guardians -->
+        <div class="space-y-4 pt-4 border-t border-slate-100">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <h4 class="text-xs font-black uppercase tracking-wider text-slate-700">অনুমোদিত হল অফ ফেম দাতা / Public Guardians (@Model.ApprovedHallOfFameDonors.Count)</h4>
+                </div>
+                <span class="text-[11px] text-slate-400">সর্বোচ্চ ২৫ জন প্রদর্শিত</span>
+            </div>
+
+            @if (!Model.ApprovedHallOfFameDonors.Any())
+            {
+                <div class="text-center py-6 text-xs text-slate-400 bg-slate-50 rounded-2xl border border-slate-100">
+                    এখনও কোনো দাতা পাবলিক হল অফ ফেমে প্রদর্শনের জন্য অনুমোদিত হননি।
+                </div>
+            }
+            else
+            {
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    @foreach (var donor in Model.ApprovedHallOfFameDonors)
+                    {
+                        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/90 flex flex-col justify-between gap-2">
+                            <div>
+                                <div class="flex items-center justify-between">
+                                    <h5 class="text-xs font-black text-slate-900 truncate">@(donor.DisplayName ?? "Anonymous")</h5>
+                                    <span class="text-xs font-black text-teal-800">৳@donor.Amount.ToString("N0")</span>
+                                </div>
+                                <span class="text-[10px] text-slate-400">@donor.CreatedAt.ToString("MMM dd, yyyy")</span>
+                                @if (!string.IsNullOrWhiteSpace(donor.RecognitionMessage))
+                                {
+                                    <p class="text-[11px] text-slate-600 italic line-clamp-1 mt-1">"@donor.RecognitionMessage"</p>
+                                }
+                            </div>
+                            <form asp-action="RejectHallOfFame" method="post" class="pt-2 border-t border-slate-200/60">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@donor.Id" />
+                                <button type="submit" class="w-full py-1 text-[11px] text-rose-700 hover:text-rose-900 hover:bg-rose-50 font-semibold rounded-lg transition">
+                                    লুকান / অনুমোদন প্রত্যাহার (Revoke)
+                                </button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Section 5: Audit Trail Log -->
     <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
         <h3 class="text-base font-bold text-slate-900">অ্যাডমিন ক্রিয়াকলাপ অডিট ট্রেইল (Security Audit Log)</h3>
         <div class="overflow-x-auto">

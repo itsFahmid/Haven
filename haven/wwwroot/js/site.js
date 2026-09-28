@@ -529,9 +529,24 @@
         processPayment: function () {
             const customInput = document.getElementById('customAmountInput');
             const amount = customInput ? parseInt(customInput.value) || this.selectedAmount : this.selectedAmount;
-            const isAnon = document.getElementById('payAnonymousCheck')?.checked ?? true;
-            const donorName = document.getElementById('donorNameInput')?.value || '';
-            const optHallOfFame = document.getElementById('optHallOfFameCheck')?.checked ?? false;
+            
+            // Check opt-in from either modal or donate page
+            const optHallOfFame = document.getElementById('optHallOfFameCheck')?.checked 
+                               || document.getElementById('modalOptInHallOfFame')?.checked 
+                               || false;
+            
+            const isAnon = optHallOfFame ? false : (document.getElementById('payAnonymousCheck')?.checked ?? true);
+            
+            const donorName = document.getElementById('donorDisplayNameInput')?.value 
+                           || document.getElementById('modalDisplayName')?.value 
+                           || document.getElementById('donorNameInput')?.value 
+                           || '';
+                           
+            const recMessage = document.getElementById('donorRecognitionMessageInput')?.value 
+                            || document.getElementById('modalRecognitionMessage')?.value 
+                            || '';
+                            
+            const city = document.getElementById('donorCityInput')?.value || '';
             const phone = document.getElementById('donorPhoneInput')?.value || '';
 
             if (!amount || amount < 10) {
@@ -561,6 +576,8 @@
                     amountBDT: amount,
                     gateway: 'sslcommerz',
                     donorName: donorName,
+                    recognitionMessage: recMessage,
+                    city: city,
                     mobileNumber: phone,
                     isAnonymous: isAnon,
                     optIntoHallOfFame: optHallOfFame,

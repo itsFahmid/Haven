@@ -59,11 +59,16 @@ public class Payment
 
     public bool OptInHallOfFame { get; set; } = false;
 
+    public bool IsApprovedForHallOfFame { get; set; } = false;
+
     [MaxLength(100)]
     public string? DisplayName { get; set; }
 
     [MaxLength(100)]
     public string? City { get; set; }
+
+    [MaxLength(500)]
+    public string? RecognitionMessage { get; set; }
 
     [MaxLength(500)]
     public string? FailureReason { get; set; }
