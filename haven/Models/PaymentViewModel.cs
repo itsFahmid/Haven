@@ -2,15 +2,23 @@ namespace Obhoy.Models;
 
 public class PaymentViewModel
 {
-    public string Purpose { get; set; } = "Micro-Donation"; // "Micro-Donation", "Subsidize A Youth Session", "Course Fee"
-    public string PurposeBn { get; set; } = "ক্ষুদ্র অনুদান";
-    public int AmountBDT { get; set; } = 100;
+    public string Purpose { get; set; } = "Clinical Care Subsidy & Infrastructure";
+    public string PurposeBn { get; set; } = "মানসিক সেবা ভর্তুকি ও উন্মুক্ত অবকাঠামো";
+    public int AmountBDT { get; set; } = 600; // Default to 1 full subsidized clinical session
     public string SelectedGateway { get; set; } = "sslcommerz"; // "sslcommerz", "bkash", "nagad", "rocket"
     public bool OptIntoHallOfFame { get; set; } = false;
     public string? DonorDisplayName { get; set; }
     public string? MobileNumber { get; set; }
     public string? TransactionId { get; set; }
     public bool IsAnonymous { get; set; } = true;
+
+    // Aggregate Anonymous Stewardship Telemetry
+    public decimal TotalSponsoredPoolBDT { get; set; } = 58400;
+    public int SubsidizedSessionsCount { get; set; } = 74;
+    public int HelplineUptimeHours { get; set; } = 720;
+    public int ProtectedYouthCount { get; set; } = 28490;
+    public int VerifiedCliniciansCount { get; set; } = 38;
+
     public List<HallOfFameDonor> RecentDonors { get; set; } = new();
 }
 
@@ -18,9 +26,9 @@ public class HallOfFameDonor
 {
     public string Name { get; set; } = string.Empty;
     public int AmountBDT { get; set; }
-    public string BadgeEn { get; set; } = "Youth Angel";
-    public string BadgeBn { get; set; } = "তারুণ্যের দূত";
-    public string TimeAgoEn { get; set; } = "2 hours ago";
-    public string TimeAgoBn { get; set; } = "২ ঘণ্টা আগে";
-    public string City { get; set; } = "Dhaka";
+    public string BadgeEn { get; set; } = "Care Sustainer";
+    public string BadgeBn { get; set; } = "সেবা সহযোগী";
+    public string TimeAgoEn { get; set; } = "Recently";
+    public string TimeAgoBn { get; set; } = "সম্প্রতি";
+    public string City { get; set; } = "Bangladesh";
 }

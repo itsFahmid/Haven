@@ -1,83 +1,237 @@
-﻿@model Obhoy.Models.PaymentViewModel
+@model Obhoy.Models.PaymentViewModel
 @{
-    ViewData["Title"] = "মাইক্রো-অনুদান ও হল অফ ফেম | Donate & Hall of Fame";
+    ViewData["Title"] = "টেকসই তহবিল ও মানসিক স্বাস্থ্যসেবা ভর্তুকি | Sanctuary Stewardship & Care Fund";
 }
 
-<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-16">
     
-    <div class="text-center max-w-2xl mx-auto space-y-3">
-        <span class="px-3 py-1 bg-amber-100 text-amber-900 rounded-full text-xs font-bold uppercase tracking-wider">
-            Safe Youth Community Fund
-        </span>
-        <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight" data-bn="তারুণ্যের পাশে দাঁড়ান: ক্ষুদ্র অনুদান তহবিল" data-en="Support Vulnerable Youth: Micro-Donation Fund">
-            তারুণ্যের পাশে দাঁড়ান: ক্ষুদ্র অনুদান তহবিল
+    <!-- Hero / Purpose Section -->
+    <header class="max-w-3xl mx-auto text-center space-y-4">
+        <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-[1.2]" data-bn="উন্মুক্ত ও গোপনীয় ডিজিটাল নিরাপত্তা সবার জন্য বজায় রাখা" data-en="Sustaining Free, Encrypted Mental Health & Safety for Bangladesh">
+            উন্মুক্ত ও গোপনীয় ডিজিটাল নিরাপত্তা সবার জন্য বজায় রাখা
         </h1>
-        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed" data-bn="আপনার ৳৫০ বা ৳১০০ অনুদানে পরিচালিত হয় বাংলাদেশের সংকটগ্রস্ত তরুণদের জন্য চব্বিশ ঘণ্টার ফ্রি এআই হটলাইন ও সাইবার আইনি সুরক্ষা সেল।" data-en="Every ৳50 or ৳100 keeps OBHOY completely free, encrypted, and accessible for young people dealing with cyber harassment and crisis.">
-            আপনার ৳৫০ বা ৳১০০ অনুদানে পরিচালিত হয় বাংলাদেশের সংকটগ্রস্ত তরুণদের জন্য চব্বিশ ঘণ্টার ফ্রি এআই হটলাইন ও সাইবার আইনি সুরক্ষা সেল।
+        <p class="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto" data-bn="অভয় কোনো বাণিজ্যিক বা অনুদান-নির্ভর এনজিও সংস্থা নয়। এটি একটি উন্মুক্ত, জিরো-ট্র্যাকিং ডিজিটাল সংকট প্রতিরোধ প্রযুক্তি। আপনার স্বেচ্ছাসেবী সহযোগিতা সার্ভার হোস্টিং, এআই হটলাইন কম্পিউট এবং অস্বচ্ছল তরুণদের ভেরিফায়েড থেরাপিস্টদের ফি ভর্তুকি দিতে ব্যবহৃত হয়।" data-en="OBHOY is not a commercial enterprise or traditional charity. It is a zero-tracking digital safety sanctuary. Community stewardship directly funds cloud uptime, AI crisis triage compute, and clinician subsidies for youth who cannot afford private therapy.">
+            অভয় কোনো বাণিজ্যিক বা অনুদান-নির্ভর এনজিও সংস্থা নয়। এটি একটি উন্মুক্ত, জিরো-ট্র্যাকিং ডিজিটাল সংকট প্রতিরোধ প্রযুক্তি। আপনার স্বেচ্ছাসেবী সহযোগিতা সার্ভার হোস্টিং, এআই হটলাইন কম্পিউট এবং অস্বচ্ছল তরুণদের ভেরিফায়েড থেরাপিস্টদের ফি ভর্তুকি দিতে ব্যবহৃত হয়।
         </p>
-    </div>
+    </header>
 
-    <!-- Quick Donation Launch Card -->
-    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm text-center space-y-6 max-w-xl mx-auto">
-        <div class="w-16 h-16 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center mx-auto border border-teal-100">
-            <svg class="w-8 h-8 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-            </svg>
+    <!-- Anonymous Aggregate Telemetry (No Names, No Rankings) -->
+    <section aria-label="Community Care Telemetry" class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-2xs text-center space-y-1 transition hover:-translate-y-1 duration-200">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block" data-bn="মোট যত্ন তহবিল" data-en="Community Care Pool">
+                মোট যত্ন তহবিল
+            </span>
+            <div class="text-2xl sm:text-3xl font-black text-teal-800">
+                ৳@Model.TotalSponsoredPoolBDT.ToString("N0")
+            </div>
+            <span class="text-xs text-slate-400 block" data-bn="সম্পূর্ণ স্বচ্ছ তহবিল" data-en="Directly Allocated">সম্পূর্ণ স্বচ্ছ তহবিল</span>
         </div>
 
-        <div>
-            <h3 class="text-xl font-bold text-slate-900" data-bn="তাৎক্ষণিক অনুদান প্রদান করুন" data-en="Make an Instant Contribution">
-                তাৎক্ষণিক অনুদান প্রদান করুন
-            </h3>
-            <p class="text-xs text-slate-500 mt-1" data-bn="বিকাশ, নগদ, রকেট বা যেকোনো ব্যাংক কার্ডের মাধ্যমে" data-en="Via bKash, Nagad, Rocket, or Any Card">
-                বিকাশ, নগদ, রকেট বা যেকোনো ব্যাংক কার্ডের মাধ্যমে
-            </p>
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-2xs text-center space-y-1 transition hover:-translate-y-1 duration-200">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block" data-bn="ভর্তুকিপ্রাপ্ত সেশন" data-en="Subsidized Sessions">
+                ভর্তুকিপ্রাপ্ত সেশন
+            </span>
+            <div class="text-2xl sm:text-3xl font-black text-teal-800">
+                @Model.SubsidizedSessionsCount টি
+            </div>
+            <span class="text-xs text-slate-400 block" data-bn="BMDC ভেরিফায়েড থেরাপি" data-en="Verified Clinical Care">BMDC ভেরিফায়েড থেরাপি</span>
         </div>
 
-        <button onclick="openModal('paymentModal')" class="w-full py-4 bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm rounded-2xl shadow-sm transition" data-bn="অনুদানের পপআপ খুলুন ➔" data-en="Open Donation Checkout ➔">
-            অনুদানের পপআপ খুলুন ➔
-        </button>
-    </div>
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-2xs text-center space-y-1 transition hover:-translate-y-1 duration-200">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block" data-bn="সার্বক্ষণিক হটলাইন আপটাইম" data-en="Helpline Availability">
+                সার্বক্ষণিক হটলাইন আপটাইম
+            </span>
+            <div class="text-2xl sm:text-3xl font-black text-teal-800">
+                ২৪/৭
+            </div>
+            <span class="text-xs text-slate-400 block" data-bn="জরুরি সংকট এআই ও রুট" data-en="AI Triage & 1098 Routing">জরুরি সংকট এআই ও রুট</span>
+        </div>
 
-    <!-- Hall of Fame Full Listing -->
-    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
-        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-2xs text-center space-y-1 transition hover:-translate-y-1 duration-200">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block" data-bn="আর্থিক গোপনীয়তা" data-en="Financial Privacy">
+                আর্থিক গোপনীয়তা
+            </span>
+            <div class="text-2xl sm:text-3xl font-black text-emerald-700">
+                ১০০%
+            </div>
+            <span class="text-xs text-slate-400 block" data-bn="জিরো-লগিং অডিট শিল্ড" data-en="Zero Log Retention">জিরো-লগিং অডিট শিল্ড</span>
+        </div>
+    </section>
+
+    <!-- Main Contribution & Impact Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        
+        <!-- Left 7 Cols: Three Transparency Pillars -->
+        <section class="lg:col-span-7 space-y-6">
             <div>
-                <h3 class="text-lg font-bold text-slate-900" data-bn="অভয় হল অফ ফেম (সম্মানিত দাতা তালিকা)" data-en="Obhoy Hall of Fame (Recognized Benefactors)">
-                    অভয় হল অফ ফেম (সম্মানিত দাতা তালিকা)
-                </h3>
-                <p class="text-xs text-slate-500" data-bn="যারা পরিচয় প্রকাশ করে তরুণদের উৎসাহ দিয়েছেন" data-en="Supporters inspiring youth protection">
-                    যারা পরিচয় প্রকাশ করে তরুণদের উৎসাহ দিয়েছেন
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight" data-bn="আপনার অবদানের সুনির্দিষ্ট ব্যবহার" data-en="Where Every Taka Goes">
+                    আপনার অবদানের সুনির্দিষ্ট ব্যবহার
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1" data-bn="আমরা বাণিজ্যিক বিজ্ঞাপন প্রদর্শন করি না এবং কোনো ব্যবহারকারীর তথ্য বিক্রি করি না।" data-en="We never display third-party advertisements or sell user information.">
+                    আমরা বাণিজ্যিক বিজ্ঞাপন প্রদর্শন করি না এবং কোনো ব্যবহারকারীর তথ্য বিক্রি করি না।
                 </p>
             </div>
-            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-teal-800 bg-teal-50 px-3 py-1 rounded-full border border-teal-100">
-                <svg class="w-3.5 h-3.5 text-amber-500 fill-amber-500" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
-                <span>Community Angels</span>
-            </span>
-        </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            @foreach (var donor in Model.RecentDonors)
-            {
-                <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-white transition flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold text-sm shrink-0 border border-amber-100">
-                            <svg class="w-4 h-4 text-amber-600 fill-amber-500" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+            <!-- Pillar 1: Subsidized Care -->
+            <div class="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-2xs flex items-start gap-5 transition hover:shadow-md duration-200">
+                <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-800 flex items-center justify-center shrink-0 border border-teal-100">
+                    <svg class="w-6 h-6 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </div>
+                <div class="space-y-1.5">
+                    <h3 class="text-base font-bold text-slate-900" data-bn="প্রান্তিক তরুণদের জন্য পূর্ণ থেরাপি সেশন ভর্তুকি" data-en="Clinical Therapy Subsidies for Vulnerable Youth">
+                        প্রান্তিক তরুণদের জন্য পূর্ণ থেরাপি সেশন ভর্তুকি
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed" data-bn="বাংলাদেশে পেশাদার মানসিক স্বাস্থ্যসেবা অনেকের জন্যই ব্যয়বহুল। অস্বচ্ছল তরুণ ও অভিভাবকরা যাতে বিনামূল্যে বা নামমাত্র মূল্যে BMDC-ভেরিফায়েড সাইকিয়াট্রিস্ট ও সাইকোলজিস্টদের সাথে কাউন্সেলিং পেতে পারেন, তহবিলের একটি বড় অংশ সরাসরি সেই চিকিৎসকদের ফি পরিশোধে ব্যবহৃত হয়।" data-en="Professional psychiatric and psychological care is cost-prohibitive for many. Community funds directly reimburse licensed BMDC clinicians when disadvantaged adolescents or parents request subsidized care.">
+                        বাংলাদেশে পেশাদার মানসিক স্বাস্থ্যসেবা অনেকের জন্যই ব্যয়বহুল। অস্বচ্ছল তরুণ ও অভিভাবকরা যাতে বিনামূল্যে বা নামমাত্র মূল্যে BMDC-ভেরিফায়েড সাইকিয়াট্রিস্ট ও সাইকোলজিস্টদের সাথে কাউন্সেলিং পেতে পারেন, তহবিলের একটি বড় অংশ সরাসরি সেই চিকিৎসকদের ফি পরিশোধে ব্যবহৃত হয়।
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pillar 2: AI Triage & Emergency Infrastructure -->
+            <div class="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-2xs flex items-start gap-5 transition hover:shadow-md duration-200">
+                <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-800 flex items-center justify-center shrink-0 border border-teal-100">
+                    <svg class="w-6 h-6 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <div class="space-y-1.5">
+                    <h3 class="text-base font-bold text-slate-900" data-bn="২৪/৭ এআই ক্রাইসিস ট্রায়াজ ও সার্ভার আপটাইম" data-en="24/7 AI Triage & High-Availability Servers">
+                        ২৪/৭ এআই ক্রাইসিস ট্রায়াজ ও সার্ভার আপটাইম
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed" data-bn="রাত ৩টায় ব্ল্যাকমেইল বা তীব্র আত্মহত্যার ঝুঁকির মুখে থাকা কিশোরদের প্রথম আশ্রয় হলো আমাদের কৃত্রিম বুদ্ধিমত্তা চালিত জরুরি ট্রায়াজ। এই সার্ভার ও নিরাপদ ক্লাউড ব্যাকএন্ড ২৪ ঘণ্টা অবিরাম সচল রাখতে এআই এপিআই কম্পিউট ও হোস্টিং ব্যয় নিয়মিত পরিচালনা করা আবশ্যক।" data-en="At 3 AM when an adolescent faces blackmail or acute crisis, our automated AI triage provides instant psychological first aid and 1098 routing. Funds cover ongoing AI API tokens and low-latency encrypted hosting.">
+                        রাত ৩টায় ব্ল্যাকমেইল বা তীব্র আত্মহত্যার ঝুঁকির মুখে থাকা কিশোরদের প্রথম আশ্রয় হলো আমাদের কৃত্রিম বুদ্ধিমত্তা চালিত জরুরি ট্রায়াজ। এই সার্ভার ও নিরাপদ ক্লাউড ব্যাকএন্ড ২৪ ঘণ্টা অবিরাম সচল রাখতে এআই এপিআই কম্পিউট ও হোস্টিং ব্যয় নিয়মিত পরিচালনা করা আবশ্যক।
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pillar 3: Zero-Data Privacy & Independence -->
+            <div class="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-2xs flex items-start gap-5 transition hover:shadow-md duration-200">
+                <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-800 flex items-center justify-center shrink-0 border border-teal-100">
+                    <svg class="w-6 h-6 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                </div>
+                <div class="space-y-1.5">
+                    <h3 class="text-base font-bold text-slate-900" data-bn="জিরো-লগিং ও প্রাতিষ্ঠানিক স্বাধীনতা" data-en="Zero-Log Architecture & Complete Independence">
+                        জিরো-লগিং ও প্রাতিষ্ঠানিক স্বাধীনতা
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed" data-bn="কোনো বাণিজ্যিক স্বার্থের কাছে দায়বদ্ধ না থাকায় অভয় কোনো ব্যবহারকারীর আইপি বা চ্যাট ইতিহাস সংরক্ষণ করে না। স্বতন্ত্র কমিউনিটি অর্থায়ন আমাদের এই নিরঙ্কুশ নিরাপত্তা ও নিরপেক্ষতা ধরে রাখতে সক্ষম করে তোলে।" data-en="Free from corporate advertising incentives, OBHOY operates a zero-activity-retention policy. Community funding preserves our strict neutrality, encryption, and zero-tracking commitment.">
+                        কোনো বাণিজ্যিক স্বার্থের কাছে দায়বদ্ধ না থাকায় অভয় কোনো ব্যবহারকারীর আইপি বা চ্যাট ইতিহাস সংরক্ষণ করে না। স্বতন্ত্র কমিউনিটি অর্থায়ন আমাদের এই নিরঙ্কুশ নিরাপত্তা ও নিরপেক্ষতা ধরে রাখতে সক্ষম করে তোলে।
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right 5 Cols: Contribution Card -->
+        <div class="lg:col-span-5 sticky top-28">
+            <div class="bg-white rounded-3xl p-7 sm:p-8 border border-slate-200/90 shadow-lg space-y-6">
+                
+                <div class="pb-4 border-b border-slate-100 space-y-1">
+                    <h2 class="text-xl font-bold text-slate-900" data-bn="সহযোগিতার পরিমাণ নির্ধারণ করুন" data-en="Select Contribution Tier">
+                        সহযোগিতার পরিমাণ নির্ধারণ করুন
+                    </h2>
+                    <p class="text-xs text-slate-500" data-bn="বিকাশ, নগদ, রকেট বা যেকোনো ডেবিট/ক্রেডিট কার্ডের মাধ্যমে" data-en="Via bKash, Nagad, Rocket, or Any Card">
+                        বিকাশ, নগদ, রকেট বা যেকোনো ডেবিট/ক্রেডিট কার্ডের মাধ্যমে
+                    </p>
+                </div>
+
+                <!-- Meaningful Presets Matching Real Costs -->
+                <div class="space-y-2.5">
+                    
+                    <label class="block p-3.5 rounded-2xl border-2 border-slate-200 cursor-pointer transition hover:border-teal-700 bg-white" onclick="ObhoyPayment.setAmount(100, this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <input type="radio" name="presetAmount" value="100" class="text-teal-700 focus:ring-teal-600" />
+                                <div>
+                                    <div class="text-xs font-bold text-slate-900" data-bn="হটলাইন অবকাঠামো সহায়তা" data-en="Helpline Infrastructure">হটলাইন অবকাঠামো সহায়তা</div>
+                                    <div class="text-[11px] text-slate-500" data-bn="১ দিনের সার্বিক ট্রায়াজ ও ক্লাউড আপটাইম" data-en="1 Day of Continuous AI & Cloud Uptime">১ দিনের সার্বিক ট্রায়াজ ও ক্লাউড আপটাইম</div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-black text-slate-900">৳১০০</span>
                         </div>
-                        <div>
-                            <div class="text-xs font-bold text-slate-900">@donor.Name</div>
-                            <div class="text-[10px] text-slate-500">@donor.City • <span data-bn="@donor.TimeAgoBn" data-en="@donor.TimeAgoEn">@donor.TimeAgoBn</span></div>
+                    </label>
+
+                    <label class="block p-3.5 rounded-2xl border-2 border-slate-200 cursor-pointer transition hover:border-teal-700 bg-white" onclick="ObhoyPayment.setAmount(300, this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <input type="radio" name="presetAmount" value="300" class="text-teal-700 focus:ring-teal-600" />
+                                <div>
+                                    <div class="text-xs font-bold text-slate-900" data-bn="সাইবার ও আইনি সুরক্ষা সংস্থান" data-en="Cyber Safety Resources">সাইবার ও আইনি সুরক্ষা সংস্থান</div>
+                                    <div class="text-[11px] text-slate-500" data-bn="ব্ল্যাকমেইল ও বুলিং প্রতিরোধ কনটেন্ট" data-en="Anti-Extortion Education Modules">ব্ল্যাকমেইল ও বুলিং প্রতিরোধ কনটেন্ট</div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-black text-slate-900">৳৩০০</span>
                         </div>
+                    </label>
+
+                    <label class="block p-3.5 rounded-2xl border-2 border-teal-700 cursor-pointer transition bg-teal-50/40" onclick="ObhoyPayment.setAmount(600, this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <input type="radio" name="presetAmount" value="600" checked class="text-teal-700 focus:ring-teal-600" />
+                                <div>
+                                    <div class="text-xs font-bold text-teal-900 flex items-center gap-1.5">
+                                        <span data-bn="১ জন তরুণের পূর্ণ থেরাপি সেশন" data-en="Sponsor 1 Full Clinical Therapy Session">১ জন তরুণের পূর্ণ থেরাপি সেশন</span>
+                                        <span class="px-1.5 py-0.5 rounded bg-teal-700 text-white text-[9px] font-bold uppercase">Standard</span>
+                                    </div>
+                                    <div class="text-[11px] text-teal-700" data-bn="ভেরিফায়েড ক্লিনিক্যাল সেশনের সম্পূর্ণ ফি" data-en="Full Fee for 1 Verified Clinician Session">ভেরিফায়েড ক্লিনিক্যাল সেশনের সম্পূর্ণ ফি</div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-black text-teal-900">৳৬০০</span>
+                        </div>
+                    </label>
+
+                    <label class="block p-3.5 rounded-2xl border-2 border-slate-200 cursor-pointer transition hover:border-teal-700 bg-white" onclick="ObhoyPayment.setAmount(1200, this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <input type="radio" name="presetAmount" value="1200" class="text-teal-700 focus:ring-teal-600" />
+                                <div>
+                                    <div class="text-xs font-bold text-slate-900" data-bn="দ্বৈত ক্লিনিক্যাল কাউন্সেলিং ভর্তুকি" data-en="Double Clinical Session Subsidy">দ্বৈত ক্লিনিক্যাল কাউন্সেলিং ভর্তুকি</div>
+                                    <div class="text-[11px] text-slate-500" data-bn="২ জন সংকটাপন্ন কিশোর-কিশোরীর সেশন" data-en="Sponsors 2 Complete Psychological Sessions">২ জন সংকটাপন্ন কিশোর-কিশোরীর সেশন</div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-black text-slate-900">৳১,২০০</span>
+                        </div>
+                    </label>
+
+                </div>
+
+                <!-- Custom Amount Input -->
+                <div class="space-y-1.5">
+                    <label for="customAmountInput" class="block text-xs font-bold text-slate-700 uppercase tracking-wider" data-bn="অন্যান্য যেকোনো পরিমাণ (ন্যূনতম ৳১০)" data-en="Custom Amount in BDT (Min ৳10)">
+                        অন্যান্য যেকোনো পরিমাণ (ন্যূনতম ৳১০)
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 font-bold text-sm">৳</span>
+                        <input type="number" id="customAmountInput" value="600" min="10" step="10" placeholder="Custom Amount in BDT" class="w-full pl-8 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 font-bold text-slate-900" />
                     </div>
-                    <div class="text-right">
-                        <div class="text-xs font-black text-teal-800">৳@donor.AmountBDT</div>
-                        <span class="text-[9px] font-bold text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-100" data-bn="@donor.BadgeBn" data-en="@donor.BadgeEn">
-                            @donor.BadgeBn
+                </div>
+
+                <!-- Direct SSLCommerz Initiation Button -->
+                <div class="space-y-3 pt-2">
+                    <button type="button" id="confirmPaymentBtn" onclick="ObhoyPayment.processPayment()" class="w-full py-4 px-6 bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm rounded-2xl shadow-sm transition flex items-center justify-center gap-2">
+                        <span data-bn="নিরাপদ গেটওয়েতে এগিয়ে যান (SSLCommerz) ➔" data-en="Proceed to Secure Checkout (SSLCommerz) ➔">
+                            নিরাপদ গেটওয়েতে এগিয়ে যান (SSLCommerz) ➔
+                        </span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </button>
+
+                    <div class="flex items-center justify-center gap-2 text-[11px] text-slate-500">
+                        <svg class="w-3.5 h-3.5 text-teal-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        <span data-bn="256-Bit SSL এনক্রিপ্টেড • কোনো কার্ড তথ্য অভয়ে সংরক্ষিত হয় না" data-en="256-Bit SSL Encrypted • Zero Cardholder Data Retained">
+                            256-Bit SSL এনক্রিপ্টেড • কোনো কার্ড তথ্য অভয়ে সংরক্ষিত হয় না
                         </span>
                     </div>
                 </div>
-            }
+
+            </div>
         </div>
+
     </div>
 
 </div>

@@ -476,11 +476,11 @@
     };
 
     // -------------------------------------------------------------
-    // 6. Payment & Micro-Donation Modal Engine (bKash, Nagad, Rocket, SSLCommerz)
+    // 6. Community Sanctuary Stewardship & Safe Checkout
     // -------------------------------------------------------------
     window.ObhoyPayment = window.HavenPayment = {
-        selectedGateway: 'bkash',
-        selectedAmount: 100,
+        selectedGateway: 'sslcommerz',
+        selectedAmount: 600,
 
         setGateway: function (gateway) {
             this.selectedGateway = gateway;
@@ -490,29 +490,6 @@
                     card.classList.add('active', gateway);
                 }
             });
-
-            // Update dynamic instructions
-            const helperText = document.getElementById('paymentGatewayHelper');
-            if (helperText) {
-                const lang = window.ObhoyLang.current;
-                if (gateway === 'bkash') {
-                    helperText.innerText = lang === 'bn'
-                        ? 'bKash Merchant / Send Money: 01700-000000 (Obhoy Safe Foundation)'
-                        : 'bKash Merchant Number: 01700-000000 (Obhoy Safe Foundation)';
-                } else if (gateway === 'nagad') {
-                    helperText.innerText = lang === 'bn'
-                        ? 'Nagad Direct Pay: 01800-000000'
-                        : 'Nagad Direct Payment: 01800-000000';
-                } else if (gateway === 'rocket') {
-                    helperText.innerText = lang === 'bn'
-                        ? 'Rocket Biller ID: 4892'
-                        : 'Rocket Biller ID: 4892';
-                } else {
-                    helperText.innerText = lang === 'bn'
-                        ? 'SSLCommerz: ভিসা, মাস্টারকার্ড, বা যেকোনো ডেবিট/ক্রেডিট কার্ড'
-                        : 'SSLCommerz: Visa, Mastercard, or Any Bangladesh Debit/Credit Card';
-                }
-            }
         },
 
         setAmount: function (amount, btn) {
@@ -521,10 +498,30 @@
                 b.classList.remove('bg-teal-700', 'text-white', 'border-teal-700');
                 b.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
             });
+
             if (btn) {
-                btn.classList.add('bg-teal-700', 'text-white', 'border-teal-700');
-                btn.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
+                if (btn.classList.contains('amount-preset-btn')) {
+                    btn.classList.add('bg-teal-700', 'text-white', 'border-teal-700');
+                    btn.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
+                }
+                const radio = btn.querySelector ? btn.querySelector('input[type="radio"]') : null;
+                if (radio) {
+                    radio.checked = true;
+                    document.querySelectorAll('input[name="presetAmount"]').forEach(r => {
+                        const parentLabel = r.closest('label');
+                        if (parentLabel) {
+                            parentLabel.classList.remove('border-teal-700', 'bg-teal-50/40');
+                            parentLabel.classList.add('border-slate-200', 'bg-white');
+                        }
+                    });
+                    const currentLabel = radio.closest('label');
+                    if (currentLabel) {
+                        currentLabel.classList.remove('border-slate-200', 'bg-white');
+                        currentLabel.classList.add('border-teal-700', 'bg-teal-50/40');
+                    }
+                }
             }
+
             const customInput = document.getElementById('customAmountInput');
             if (customInput) customInput.value = amount;
         },
