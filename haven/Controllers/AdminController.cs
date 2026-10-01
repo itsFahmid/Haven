@@ -80,6 +80,12 @@ public class AdminController : Controller
         return View(model);
     }
 
+    // FR-10, UC-24: Pending Therapists Verification View / Anchor Redirect
+    public IActionResult PendingTherapists()
+    {
+        return RedirectToAction(nameof(Index), "Admin", null, "pending-therapists");
+    }
+
     // Dismiss User Post Report
     [HttpPost]
     [ValidateAntiForgeryToken]
