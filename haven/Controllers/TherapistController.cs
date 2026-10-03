@@ -1,20 +1,23 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Obhoy.Data;
 using Obhoy.Models;
+using Obhoy.Services;
 
 namespace Obhoy.Controllers;
 
 public class TherapistController : Controller
 {
     private readonly ObhoyDbContext _db;
+    private readonly INotificationService _notificationService;
     private readonly ILogger<TherapistController> _logger;
 
-    public TherapistController(ObhoyDbContext db, ILogger<TherapistController> logger)
+    public TherapistController(ObhoyDbContext db, INotificationService notificationService, ILogger<TherapistController> logger)
     {
         _db = db;
+        _notificationService = notificationService;
         _logger = logger;
     }
 
@@ -153,6 +156,7 @@ public class TherapistController : Controller
 
         var booking = await _db.Bookings
             .Include(b => b.Therapist)
+                .ThenInclude(t => t!.User)
             .Include(b => b.User)
             .FirstOrDefaultAsync(b => b.Id == id);
 
@@ -162,9 +166,33 @@ public class TherapistController : Controller
             return RedirectToAction(nameof(Dashboard));
         }
 
+        // Verify that this therapist owns the booking (or is admin)
+        if (booking.Therapist?.UserId != userId && booking.TherapistId != userId && !User.IsInRole("Admin"))
+        {
+            TempData["ErrorMessage"] = "You do not have permission to manage this booking request.";
+            return RedirectToAction(nameof(Dashboard));
+        }
+
         booking.Status = BookingStatus.Approved;
         booking.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();
+
+        var therapistName = booking.Therapist?.User?.FullName ?? booking.Therapist?.TitleEn ?? "Dr. Specialist";
+
+        // Dispatch persistent notification to patient user
+        try
+        {
+            await _notificationService.CreateNotificationAsync(
+                booking.UserId,
+                "অ্যাপয়েন্টমেন্ট অনুমোদিত / Appointment Accepted",
+                $"Your appointment with {therapistName} on {booking.BookingDate:dd MMM yyyy} ({booking.TimeSlot}) has been accepted.",
+                "BookingAccepted",
+                "/Booking/MyBookings");
+        }
+        catch (Exception notifEx)
+        {
+            _logger.LogError(notifEx, "Failed to send notification for approved booking #{BookingId}", booking.Id);
+        }
 
         _logger.LogInformation("Booking #{BookingId} approved by User {UserId}", booking.Id, userId);
 
@@ -183,6 +211,7 @@ public class TherapistController : Controller
 
         var booking = await _db.Bookings
             .Include(b => b.Therapist)
+                .ThenInclude(t => t!.User)
             .Include(b => b.User)
             .FirstOrDefaultAsync(b => b.Id == id);
 
@@ -192,9 +221,33 @@ public class TherapistController : Controller
             return RedirectToAction(nameof(Dashboard));
         }
 
+        // Verify that this therapist owns the booking (or is admin)
+        if (booking.Therapist?.UserId != userId && booking.TherapistId != userId && !User.IsInRole("Admin"))
+        {
+            TempData["ErrorMessage"] = "You do not have permission to manage this booking request.";
+            return RedirectToAction(nameof(Dashboard));
+        }
+
         booking.Status = BookingStatus.Rejected;
         booking.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();
+
+        var therapistName = booking.Therapist?.User?.FullName ?? booking.Therapist?.TitleEn ?? "Dr. Specialist";
+
+        // Dispatch persistent notification to patient user
+        try
+        {
+            await _notificationService.CreateNotificationAsync(
+                booking.UserId,
+                "অ্যাপয়েন্টমেন্ট বাতিল / Appointment Rejected",
+                $"Your appointment with {therapistName} on {booking.BookingDate:dd MMM yyyy} ({booking.TimeSlot}) has been rejected.",
+                "BookingRejected",
+                "/Booking/MyBookings");
+        }
+        catch (Exception notifEx)
+        {
+            _logger.LogError(notifEx, "Failed to send notification for rejected booking #{BookingId}", booking.Id);
+        }
 
         _logger.LogInformation("Booking #{BookingId} rejected by User {UserId}", booking.Id, userId);
 

@@ -823,6 +823,133 @@
                 }
             });
         });
+
+        // -------------------------------------------------------------
+        // Notification System UI & Live Polling Engine
+        // -------------------------------------------------------------
+        window.toggleNotificationDropdown = function () {
+            const menu = document.getElementById('notificationDropdownMenu');
+            if (!menu) return;
+            menu.classList.toggle('hidden');
+            if (!menu.classList.contains('hidden')) {
+                window.fetchNotifications();
+            }
+        };
+
+        window.fetchNotifications = function () {
+            const badge = document.getElementById('notificationBadge');
+            const headerBadge = document.getElementById('notificationHeaderBadge');
+            const list = document.getElementById('notificationList');
+            if (!badge || !list) return;
+
+            fetch('/Notification/GetNotifications')
+                .then(r => {
+                    if (r.status === 401) return null;
+                    return r.ok ? r.json() : null;
+                })
+                .then(data => {
+                    if (!data || !data.success) return;
+
+                    const unread = data.unreadCount || 0;
+                    if (unread > 0) {
+                        badge.textContent = unread > 99 ? '99+' : unread;
+                        badge.classList.remove('hidden');
+                        if (headerBadge) {
+                            headerBadge.textContent = `${unread} unread`;
+                            headerBadge.classList.remove('hidden');
+                        }
+                    } else {
+                        badge.classList.add('hidden');
+                        if (headerBadge) {
+                            headerBadge.classList.add('hidden');
+                        }
+                    }
+
+                    if (!data.notifications || data.notifications.length === 0) {
+                        list.innerHTML = `
+                            <div class="p-6 text-center text-xs text-slate-400">
+                                <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-2 text-sm">🔔</div>
+                                <span>কোনো নতুন বিজ্ঞপ্তি নেই / No notifications</span>
+                            </div>`;
+                        return;
+                    }
+
+                    let html = '';
+                    data.notifications.forEach(n => {
+                        let iconHtml = '🔔';
+                        let borderClass = n.isRead ? 'bg-white' : 'bg-teal-50/40 font-semibold';
+                        let dotHtml = n.isRead ? '' : '<span class="w-2 h-2 rounded-full bg-teal-600 shrink-0"></span>';
+
+                        if (n.type === 'BookingAccepted') {
+                            iconHtml = '✓';
+                        } else if (n.type === 'BookingRejected') {
+                            iconHtml = '✕';
+                        } else if (n.type === 'BookingPending') {
+                            iconHtml = '⏳';
+                        }
+
+                        html += `
+                            <div class="p-3.5 hover:bg-slate-50 transition flex items-start gap-3 cursor-pointer ${borderClass}" onclick="handleNotificationClick(${n.id}, '${n.linkUrl}')">
+                                <div class="w-7 h-7 rounded-xl ${n.type === 'BookingAccepted' ? 'bg-emerald-100 text-emerald-700' : n.type === 'BookingRejected' ? 'bg-rose-100 text-rose-700' : 'bg-teal-100 text-teal-800'} flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                                    ${iconHtml}
+                                </div>
+                                <div class="flex-grow min-w-0">
+                                    <div class="flex items-center justify-between gap-1">
+                                        <h4 class="text-xs font-bold text-slate-900 truncate">${n.title}</h4>
+                                        ${dotHtml}
+                                    </div>
+                                    <p class="text-[11px] text-slate-600 mt-0.5 leading-tight line-clamp-2">${n.message}</p>
+                                    <span class="text-[10px] text-slate-400 mt-1 block">${n.timeAgo}</span>
+                                </div>
+                            </div>`;
+                    });
+
+                    list.innerHTML = html;
+                })
+                .catch(() => {
+                    // Ignore network failure gracefully
+                });
+        };
+
+        window.handleNotificationClick = function (id, linkUrl) {
+            fetch('/Notification/MarkAsRead?id=' + id, { method: 'POST' })
+                .finally(() => {
+                    if (linkUrl && linkUrl !== '#' && linkUrl.length > 1) {
+                        window.location.href = linkUrl;
+                    } else {
+                        window.fetchNotifications();
+                    }
+                });
+        };
+
+        window.markAllNotificationsAsRead = function () {
+            fetch('/Notification/MarkAllAsRead', { method: 'POST' })
+                .then(() => {
+                    window.fetchNotifications();
+                });
+        };
+
+        // Close dropdowns on outside click
+        document.addEventListener('click', function (e) {
+            const notifContainer = document.getElementById('notificationDropdownContainer');
+            const notifMenu = document.getElementById('notificationDropdownMenu');
+            if (notifContainer && notifMenu && !notifContainer.contains(e.target)) {
+                notifMenu.classList.add('hidden');
+            }
+
+            const profileMenuContainer = document.getElementById('userMenuContainer');
+            const profileMenu = document.getElementById('profileDropdownMenu');
+            if (profileMenuContainer && profileMenu && !profileMenuContainer.contains(e.target)) {
+                profileMenu.classList.add('hidden');
+            }
+        });
+
+        // Initialize polling if notification bell exists
+        if (document.getElementById('notificationBellBtn')) {
+            window.fetchNotifications();
+            setInterval(window.fetchNotifications, 20000);
+        }
     });
 
 })();
+

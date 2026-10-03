@@ -28,6 +28,7 @@ public class ObhoyDbContext : DbContext
     public DbSet<CommunityPost> CommunityPosts => Set<CommunityPost>();
     public DbSet<CommunityComment> CommunityComments => Set<CommunityComment>();
     public DbSet<PostReport> PostReports => Set<PostReport>();
+    public DbSet<Notification> Notifications => Set<Notification>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -179,6 +180,18 @@ public class ObhoyDbContext : DbContext
                   .WithMany()
                   .HasForeignKey(log => log.AdminUserId)
                   .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.HasKey(n => n.Id);
+            entity.HasOne(n => n.User)
+                  .WithMany()
+                  .HasForeignKey(n => n.UserId)
+                  .OnDelete(DeleteBehavior.Cascade);
+            entity.HasIndex(n => n.UserId);
+            entity.HasIndex(n => n.IsRead);
+            entity.HasIndex(n => n.CreatedAt);
         });
     }
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Obhoy.Data;
 using Obhoy.Models;
@@ -10,10 +10,12 @@ namespace Obhoy.Controllers;
 public class TherapyController : Controller
 {
     private readonly ObhoyDbContext _db;
+    private readonly INotificationService _notificationService;
 
-    public TherapyController(ObhoyDbContext db)
+    public TherapyController(ObhoyDbContext db, INotificationService notificationService)
     {
         _db = db;
+        _notificationService = notificationService;
     }
 
     public async Task<IActionResult> Index(string specialty = "All", string mode = "All")
@@ -195,6 +197,30 @@ public class TherapyController : Controller
         }
 
         await _db.SaveChangesAsync();
+
+        // Dispatch notifications to therapist and admins
+        try
+        {
+            if (therapist != null)
+            {
+                var bookerUser = await _db.Users.FindAsync(userId);
+                var patientName = bookerUser?.FullName ?? (request.IsAnonymous ? "Anonymous Patient" : request.Name);
+
+                await _notificationService.CreateNotificationAsync(
+                    therapist.UserId,
+                    "নতুন অ্যাপয়েন্টমেন্ট অনুরোধ / New Appointment Request",
+                    $"New appointment request from {patientName} for {booking.BookingDate:dd MMM yyyy} ({booking.TimeSlot}).",
+                    "BookingPending",
+                    "/TherapistDashboard/ManageRequests");
+
+                await _notificationService.NotifyAdminsAsync(
+                    "নতুন বুকিং অনুরোধ / New Booking Request",
+                    $"Session request {bookingCode} submitted by {patientName} for {therapist.User?.FullName ?? therapist.TitleEn}.",
+                    "BookingPending",
+                    "/Admin");
+            }
+        }
+        catch { }
 
         return Json(new
         {

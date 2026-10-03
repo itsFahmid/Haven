@@ -1,9 +1,10 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Obhoy.Data;
 using Obhoy.Models;
+using Obhoy.Services;
 
 namespace Obhoy.Controllers;
 
@@ -11,11 +12,13 @@ namespace Obhoy.Controllers;
 public class TherapistDashboardController : Controller
 {
     private readonly ObhoyDbContext _db;
+    private readonly INotificationService _notificationService;
     private readonly ILogger<TherapistDashboardController> _logger;
 
-    public TherapistDashboardController(ObhoyDbContext db, ILogger<TherapistDashboardController> logger)
+    public TherapistDashboardController(ObhoyDbContext db, INotificationService notificationService, ILogger<TherapistDashboardController> logger)
     {
         _db = db;
+        _notificationService = notificationService;
         _logger = logger;
     }
 
@@ -111,6 +114,7 @@ public class TherapistDashboardController : Controller
 
         var booking = await _db.Bookings
             .Include(b => b.Therapist)
+                .ThenInclude(t => t!.User)
             .Include(b => b.User)
             .FirstOrDefaultAsync(b => b.Id == id);
 
@@ -131,6 +135,23 @@ public class TherapistDashboardController : Controller
         booking.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();
 
+        var therapistName = booking.Therapist?.User?.FullName ?? booking.Therapist?.TitleEn ?? "Dr. Specialist";
+
+        // Dispatch persistent notification to the patient user
+        try
+        {
+            await _notificationService.CreateNotificationAsync(
+                booking.UserId,
+                "অ্যাপয়েন্টমেন্ট অনুমোদিত / Appointment Accepted",
+                $"Your appointment with {therapistName} on {booking.BookingDate:dd MMM yyyy} ({booking.TimeSlot}) has been accepted.",
+                "BookingAccepted",
+                "/Booking/MyBookings");
+        }
+        catch (Exception notifEx)
+        {
+            _logger.LogError(notifEx, "Failed to send notification for approved booking #{BookingId}", booking.Id);
+        }
+
         _logger.LogInformation("Booking #{BookingId} approved by Therapist User {UserId}", booking.Id, userId);
 
         TempData["SuccessMessage"] = $"অ্যাপয়েন্টমেন্ট অনুরোধ (Ref: {booking.BookingReference}) অনুমোদিত হয়েছে! রোগীকে নোটিফিকেশন পাঠানো হয়েছে। / Booking request #{booking.Id} has been Approved!";
@@ -147,6 +168,7 @@ public class TherapistDashboardController : Controller
 
         var booking = await _db.Bookings
             .Include(b => b.Therapist)
+                .ThenInclude(t => t!.User)
             .Include(b => b.User)
             .FirstOrDefaultAsync(b => b.Id == id);
 
@@ -166,6 +188,23 @@ public class TherapistDashboardController : Controller
         booking.Status = BookingStatus.Rejected;
         booking.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();
+
+        var therapistName = booking.Therapist?.User?.FullName ?? booking.Therapist?.TitleEn ?? "Dr. Specialist";
+
+        // Dispatch persistent notification to the patient user
+        try
+        {
+            await _notificationService.CreateNotificationAsync(
+                booking.UserId,
+                "অ্যাপয়েন্টমেন্ট বাতিল / Appointment Rejected",
+                $"Your appointment with {therapistName} on {booking.BookingDate:dd MMM yyyy} ({booking.TimeSlot}) has been rejected.",
+                "BookingRejected",
+                "/Booking/MyBookings");
+        }
+        catch (Exception notifEx)
+        {
+            _logger.LogError(notifEx, "Failed to send notification for rejected booking #{BookingId}", booking.Id);
+        }
 
         _logger.LogInformation("Booking #{BookingId} rejected by Therapist User {UserId}", booking.Id, userId);
 

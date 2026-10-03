@@ -69,6 +69,7 @@ builder.Services.AddDbContext<ObhoyDbContext>(options =>
 // Register Security & Authentication Services
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 // Register Gemini AI Services
 builder.Services.AddHttpClient<ICrisisAiService, GeminiAiService>();
@@ -104,6 +105,13 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
+if (args.Contains("--test"))
+{
+    var passed = await FlowVerificationTests.RunAllTestsAsync();
+    Environment.Exit(passed ? 0 : 1);
+    return;
+}
+
 // Ensure Database is Created and Migrations Applied Automatically
 using (var scope = app.Services.CreateScope())
 {
@@ -122,6 +130,7 @@ using (var scope = app.Services.CreateScope())
                 if (db.Database.IsSqlite())
                 {
                     try { db.Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS ""Bookings"" (""Id"" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, ""UserId"" INTEGER NOT NULL, ""TherapistId"" INTEGER NOT NULL, ""BookingDate"" TEXT NOT NULL, ""TimeSlot"" TEXT NOT NULL, ""CommunicationMode"" TEXT NOT NULL, ""Notes"" TEXT NULL, ""Status"" INTEGER NOT NULL DEFAULT 0, ""BookingReference"" TEXT NOT NULL DEFAULT '', ""FeeBDT"" TEXT NOT NULL DEFAULT '0', ""CreatedAt"" TEXT NOT NULL, ""UpdatedAt"" TEXT NULL);"); } catch { }
+                    try { db.Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS ""Notifications"" (""Id"" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, ""UserId"" INTEGER NOT NULL, ""Title"" TEXT NOT NULL, ""Message"" TEXT NOT NULL, ""Type"" TEXT NOT NULL DEFAULT 'General', ""LinkUrl"" TEXT NULL, ""IsRead"" INTEGER NOT NULL DEFAULT 0, ""CreatedAt"" TEXT NOT NULL);"); } catch { }
                     try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ExperienceYears INTEGER NOT NULL DEFAULT 5;"); } catch { }
                     try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN YearsOfExperience INTEGER NOT NULL DEFAULT 0;"); } catch { }
                     try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ConsultationTime TEXT NULL;"); } catch { }
@@ -178,6 +187,7 @@ using (var scope = app.Services.CreateScope())
             if (db.Database.IsSqlite())
             {
                 try { db.Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS ""Bookings"" (""Id"" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, ""UserId"" INTEGER NOT NULL, ""TherapistId"" INTEGER NOT NULL, ""BookingDate"" TEXT NOT NULL, ""TimeSlot"" TEXT NOT NULL, ""CommunicationMode"" TEXT NOT NULL, ""Notes"" TEXT NULL, ""Status"" INTEGER NOT NULL DEFAULT 0, ""BookingReference"" TEXT NOT NULL DEFAULT '', ""FeeBDT"" TEXT NOT NULL DEFAULT '0', ""CreatedAt"" TEXT NOT NULL, ""UpdatedAt"" TEXT NULL);"); } catch { }
+                try { db.Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS ""Notifications"" (""Id"" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, ""UserId"" INTEGER NOT NULL, ""Title"" TEXT NOT NULL, ""Message"" TEXT NOT NULL, ""Type"" TEXT NOT NULL DEFAULT 'General', ""LinkUrl"" TEXT NULL, ""IsRead"" INTEGER NOT NULL DEFAULT 0, ""CreatedAt"" TEXT NOT NULL);"); } catch { }
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ExperienceYears INTEGER NOT NULL DEFAULT 5;"); } catch { }
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN YearsOfExperience INTEGER NOT NULL DEFAULT 0;"); } catch { }
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE ProfessionalProfiles ADD COLUMN ConsultationTime TEXT NULL;"); } catch { }

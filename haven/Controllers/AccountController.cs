@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +28,8 @@ public class AccountController : Controller
     {
         if (User.Identity?.IsAuthenticated == true)
         {
+            if (User.IsInRole("Admin")) return RedirectToAction("Index", "Admin");
+            if (User.IsInRole("Professional")) return RedirectToAction("ManageRequests", "TherapistDashboard");
             return RedirectToLocal(returnUrl);
         }
 
@@ -58,7 +60,7 @@ public class AccountController : Controller
 
         TempData["SuccessMessage"] = "Welcome to Obhoy! Your account has been securely created. / অভয়ে স্বাগতম! আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।";
 
-        return RedirectToLocal(returnUrl);
+        return RedirectToLocal(returnUrl, user);
     }
 
     [HttpGet]
@@ -66,6 +68,8 @@ public class AccountController : Controller
     {
         if (User.Identity?.IsAuthenticated == true)
         {
+            if (User.IsInRole("Admin")) return RedirectToAction("Index", "Admin");
+            if (User.IsInRole("Professional")) return RedirectToAction("ManageRequests", "TherapistDashboard");
             return RedirectToLocal(returnUrl);
         }
 
@@ -95,11 +99,11 @@ public class AccountController : Controller
 
         TempData["SuccessMessage"] = $"Welcome back, {user.FullName}! / ফিরে আসার জন্য স্বাগতম, {user.FullName}!";
 
-        return RedirectToLocal(returnUrl);
+        return RedirectToLocal(returnUrl, user);
     }
 
+    [HttpGet]
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
         var userName = User.Identity?.Name ?? "User";
@@ -374,11 +378,23 @@ public class AccountController : Controller
             authProperties);
     }
 
-    private IActionResult RedirectToLocal(string? returnUrl)
+    private IActionResult RedirectToLocal(string? returnUrl, User? user = null)
     {
         if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
         {
             return Redirect(returnUrl);
+        }
+
+        if (user != null)
+        {
+            if (string.Equals(user.Role, "Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            if (string.Equals(user.Role, "Professional", StringComparison.OrdinalIgnoreCase))
+            {
+                return RedirectToAction("ManageRequests", "TherapistDashboard");
+            }
         }
 
         return RedirectToAction("Index", "Home");

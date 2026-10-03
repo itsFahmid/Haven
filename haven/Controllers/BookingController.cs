@@ -1,9 +1,10 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Obhoy.Data;
 using Obhoy.Models;
+using Obhoy.Services;
 
 namespace Obhoy.Controllers;
 
@@ -11,11 +12,13 @@ namespace Obhoy.Controllers;
 public class BookingController : Controller
 {
     private readonly ObhoyDbContext _db;
+    private readonly INotificationService _notificationService;
     private readonly ILogger<BookingController> _logger;
 
-    public BookingController(ObhoyDbContext db, ILogger<BookingController> logger)
+    public BookingController(ObhoyDbContext db, INotificationService notificationService, ILogger<BookingController> logger)
     {
         _db = db;
+        _notificationService = notificationService;
         _logger = logger;
     }
 
@@ -86,6 +89,31 @@ public class BookingController : Controller
 
         _db.Bookings.Add(booking);
         await _db.SaveChangesAsync();
+
+        var currentUser = await _db.Users.FindAsync(userId);
+        var patientDisplayName = currentUser?.FullName ?? "User";
+
+        // Dispatch persistent notification to the assigned therapist
+        try
+        {
+            await _notificationService.CreateNotificationAsync(
+                therapist.UserId,
+                "নতুন অ্যাপয়েন্টমেন্ট অনুরোধ / New Appointment Request",
+                $"New appointment request from {patientDisplayName} for {booking.BookingDate:dd MMM yyyy} ({booking.TimeSlot}).",
+                "BookingPending",
+                "/TherapistDashboard/ManageRequests");
+
+            // Dispatch notification to Admins
+            await _notificationService.NotifyAdminsAsync(
+                "নতুন অ্যাপয়েন্টমেন্ট জমা / New Booking Request",
+                $"Booking request {bookingCode} submitted by {patientDisplayName} for {therapist.User?.FullName ?? therapist.TitleEn}.",
+                "BookingPending",
+                "/Admin");
+        }
+        catch (Exception notifEx)
+        {
+            _logger.LogError(notifEx, "Failed to create notification for booking #{BookingId}", booking.Id);
+        }
 
         _logger.LogInformation("Booking request #{BookingId} ({BookingCode}) created by User {UserId} for Therapist {TherapistId} with Status Pending",
             booking.Id, bookingCode, userId, model.TherapistId);
